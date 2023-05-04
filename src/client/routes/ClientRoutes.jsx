@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import LandingPage from '../pages/LandingPage'
+import Registry from '../pages/Registry'
 
 
 export const ClientRoutes = () => {

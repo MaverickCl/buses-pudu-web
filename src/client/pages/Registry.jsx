@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -6,61 +6,80 @@ import {
   Container,
   Typography,
   FormControlLabel,
-  Checkbox,
-} from '@mui/material';
-import { AccountCircle, Email, Lock } from '@mui/icons-material';
+} from "@mui/material";
+import { es } from "date-fns/locale";
+import {
+  AccountCircle,
+  Email,
+  Lock,
+  CalendarMonth,
+  Phone,
+} from "@mui/icons-material";
+import BadgeIcon from "@mui/icons-material/Badge";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import TneButton from "../components/TneButton";
 
-const Registry= () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [rut, setRut] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
+const Registry = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [rut, setRut] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
   const [tne, setTne] = useState(false);
+  const [tneMessage, setTneMessage] = useState("Tienes una TNE vigente?");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log({ firstName, lastName, email, password });
+    console.log({ name, birthDate, rut, phoneNumber, email, password });
   };
 
   return (
-    <Container maxWidth="sm" className={classes.root}>
+    <Container maxWidth="sm">
       <Typography variant="h4" align="center" gutterBottom>
-        Register
+        Registro
       </Typography>
-      <form onSubmit={handleSubmit} className={classes.form}>
+      <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <TextField
               required
               fullWidth
-              id="firstName"
-              label="Nombre"
-              value={firstName}
-              onChange={(event) => setFirstName(event.target.value)}
+              id="Name"
+              label="Nombre Completo"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
               InputProps={{
-                startAdornment: (
-                  <AccountCircle color="secondary" />
-                ),
+                startAdornment: <AccountCircle color="secondary" />,
               }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              fullWidth
-              id="lastName"
-              label="Apellidos"
-              value={lastName}
-              onChange={(event) => setLastName(event.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <AccountCircle color="secondary" />
-                ),
-              }}
-            />
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={es}
+            >
+              <DatePicker
+                sx={{ display: "flex" }}
+                required
+                fullWidth
+                id="birthDate"
+                label="Fecha Nacimiento"
+                value={birthDate}
+                onChange={(date) => setBirthDate(date)}
+                renderInput={(params) => (
+                  <TextField
+                    fullWidth
+                    {...params}
+                    InputProps={{
+                      startAdornment: <CalendarMonth color="secondary" />,
+                    }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
           </Grid>
 
           <Grid item xs={12} sm={6}>
@@ -72,25 +91,21 @@ const Registry= () => {
               value={rut}
               onChange={(event) => setRut(event.target.value)}
               InputProps={{
-                startAdornment: (
-                  <AccountCircle color="secondary" />
-                ),
+                startAdornment: <BadgeIcon color="secondary" />,
               }}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              fullWidth
-              id="birthDate"
-              label="Fecha Nacimiento"
-              value={birthDate}
-              onChange={(event) => setBirthDate(event.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <AccountCircle color="secondary" />
-                ),
-              }}
+            <FormControlLabel
+              control={
+                <TneButton
+                  onChange={(event) => setTne(event.target.checked)}
+                  setMessage={setTneMessage}
+                  name="tne"
+                  rut={rut}
+                />
+              }
+              label={tneMessage}
             />
           </Grid>
 
@@ -103,9 +118,7 @@ const Registry= () => {
               value={phoneNumber}
               onChange={(event) => setPhoneNumber(event.target.value)}
               InputProps={{
-                startAdornment: (
-                  <Email color="secondary" />
-                ),
+                startAdornment: <Phone color="secondary" />,
               }}
             />
           </Grid>
@@ -119,13 +132,11 @@ const Registry= () => {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               InputProps={{
-                startAdornment: (
-                  <Email color="secondary" />
-                ),
+                startAdornment: <Email color="secondary" />,
               }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ marginBottom: 2 }}>
             <TextField
               required
               fullWidth
@@ -135,38 +146,13 @@ const Registry= () => {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               InputProps={{
-                startAdornment: (
-                  <Lock color="secondary" />
-                ),
+                startAdornment: <Lock color="secondary" />,
               }}
             />
           </Grid>
         </Grid>
-        <Grid container alignItems="center">
-        <Grid item>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={tne}
-                onChange={(event) => setTne(event.target.checked)}
-                name="tne"
-                color="primary"
-              />
-            }
-            label="TNE"
-          />
-        </Grid>
-        <Grid item xs>
-          <span>Tienes una TNE vigente?</span>
-        </Grid>
-      </Grid>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          fullWidth
-          className={classes.button}
-        >
+        <Grid container alignItems="center"></Grid>
+        <Button type="submit" variant="contained" color="primary" fullWidth>
           Registrarse
         </Button>
       </form>
