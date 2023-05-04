@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   TextField,
   Button,
@@ -8,23 +7,10 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
-} from '@material-ui/core';
+} from '@mui/material';
 import { AccountCircle, Email, Lock } from '@mui/icons-material';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: theme.spacing(8),
-  },
-  form: {
-    marginTop: theme.spacing(3),
-  },
-  button: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 const Registry= () => {
-  const classes = useStyles();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');

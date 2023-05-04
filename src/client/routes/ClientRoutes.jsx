@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { LandingPage } from '../pages'
+import { LandingPage, Registry } from '../pages'
 
 export const ClientRoutes = () => {
   return (
@@ -9,6 +9,9 @@ export const ClientRoutes = () => {
         <Route path='/' element={ <LandingPage/> }/>
 
         <Route path='/*' element={ <Navigate to="/"/> }/>
+
+        {/* SignUpPage */}
+        <Route path='/registro' element={<Registry/>} />
 
     </Routes>
   )

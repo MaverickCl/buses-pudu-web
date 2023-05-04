@@ -2,6 +2,8 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { AuthRoutes } from '../auth/routes/AuthRoutes'
 import { ClientRoutes } from '../client/routes/ClientRoutes'
+import { Registry } from '../pages/Registry';
+//import { NotFound } from './pages/404';
 
 export const AppRouter = () => {
   return (
@@ -13,7 +15,8 @@ export const AppRouter = () => {
         {/* LandingPage */}
         <Route path='/*' element={ <ClientRoutes/> } />
 
-
+        {/* SignUpPage */}
+        <Route path='/registro' element={<Registry/>} />
 
     </Routes>
   )
