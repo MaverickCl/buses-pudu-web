@@ -53,19 +53,21 @@ export default function CircularIntegration(props) {
   }, []);
 
   const handleButtonClick = () => {
+    //FIX REQUEST OPOTIONS TO WORK WITH API
     const requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: {
-        // "Content-Type": "application/json",
-        // Accept: "application/json",
+        "Content-Type": "application/json",
+        Accept: "application/json",
         Authorization:
           "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgzNzg3NjM4LCJpYXQiOjE2ODMxODc2MzgsImp0aSI6ImNiZDA0MGI1MjI5ZTQwNTc4M2MxMTI2NzQwMDU2MzdjIiwidXNlcl9pZCI6Mn0.CHnMOZ_ywCobzdNBAOefKChFhwW2-Jy3Og28JHgaGDw",
       },
-      // body: JSON.stringify({
-      //   rut: props.rut,
-      // }),
+      body: JSON.stringify({
+        rut: props.rut,
+      }),
     };
 
+    //FIX URL TO WORK WITH API
     const apiUrl =
       "https://592f-190-5-45-133.ngrok-free.app/api/v1/random/test/";
 
@@ -80,7 +82,8 @@ export default function CircularIntegration(props) {
         fetch(apiUrl, requestOptions)
           .then((response) => response.json())
           .then((data) => {
-            if (data.isAvailable) {
+            console.log(data);
+            if (data) {
               // revisar si esta el rut
               if (data.tneValidity) {
                 // revisar si el rut tiene tne valida

@@ -8,6 +8,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { es } from "date-fns/locale";
+import { parseISO } from "date-fns";
 import {
   AccountCircle,
   Email,
@@ -21,6 +22,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TneButton from "../components/TneButton";
 
+import ResponsiveAppBar from "../components/ResponsiveAppBar";
+
 const Registry = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,6 +36,8 @@ const Registry = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    //SEND DATA TO API
     console.log({ name, birthDate, rut, phoneNumber, email, password });
   };
 
@@ -69,15 +74,15 @@ const Registry = () => {
                 label="Fecha Nacimiento"
                 value={birthDate}
                 onChange={(date) => setBirthDate(date)}
-                renderInput={(params) => (
-                  <TextField
-                    fullWidth
-                    {...params}
-                    InputProps={{
-                      startAdornment: <CalendarMonth color="secondary" />,
-                    }}
-                  />
-                )}
+                // renderInput={(params) => (
+                //   <TextField
+                //     fullWidth
+                //     {...params}
+                //     InputProps={{
+                //       startAdornment: <CalendarMonth color="secondary" />,
+                //     }}
+                //   />
+                // )}
               />
             </LocalizationProvider>
           </Grid>
