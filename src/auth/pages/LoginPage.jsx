@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState, useEffect } from "react";
+import { login } from "../services/ApiRest";
 
 function Copyright(props) {
   return (
@@ -28,15 +30,55 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+/* interface DecodedData {
+  roles: string[];
+} */
+
+async function loginLogic(correo, contrasenia) {
+  const result = await login(correo, contrasenia);
+
+  if (result) {
+    const token = result.split(" ")[1];
+    localStorage.setItem("token", token);
+    return true;
+  }
+
+  return false;
+}
+
+ /* function navigateToUserPage() {
+  
+}  */
 export default function LoginPage() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  
+
+  const [correo, setCorreo] = useState("");
+  const [contrasenia, setContrasenia] = useState("");
+  const [loginError, setLoginError] = useState(false);
+  
+  //const data = new FormData(e.target);
+  /* useEffect(() => {
     console.log({
-      email: data.get('email'),
+      correo: data.get('correo'),
       contrasenia: data.get('contrasenia'),
-    });
+  })
+  }); */
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await loginLogic(correo, contrasenia);
+    if (!result) {
+      setLoginError(true);
+      return;
+    }
+
+    
+    //localStorage.setItem("roles", decodedData.roles.toString());
+
+    // const roles = localStorage.getItem('roles') || "";
+    // console.log(roles.split(',').includes('ROLE_COORDINADOR'))
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -61,10 +103,13 @@ export default function LoginPage() {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="correo"
               label="Email Address"
-              name="email"
+              name="correo"
               autoComplete="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+
               autoFocus
             />
             <TextField
@@ -76,7 +121,11 @@ export default function LoginPage() {
               type="password"
               id="contrasenia"
               autoComplete="current-password"
+              value={contrasenia}
+              onChange={(e) => setContrasenia(e.target.value)}
+
             />
+            {loginError && "Error de login"}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
