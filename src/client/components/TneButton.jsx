@@ -77,6 +77,8 @@ export default function CircularIntegration(props) {
     if (props.rut !== "") {
       setLoading(true);
 
+      props.setMessage("... Revisando");
+
       tneLogic(props.rut);
     } else {
       props.setMessage("Ingrese un RUT para revisar");

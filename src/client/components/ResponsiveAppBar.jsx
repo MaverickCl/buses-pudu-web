@@ -19,12 +19,24 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-const pages = ["Gestiona tus pasajes", "Encuéntranos", "Pudú Points"];
-const settings = ["Perfil", "Cuenta", "Dashboard", "Salir"];
+const pages = [
+  { title: "Gestiona tus pasajes", link: "/gestion-tickets" },
+  // { title: "Encuéntranos", link: "" },
+  { title: "Pudú Points", link: "/pudu-points" },
+];
+const settings = [
+  { title: "Perfil", link: "/perfil" },
+  // { title: "Cuenta", link: "" },
+  // { title: "Dashboard", link: "" },
+  { title: "Salir", link: "" },
+];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [authMenuAnchorEl, setAuthMenuAnchorEl] = React.useState(null);
+  const [isAuthMenuOpen, setIsAuthMenuOpen] = React.useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -39,6 +51,27 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogin = () => {
+    // add login handler
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    // add logout handler
+    setIsLoggedIn(false);
+    handleCloseUserMenu(); // close user menu after logout
+  };
+
+  const handleOpenAuthMenu = (event) => {
+    setAuthMenuAnchorEl(event.currentTarget);
+    setIsAuthMenuOpen(true);
+  };
+
+  const handleCloseAuthMenu = () => {
+    setAuthMenuAnchorEl(null);
+    setIsAuthMenuOpen(false);
   };
 
   return (
@@ -78,30 +111,64 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.link} onClick={handleCloseNavMenu}>
+                  <Link to={page.link}>
+                    <Typography textAlign="center">{page.title}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
+              <Link to={page.link}>
+                <Button
+                  key={page.link}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.title}
+                </Button>
+              </Link>
             ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Cuenta">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            {isLoggedIn ? (
+              <Tooltip title="Cuenta">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt="Profile Picture"
+                    src="/static/images/avatar/2.jpg"
+                  />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <IconButton onClick={handleOpenAuthMenu} sx={{ p: 0 }}>
+                <AccountCircleIcon />
               </IconButton>
-            </Tooltip>
+            )}
+            <Menu
+              id="auth-menu"
+              anchorEl={authMenuAnchorEl}
+              open={isAuthMenuOpen}
+              onClose={handleCloseAuthMenu}
+            >
+              <MenuItem
+                onClick={handleCloseAuthMenu}
+                component={Link}
+                to="/auth/login"
+              >
+                Ingresar
+              </MenuItem>
+              <MenuItem
+                onClick={handleCloseAuthMenu}
+                component={Link}
+                to="/registro"
+              >
+                Registrarse
+              </MenuItem>
+            </Menu>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -119,8 +186,8 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting.link} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>

@@ -8,14 +8,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { es } from "date-fns/locale";
-import { parseISO } from "date-fns";
-import {
-  AccountCircle,
-  Email,
-  Lock,
-  CalendarMonth,
-  Phone,
-} from "@mui/icons-material";
+import { AccountCircle, Email, Lock, Phone } from "@mui/icons-material";
 import BadgeIcon from "@mui/icons-material/Badge";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -50,116 +43,126 @@ const Registry = () => {
   }
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" align="center" gutterBottom>
-        Registro
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              fullWidth
-              id="Name"
-              label="Nombre Completo"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              InputProps={{
-                startAdornment: <AccountCircle color="secondary" />,
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <LocalizationProvider
-              dateAdapter={AdapterDateFns}
-              adapterLocale={es}
-            >
-              <DatePicker
-                sx={{ display: "flex" }}
+    <Container
+      maxWidth="sm"
+      sx={{ height: "100vh", display: "flex", alignItems: "center" }}
+    >
+      <Grid container spacing={2} justifyContent="center">
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          style={{ marginTop: "-4.5rem" }}
+        >
+          Registro
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
                 required
                 fullWidth
-                id="birthDate"
-                label="Fecha Nacimiento"
-                value={birthDate}
-                onChange={(date) => setBirthDate(date)}
+                id="Name"
+                label="Nombre Completo"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                InputProps={{
+                  startAdornment: <AccountCircle color="secondary" />,
+                }}
               />
-            </LocalizationProvider>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              fullWidth
-              id="rut"
-              label="RUT"
-              value={rut}
-              onChange={(event) => setRut(event.target.value)}
-              InputProps={{
-                startAdornment: <BadgeIcon color="secondary" />,
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormControlLabel
-              control={
-                <TneButton
-                  onChange={(event) => setTne(event.target.checked)}
-                  setMessage={setTneMessage}
-                  name="tne"
-                  rut={rut}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <LocalizationProvider
+                dateAdapter={AdapterDateFns}
+                adapterLocale={es}
+              >
+                <DatePicker
+                  sx={{ display: "flex" }}
+                  required
+                  fullWidth
+                  id="birthDate"
+                  label="Fecha Nacimiento"
+                  value={birthDate}
+                  onChange={(date) => setBirthDate(date)}
                 />
-              }
-              label={tneMessage}
-            />
-          </Grid>
+              </LocalizationProvider>
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              required
-              fullWidth
-              id="phoneNumber"
-              label="Numero de Teléfono"
-              value={phoneNumber}
-              onChange={(event) => setPhoneNumber(event.target.value)}
-              InputProps={{
-                startAdornment: <Phone color="secondary" />,
-              }}
-            />
-          </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="rut"
+                label="RUT"
+                value={rut}
+                onChange={(event) => setRut(event.target.value)}
+                InputProps={{
+                  startAdornment: <BadgeIcon color="secondary" />,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControlLabel
+                control={
+                  <TneButton
+                    onChange={(event) => setTne(event.target.checked)}
+                    setMessage={setTneMessage}
+                    name="tne"
+                    rut={rut}
+                  />
+                }
+                label={tneMessage}
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              InputProps={{
-                startAdornment: <Email color="secondary" />,
-              }}
-            />
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="phoneNumber"
+                label="Numero de Teléfono"
+                value={phoneNumber}
+                onChange={(event) => setPhoneNumber(event.target.value)}
+                InputProps={{
+                  startAdornment: <Phone color="secondary" />,
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                InputProps={{
+                  startAdornment: <Email color="secondary" />,
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <TextField
+                required
+                fullWidth
+                id="password"
+                label="Contraseña"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                InputProps={{
+                  startAdornment: <Lock color="secondary" />,
+                }}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sx={{ marginBottom: 2 }}>
-            <TextField
-              required
-              fullWidth
-              id="password"
-              label="Contraseña"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              InputProps={{
-                startAdornment: <Lock color="secondary" />,
-              }}
-            />
-          </Grid>
-        </Grid>
-        <Grid container alignItems="center"></Grid>
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Registrarse
-        </Button>
-      </form>
+          <Grid container alignItems="center"></Grid>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Registrarse
+          </Button>
+        </form>
+      </Grid>
     </Container>
   );
 };
