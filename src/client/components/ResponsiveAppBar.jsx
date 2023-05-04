@@ -6,6 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
+
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 import Container from "@mui/material/Container";
 
 import { Link } from "react-router-dom";
@@ -16,7 +19,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-const pages = ["Gestiona tus pasajes", "Encuentranos", "Pudú Points"];
+const pages = ["Gestiona tus pasajes", "Encuéntranos", "Pudú Points"];
 const settings = ["Perfil", "Cuenta", "Dashboard", "Salir"];
 
 function ResponsiveAppBar() {

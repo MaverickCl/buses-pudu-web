@@ -22,7 +22,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TneButton from "../components/TneButton";
 
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+//import ResponsiveAppBar from "../components/ResponsiveAppBar";
+
+import { register } from "../services/ApiRest";
 
 const Registry = () => {
   const [name, setName] = useState("");
@@ -39,7 +41,14 @@ const Registry = () => {
 
     //SEND DATA TO API
     console.log({ name, birthDate, rut, phoneNumber, email, password });
+    registerLogic(name, rut, phoneNumber, email, password);
   };
+
+  async function registerLogic(nombre, rut, contacto, correo, contrasenia) {
+    const result = await register(nombre, rut, contacto, correo, contrasenia);
+
+    return true;
+  }
 
   return (
     <Container maxWidth="sm">

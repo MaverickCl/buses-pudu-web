@@ -9,6 +9,8 @@ import AutorenewRoundedIcon from "@mui/icons-material/AutorenewRounded";
 import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
+import { validateTne } from "../services/TneApiRest";
+
 export default function CircularIntegration(props) {
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -17,7 +19,22 @@ export default function CircularIntegration(props) {
   const [hovering, setHovering] = React.useState(false);
 
   const timer = React.useRef();
-  //const { setMessage } = props;
+
+  async function tneLogic(rut) {
+    const result = await validateTne(rut);
+    setLoading(false);
+
+    if (result) {
+      props.setMessage("TNE válida");
+      setSuccess(true);
+    } else {
+      props.setMessage("TNE vencida");
+      setSuccess(false);
+      setInvalid(true);
+    }
+
+    return result;
+  }
 
   const buttonSx = {
     ...(success && {
@@ -25,20 +42,20 @@ export default function CircularIntegration(props) {
       "&:hover": {
         bgcolor: green[700],
       },
-    },
-    loading && {
+    }),
+    ...(loading && {
       bgcolor: blue[500],
       "&:hover": {
         bgcolor: blue[700],
       },
-    },
-    invalid && {
+    }),
+    ...(invalid && {
       bgcolor: orange[500],
       "&:hover": {
         bgcolor: orange[700],
       },
-    },
-    failed && {
+    }),
+    ...(failed && {
       bgcolor: red[500],
       "&:hover": {
         bgcolor: red[700],
@@ -53,74 +70,18 @@ export default function CircularIntegration(props) {
   }, []);
 
   const handleButtonClick = () => {
-    //FIX REQUEST OPOTIONS TO WORK WITH API
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgzNzg3NjM4LCJpYXQiOjE2ODMxODc2MzgsImp0aSI6ImNiZDA0MGI1MjI5ZTQwNTc4M2MxMTI2NzQwMDU2MzdjIiwidXNlcl9pZCI6Mn0.CHnMOZ_ywCobzdNBAOefKChFhwW2-Jy3Og28JHgaGDw",
-      },
-      body: JSON.stringify({
-        rut: props.rut,
-      }),
-    };
-
-    //FIX URL TO WORK WITH API
-    const apiUrl =
-      "https://592f-190-5-45-133.ngrok-free.app/api/v1/random/test/";
-
     setFailed(false);
+    setInvalid(false);
+    setSuccess(false);
 
     if (props.rut !== "") {
-      if (!loading) {
-        props.setMessage("...Revisando");
-        setSuccess(false);
-        setLoading(true);
+      setLoading(true);
 
-        fetch(apiUrl, requestOptions)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            if (data) {
-              // revisar si esta el rut
-              if (data.tneValidity) {
-                // revisar si el rut tiene tne valida
-                props.setMessage("TNE válida");
-                setSuccess(true);
-                setLoading(false);
-                setInvalid(false);
-                setFailed(false);
-              } else {
-                props.setMessage("TNE vencida");
-                setSuccess(false);
-                setLoading(false);
-                setInvalid(true);
-                setFailed(false);
-              }
-            } else {
-              props.setMessage("El rut ingresado no posee TNE");
-              setSuccess(false);
-              setLoading(false);
-              setInvalid(true);
-              setFailed(false);
-            }
-          })
-          .catch((error) => {
-            console.error("Error checking TNE:", error);
-            props.setMessage("No fué posible revisar tu RUT");
-            setSuccess(false);
-            setLoading(false);
-            setInvalid(false);
-            setFailed(true);
-            return false;
-          });
-      }
+      tneLogic(props.rut);
     } else {
       props.setMessage("Ingrese un RUT para revisar");
       setSuccess(false);
-      setLoading(false);
+      setFailed(true);
     }
   };
 
