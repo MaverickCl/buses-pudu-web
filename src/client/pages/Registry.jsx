@@ -39,7 +39,6 @@ const Registry = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    //SEND DATA TO API
     console.log({ name, birthDate, rut, phoneNumber, email, password });
     registerLogic(name, rut, phoneNumber, email, password);
   };
@@ -83,15 +82,6 @@ const Registry = () => {
                 label="Fecha Nacimiento"
                 value={birthDate}
                 onChange={(date) => setBirthDate(date)}
-                // renderInput={(params) => (
-                //   <TextField
-                //     fullWidth
-                //     {...params}
-                //     InputProps={{
-                //       startAdornment: <CalendarMonth color="secondary" />,
-                //     }}
-                //   />
-                // )}
               />
             </LocalizationProvider>
           </Grid>
