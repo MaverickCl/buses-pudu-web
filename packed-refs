@@ -1,0 +1,5 @@
+# pack-refs with: peeled fully-peeled sorted 
+09aab40c01992fc8f6678dd745a58c39bdd899db refs/remotes/origin/develop
+905eba59a4026b30be3d86889c65c85e3cf5d512 refs/remotes/origin/feature/ft_SignIn
+c4dcc16452f969f4a299b7a7006f2a32ee5c1a16 refs/remotes/origin/feature/signUp
+09aab40c01992fc8f6678dd745a58c39bdd899db refs/remotes/origin/master
