@@ -37,28 +37,31 @@ export default function CircularIntegration(props) {
   }
 
   const buttonSx = {
+    "&:hover": {
+      backgroundColor: "buttonBlue.hover",
+    },
     ...(success && {
-      bgcolor: green[500],
+      bgcolor: "success.main",
       "&:hover": {
-        bgcolor: green[700],
+        bgcolor: "success.hover",
       },
     }),
     ...(loading && {
-      bgcolor: blue[500],
+      bgcolor: "buttonBlue.main",
       "&:hover": {
-        bgcolor: blue[700],
+        bgcolor: "buttonBlue.hover",
       },
     }),
     ...(invalid && {
-      bgcolor: orange[500],
+      bgcolor: "alert.main",
       "&:hover": {
-        bgcolor: orange[700],
+        bgcolor: "alert.hover",
       },
     }),
     ...(failed && {
-      bgcolor: red[500],
+      bgcolor: "error.hover",
       "&:hover": {
-        bgcolor: red[700],
+        bgcolor: "error.hover",
       },
     }),
   };
@@ -99,7 +102,7 @@ export default function CircularIntegration(props) {
       >
         <Fab
           aria-label="save"
-          color="primary"
+          color="buttonBlue"
           sx={buttonSx}
           onClick={handleButtonClick}
           onMouseOver={() => setHovering(true)}
@@ -123,7 +126,7 @@ export default function CircularIntegration(props) {
           <CircularProgress
             size={68}
             sx={{
-              color: green[500],
+              color: "success.main",
               position: "absolute",
               top: -6,
               left: -6,

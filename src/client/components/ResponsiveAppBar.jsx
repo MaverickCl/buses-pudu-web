@@ -34,7 +34,7 @@ const settings = [
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   const [authMenuAnchorEl, setAuthMenuAnchorEl] = React.useState(null);
   const [isAuthMenuOpen, setIsAuthMenuOpen] = React.useState(false);
 
@@ -75,11 +75,25 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ bgcolor: "#c54120" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to="/">
-            <img src="logoBlack.png" style={{ width: "3rem" }} />
+            <img
+              src="logoBlack.png"
+              style={{
+                marginRight: "0.5rem",
+                width: "3rem",
+                transition: "transform .2s",
+                ":hover": { transform: "scale(1.1)" },
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = "scale(1.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = "scale(1)";
+              }}
+            />
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -112,7 +126,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page.link} onClick={handleCloseNavMenu}>
-                  <Link to={page.link}>
+                  <Link to={page.link} style={{ textDecoration: "none" }}>
                     <Typography textAlign="center">{page.title}</Typography>
                   </Link>
                 </MenuItem>
@@ -121,11 +135,21 @@ function ResponsiveAppBar() {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link to={page.link}>
+              <Link
+                to={page.link}
+                key={page.link}
+                style={{ textDecoration: "none" }}
+              >
                 <Button
-                  key={page.link}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    fontWeight: "bold",
+                    transition: "color 0.2s ease-in-out",
+                    ":hover": { color: "#f2f2f2" },
+                  }}
                 >
                   {page.title}
                 </Button>
@@ -139,15 +163,29 @@ function ResponsiveAppBar() {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Profile Picture"
-                    src="/static/images/avatar/2.jpg"
+                    src="pudu.jpeg"
+                    sx={{
+                      width: "2.5rem",
+                      height: "2.5rem",
+                      transition: "transform .2s",
+                      ":hover": { transform: "scale(1.1)" },
+                    }}
                   />
                 </IconButton>
               </Tooltip>
             ) : (
               <IconButton onClick={handleOpenAuthMenu} sx={{ p: 0 }}>
-                <AccountCircleIcon />
+                <AccountCircleIcon
+                  sx={{
+                    width: "2.5rem",
+                    height: "2.5rem",
+                    transition: "transform .2s",
+                    ":hover": { transform: "scale(1.1)" },
+                  }}
+                />
               </IconButton>
             )}
+
             <Menu
               id="auth-menu"
               anchorEl={authMenuAnchorEl}
@@ -186,8 +224,21 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.link} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting.title}</Typography>
+                <MenuItem
+                  key={setting.link}
+                  onClick={
+                    setting.title.toLowerCase() === "salir"
+                      ? handleLogout
+                      : handleCloseUserMenu
+                  }
+                >
+                  <Link
+                    to={setting.link}
+                    key={setting.link}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Typography textAlign="center">{setting.title}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>

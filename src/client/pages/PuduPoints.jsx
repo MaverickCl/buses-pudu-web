@@ -11,7 +11,10 @@ import {
   TableHead,
   TableRow,
   Button,
+  CssBaseline,
 } from "@mui/material";
+
+import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 function Puntos() {
   const [puntos, setPuntos] = React.useState(150);
@@ -29,55 +32,62 @@ function Puntos() {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Tus Puntos
-            </Typography>
-            <Typography variant="h3" sx={{ mb: 2 }}>
-              {puntos}
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={canjearPuntos}
-              disabled={puntos < 150}
-            >
-              Canjear Puntos
-            </Button>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Historial de Puntos
-            </Typography>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Fecha</TableCell>
-                    <TableCell align="right">Puntos</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {historial.map((item, index) => (
-                    <TableRow key={index}>
-                      <TableCell component="th" scope="row">
-                        {item.fecha}
-                      </TableCell>
-                      <TableCell align="right">{item.puntos}</TableCell>
+    <CssBaseline>
+      <ResponsiveAppBar position="absolute" />
+
+      <Container
+        maxWidth="sm"
+        sx={{ height: "100vh", display: "flex", alignItems: "center" }}
+      >
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Tus Puntos
+              </Typography>
+              <Typography variant="h3" sx={{ mb: 2 }}>
+                {puntos}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={canjearPuntos}
+                disabled={puntos < 150}
+              >
+                Canjear Puntos
+              </Button>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Historial de Puntos
+              </Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Fecha</TableCell>
+                      <TableCell align="right">Puntos</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
+                  </TableHead>
+                  <TableBody>
+                    {historial.map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell component="th" scope="row">
+                          {item.fecha}
+                        </TableCell>
+                        <TableCell align="right">{item.puntos}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </CssBaseline>
   );
 }
 
