@@ -6,6 +6,10 @@ import {
   Container,
   Typography,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  Select,
+  Box,
   CssBaseline,
 } from "@mui/material";
 import { es } from "date-fns/locale";
@@ -14,8 +18,9 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import TneButton from "../components/TneButton";
 
+import TneButton from "../components/TneButton";
+import PhoneInput from "../components/PhoneInput";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 import { register } from "../services/ApiRest";
@@ -33,12 +38,26 @@ const Registry = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log({ name, birthDate, rut, phoneNumber, email, password });
-    registerLogic(name, rut, phoneNumber, email, password);
+    console.log({ name, birthDate, rut, phoneNumber, email, password, tne });
+    registerLogic(name, rut, phoneNumber, birthDate, email, password);
   };
 
-  async function registerLogic(nombre, rut, contacto, correo, contrasenia) {
-    const result = await register(nombre, rut, contacto, correo, contrasenia);
+  async function registerLogic(
+    nombre,
+    rut,
+    contacto,
+    birthDate,
+    correo,
+    contrasenia
+  ) {
+    const result = await register(
+      nombre,
+      rut,
+      contacto,
+      birthDate,
+      correo,
+      contrasenia
+    );
 
     return true;
   }
@@ -125,7 +144,7 @@ const Registry = () => {
                 <FormControlLabel
                   control={
                     <TneButton
-                      onChange={(event) => setTne(event.target.checked)}
+                      onChange={(value) => setTne(value)}
                       setMessage={setTneMessage}
                       name="tne"
                       rut={rut}
@@ -136,16 +155,10 @@ const Registry = () => {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="phoneNumber"
-                  label="Numero de Teléfono"
-                  value={phoneNumber}
-                  onChange={(event) => setPhoneNumber(event.target.value)}
-                  InputProps={{
-                    startAdornment: <Phone color="secondary" />,
-                  }}
+                <PhoneInput
+                  onChange={(value) => setPhoneNumber(value)}
+                  icon={true}
+                  number=""
                 />
               </Grid>
 
@@ -159,6 +172,10 @@ const Registry = () => {
                   onChange={(event) => setEmail(event.target.value)}
                   InputProps={{
                     startAdornment: <Email color="secondary" />,
+                  }}
+                  inputProps={{
+                    pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
+                    title: "Ingresa un formato de correo válido",
                   }}
                 />
               </Grid>

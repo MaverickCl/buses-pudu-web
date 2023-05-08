@@ -12,6 +12,7 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { validateTne } from "../services/TneApiRest";
 
 export default function CircularIntegration(props) {
+  const [checked, setChecked] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [failed, setFailed] = React.useState(false);
@@ -26,11 +27,15 @@ export default function CircularIntegration(props) {
 
     if (result) {
       props.setMessage("TNE válida");
+      setChecked(true);
       setSuccess(true);
+      props.onChange(true);
     } else {
       props.setMessage("TNE vencida");
+      setChecked(false);
       setSuccess(false);
       setInvalid(true);
+      props.onChange(false);
     }
 
     return result;
