@@ -80,7 +80,7 @@ function ResponsiveAppBar() {
         <Toolbar disableGutters>
           <Link to="/">
             <img
-              src="logoBlack.png"
+              src="logoWhite.png"
               style={{
                 marginRight: "0.5rem",
                 width: "3rem",
@@ -224,22 +224,22 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem
+                <Link
+                  to={setting.link}
                   key={setting.link}
-                  onClick={
-                    setting.title.toLowerCase() === "salir"
-                      ? handleLogout
-                      : handleCloseUserMenu
-                  }
+                  style={{ textDecoration: "none" }}
                 >
-                  <Link
-                    to={setting.link}
+                  <MenuItem
                     key={setting.link}
-                    style={{ textDecoration: "none" }}
+                    onClick={
+                      setting.title.toLowerCase() === "salir"
+                        ? handleLogout
+                        : handleCloseUserMenu
+                    }
                   >
                     <Typography textAlign="center">{setting.title}</Typography>
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>

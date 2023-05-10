@@ -1,108 +1,166 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CssBaseline,
+  Grid,
+  Box,
+  Paper,
+  Typography,
+  Container,
+  useMediaQuery,
+  Link,
+  TextField,
+  //Grid2,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { TextField } from "@mui/material";
 
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
+      {/* {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}
-      {"."}
+      {"."} */}
     </Typography>
   );
 }
 
-const cards = [1, 2, 3];
-
 const theme = createTheme();
 
+const paperHeight = `min(70vh, ${42.08}vw)`;
+
 export default function LandingPage() {
+  const [orign, setOrigin] = React.useState("");
+  const [destination, setDestination] = React.useState("");
+  const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <ResponsiveAppBar position="absolute" />
-      <main>
-        {/* Hero unit */}
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            pt: 8,
-            pb: 6,
+
+      <Paper
+        elevation={3}
+        style={{
+          position: "absolute",
+          width: "100%",
+          backgroundColor: "#a3d1f5",
+          zIndex: "0",
+          height: paperHeight,
+          overflow: "hidden",
+        }}
+        square
+      >
+        <img
+          src="Banner.jpg"
+          style={{
+            position: "absolute",
+            bottom: "0",
+            right: "0",
+            userSelect: "none",
+            objectFit: "cover",
+            width: "100%",
+            pointerEvents: "none",
           }}
-        >
-          <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
+        />
+      </Paper>
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 0,
+          marginTop: "2%",
+          zIndex: "1",
+          position: "relative",
+          width: isPortrait ? "100%" : "55%",
+          top: "10vh",
+        }}
+      >
+        <Grid container justifyContent="space-around">
+          <Container direction="column">
+            <img
+              src="Font.png"
               align="center"
-              color="text.primary"
-              gutterBottom
-            >
-              Buses Pudu
-            </Typography>
-
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            >
-              <TextField
-                hiddenLabel
-                id="filled-hidden-label-small"
-                variant="filled"
-                fullWidth
-              />
-            </Stack>
+              style={{
+                position: "relative",
+                userSelect: "none",
+                objectFit: "cover",
+                width: isPortrait ? "30vw" : "20vw",
+                marginTop: isPortrait ? "0" : "7vh",
+                marginLeft: isPortrait ? "0" : "7vh",
+                marginBottom: isPortrait ? "1.5rem" : "0",
+                pointerEvents: "none",
+              }}
+            />
           </Container>
-        </Box>
-
-        <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
+          <Container>
+            <Card
+              sx={{
+                marginTop: "1rem",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                borderRadius: ".8rem",
+              }}
+            >
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  marginBottom="1rem"
+                  fontWeight="bold"
+                  align={isPortrait ? "center" : "left"}
+                >
+                  ¿A DONDE TE LLEVAMOS HOY?
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item sm={6} width="100%">
+                    <TextField
+                      required
+                      fullWidth
+                      id="origin"
+                      label="Origen"
+                      onChange={(event) => setOrigin(event.target.value)}
+                      // InputProps={{
+                      //   startAdornment: <BadgeIcon color="secondary" />,
+                      // }}
+                    />
+                  </Grid>
+                  <Grid item sm={6} width="100%">
+                    <TextField
+                      required
+                      fullWidth
+                      id="destination"
+                      label="Destino"
+                      onChange={(event) => setDestination(event.target.value)}
+                      // InputProps={{
+                      //   startAdornment: <BadgeIcon color="secondary" />,
+                      // }}
+                    />
+                  </Grid>
+                </Grid>
+                <CardActions
+                  style={{
+                    justifyContent: isPortrait ? "center" : "flex-start",
                   }}
                 >
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Destino
-                    </Typography>
-                    <Typography>
-                      En esta seccion se mostraran los detalles del viaje y los
-                      precios
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">ver viaje</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </main>
+                  <Button variant="contained" size="small">
+                    ver viaje
+                  </Button>
+                </CardActions>
+              </CardContent>
+            </Card>
+          </Container>
+        </Grid>
+      </Box>
       {/* Footer */}
       <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
         <Typography
