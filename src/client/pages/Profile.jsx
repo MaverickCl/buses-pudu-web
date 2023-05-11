@@ -25,6 +25,7 @@ import PhoneInput from "../components/PhoneInput";
 import TneButton from "../components/TneButton";
 import PasswordDialog from "../components/PasswordDialog";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import Footer from "../components/Footer";
 
 const perfil = {
   name: "Juan Pérez",
@@ -291,6 +292,7 @@ const Profile = () => {
           </Card>
         </Box>
       </Container>
+      <Footer />
     </CssBaseline>
   );
 };

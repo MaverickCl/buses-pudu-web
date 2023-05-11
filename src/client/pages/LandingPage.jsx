@@ -18,19 +18,8 @@ import {
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {/* {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."} */}
-    </Typography>
-  );
-}
+import Footer from "../components/Footer";
+import ImgMediaCard from "../components/ImgMediaCard";
 
 const theme = createTheme();
 
@@ -109,6 +98,7 @@ export default function LandingPage() {
                 display: "flex",
                 flexDirection: "column",
                 borderRadius: ".8rem",
+                position: "relative",
               }}
             >
               <CardContent sx={{ flexGrow: 1 }}>
@@ -129,9 +119,6 @@ export default function LandingPage() {
                       id="origin"
                       label="Origen"
                       onChange={(event) => setOrigin(event.target.value)}
-                      // InputProps={{
-                      //   startAdornment: <BadgeIcon color="secondary" />,
-                      // }}
                     />
                   </Grid>
                   <Grid item sm={6} width="100%">
@@ -141,9 +128,6 @@ export default function LandingPage() {
                       id="destination"
                       label="Destino"
                       onChange={(event) => setDestination(event.target.value)}
-                      // InputProps={{
-                      //   startAdornment: <BadgeIcon color="secondary" />,
-                      // }}
                     />
                   </Grid>
                 </Grid>
@@ -161,16 +145,38 @@ export default function LandingPage() {
           </Container>
         </Grid>
       </Box>
+      <Container position="relative" style={{ flex: 1 }} width="100%">
+        <Grid
+          marginTop="20vh"
+          container
+          spacing={4}
+          justifyContent="space-evenly"
+        >
+          <Grid item>
+            <ImgMediaCard
+              image="pic_comfy.jpg"
+              title="Comodidad Máxima"
+              desc="Te aseguramos que contarás con los asientos mas comodos del mercado."
+            />
+          </Grid>
+          <Grid item>
+            <ImgMediaCard
+              image="pic_modern.jpg"
+              title="Buses Modernos"
+              desc="Viaja con estilo en nuestros buses modernos y equipados con tecnología de última generación."
+            />
+          </Grid>
+          <Grid item>
+            <ImgMediaCard
+              image="pic_arrive.jpg"
+              title="Viaja sin complicaciones"
+              desc="Deja las preocupaciones atrás y disfruta de un viaje sin contratiempos."
+            />
+          </Grid>
+        </Grid>
+      </Container>
       {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        ></Typography>
-        <Copyright />
-      </Box>
+      <Footer />
       {/* End footer */}
     </ThemeProvider>
   );

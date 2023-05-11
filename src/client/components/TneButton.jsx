@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { green, red, blue, orange } from "@mui/material/colors";
 import Fab from "@mui/material/Fab";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CreditCardIcon from "@mui/icons-material/CreditCard";

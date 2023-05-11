@@ -15,9 +15,21 @@ const theme = createTheme({
       main: '#c54120',
       hover: '#a32b13',
     },
+    primaryLight: {
+      main: '#FA927B',
+      hover: '#c3513d',
+    },
+    primaryClear: {
+      main: '#FAA994',
+      hover: '#c3513d',
+    },
     secondary: {
       main: '#31AD84',
       hover: '#1e7a55',
+    },
+    secondaryLight: {
+      main: '#7BFACF',
+      hover: '#31AD84',
     },
     error: {
       main: red.A400,

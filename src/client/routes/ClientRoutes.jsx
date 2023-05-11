@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
-import Registry from "../pages/Registry";
+import Registry from "../../auth/pages/Registry";
 import PuduPoints from "../pages/PuduPoints";
 import Profile from "../pages/Profile";
 import TicketManagement from "../pages/TicketManagement";

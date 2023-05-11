@@ -6,24 +6,21 @@ import {
   Container,
   Typography,
   FormControlLabel,
-  FormControl,
-  InputLabel,
-  Select,
-  Box,
   CssBaseline,
 } from "@mui/material";
 import { es } from "date-fns/locale";
-import { AccountCircle, Email, Lock, Phone } from "@mui/icons-material";
+import { AccountCircle, Email, Lock } from "@mui/icons-material";
 import BadgeIcon from "@mui/icons-material/Badge";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import TneButton from "../components/TneButton";
-import PhoneInput from "../components/PhoneInput";
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import TneButton from "../../client/components/TneButton";
+import PhoneInput from "../../client/components/PhoneInput";
+import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
+import Footer from "../../client/components/Footer";
 
-import { register } from "../services/ApiRest";
+import { register } from "../../client/services/ApiRest";
 
 const Registry = () => {
   const [name, setName] = useState("");
@@ -201,6 +198,7 @@ const Registry = () => {
           </form>
         </Grid>
       </Container>
+      <Footer />
     </CssBaseline>
   );
 };
