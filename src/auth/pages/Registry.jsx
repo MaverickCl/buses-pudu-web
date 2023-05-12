@@ -20,7 +20,7 @@ import PhoneInput from "../../client/components/PhoneInput";
 import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
 
-import { register } from "../../client/services/ApiRest";
+import { register } from "../services/SignUpApiRest";
 
 const Registry = () => {
   const [name, setName] = useState("");

@@ -80,7 +80,7 @@ function ResponsiveAppBar() {
         <Toolbar disableGutters>
           <Link to="/">
             <img
-              src="logoWhite.png"
+              src="/logoWhite.png"
               style={{
                 marginRight: "0.5rem",
                 width: "3rem",
@@ -163,7 +163,7 @@ function ResponsiveAppBar() {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Profile Picture"
-                    src="pudu.jpeg"
+                    src="/pudu.jpeg"
                     sx={{
                       width: "2.5rem",
                       height: "2.5rem",
@@ -202,7 +202,7 @@ function ResponsiveAppBar() {
               <MenuItem
                 onClick={handleCloseAuthMenu}
                 component={Link}
-                to="/registro"
+                to="/auth/registro"
               >
                 Registrarse
               </MenuItem>

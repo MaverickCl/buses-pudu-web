@@ -157,6 +157,7 @@ export default function LandingPage() {
               image="pic_comfy.jpg"
               title="Comodidad Máxima"
               desc="Te aseguramos que contarás con los asientos mas comodos del mercado."
+              imgHeight="500vh"
             />
           </Grid>
           <Grid item>
@@ -164,6 +165,7 @@ export default function LandingPage() {
               image="pic_modern.jpg"
               title="Buses Modernos"
               desc="Viaja con estilo en nuestros buses modernos y equipados con tecnología de última generación."
+              imgHeight="500vh"
             />
           </Grid>
           <Grid item>
@@ -171,6 +173,7 @@ export default function LandingPage() {
               image="pic_arrive.jpg"
               title="Viaja sin complicaciones"
               desc="Deja las preocupaciones atrás y disfruta de un viaje sin contratiempos."
+              imgHeight="500vh"
             />
           </Grid>
         </Grid>

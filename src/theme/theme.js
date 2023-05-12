@@ -1,15 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 import { green, red, blue, orange } from "@mui/material/colors";
-import Kanit from '/fonts/Kanit-ExtraBold.ttf';
 
 // Create a theme instance.
 const theme = createTheme({
-  typography: {
-    fontFamily: [
-      'Kanit',
-      'sans-serif',
-    ].join(','),
-  },
+
   palette: {
     primary: {
       main: '#c54120',
@@ -48,27 +42,7 @@ const theme = createTheme({
       hover: orange[700],
     }
   },
-  overrides: {
-    MuiCssBaseline: {
-      '@global': {
-        '@font-face': [
-          {
-            fontFamily: 'Kanit',
-            fontStyle: 'normal',
-            fontDisplay: 'swap',
-            fontWeight: 400,
-            src: `
-              local('Kanit'),
-              local('Kanit-Regular'),
-              url(${Kanit}) format('truetype')
-            `,
-            unicodeRange:
-              'U+0-FF, U+200-2FF, U+600-6FF, U+FB00-FB4F, U+FE00-FE0F, U+FE70-FEFF',
-          },
-        ],
-      },
-    },
-  },
+
 });
 
 export default theme;
