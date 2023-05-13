@@ -6,7 +6,7 @@ class PasswdApiRest {
 
     static async changePass(token, cambioContraseniaDTO) {
     try {
-      const response = await axios.put(`${BASE_URL}/usuarios/cambiar-contrasenia`, cambioContraseniaDTO, {
+      const response = await axios.put(`${BASE_URL}/api/cuenta/cambiar-contrasenia`, cambioContraseniaDTO, {
         headers: {
           Authorization: `Bearer ${token}`
         }

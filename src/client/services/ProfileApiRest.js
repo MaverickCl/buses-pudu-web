@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080/api/cliente';
+const BASE_URL = 'http://localhost:8080/api/cuenta/cliente';
 
 class ProfileApiRest {
   static async getProfile(token) {
@@ -12,7 +12,7 @@ class ProfileApiRest {
       headers: { Authorization: `Bearer ${token}` },
     };
     try {
-      const response = await axios.get(`${BASE_URL}/perfil`, config);
+      const response = await axios.get(`${BASE_URL}`, config);
       return response.data;
       
     } catch (error) {
@@ -28,7 +28,7 @@ class ProfileApiRest {
       headers: { Authorization: `Bearer ${token}` },
     };
     try {
-      const response = await axios.put(`${BASE_URL}/editar`, profileData, config);
+      const response = await axios.put(`${BASE_URL}`, profileData, config);
       return response.data;
     } catch (error) {
       console.error(error);
