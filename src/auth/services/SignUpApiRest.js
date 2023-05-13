@@ -2,7 +2,7 @@ import axios from "axios";
 export const Apiurl = "http://localhost:8080/";
 
 
-export async function register(nombre,rut,contacto,fecha_nacimiento,correo,contrasenia) {
+export async function register(nombre,rut,contacto,fechaNacimiento,correo,contrasenia) {
   try {
     const response = await axios.post(
       `${Apiurl}api/autentificacion/crear`,
@@ -12,7 +12,7 @@ export async function register(nombre,rut,contacto,fecha_nacimiento,correo,contr
         correo,
         rut,
         contacto,
-        fecha_nacimiento,
+        fechaNacimiento,
         rolesEnum: [
           "usuario",
           "cliente"

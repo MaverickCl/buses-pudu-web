@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Container,
   CssBaseline,
@@ -11,12 +12,12 @@ import {
   Button,
   useMediaQuery,
   useTheme,
-  Link,
 } from "@mui/material";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 
 const PointsCard = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
   return (
@@ -82,11 +83,11 @@ const PointsCard = () => {
               marginRight: isPortrait ? 0 : "2rem",
             }}
           >
-            {/* <Link to="/auth/registro" style={{ textDecoration: "none" }}> For some ungodly reason the link is not working */}
-            <Button variant="contained" size="small" href="/auth/registro">
-              Registrarse en Buses Pudú
-            </Button>
-            {/* </Link> */}
+            <Link to="/auth/registro" style={{ textDecoration: "none" }}>
+              <Button variant="contained" size="small">
+                Registrarse en Buses Pudú
+              </Button>
+            </Link>
           </CardActions>
         </Grid>
       </Grid>

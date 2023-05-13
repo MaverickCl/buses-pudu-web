@@ -5,7 +5,7 @@ import theme from "../../theme/theme";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center">
+    <Typography variant="body2" color="text" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Buses Pudú
@@ -23,7 +23,7 @@ function Footer() {
         display: "flex",
         position: "relative",
         marginTop: "2rem",
-        bgcolor: theme.palette.secondaryLight.main,
+        bgcolor: "black",
         width: "100%",
         color: "white",
         bottom: "0",
@@ -32,14 +32,11 @@ function Footer() {
       }}
     >
       <Container maxWidth="lg">
-        <Box
-          sx={{ bgcolor: theme.palette.secondaryLight.main, p: 6 }}
-          component="footer"
-        >
+        <Box sx={{ p: 6 }} component="footer">
           <Typography
             variant="subtitle1"
             align="center"
-            color="text.secondary"
+            color="text"
             component="p"
           >
             Buses Pudú

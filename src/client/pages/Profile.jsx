@@ -15,6 +15,7 @@ import {
   useMediaQuery,
   TextField,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -27,23 +28,16 @@ import PasswordDialog from "../components/PasswordDialog";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 
-const perfil = {
-  name: "Juan Pérez",
-  rut: "20.081.388-k",
-  email: "juan.perez@busespudu.com",
-  phone: "+56 9 1234 5678",
-  puduPoints: 100,
-  hasTneDiscount: false,
-};
+import ProfileApiRest from "../services/ProfileApiRest";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = React.useState(false);
-  const [profileData, setProfileData] = React.useState(perfil);
+  const [profileData, setProfileData] = React.useState(null);
   const [openPasswordDialog, setOpenPasswordDialog] = React.useState(false);
   const [tneMessage, setTneMessage] = React.useState("Tienes una TNE vigente?");
-  const [tne, setTne] = React.useState(profileData.hasTneDiscount);
-  const [email, setEmail] = React.useState(profileData.email);
-  const [phoneNumber, setPhoneNumber] = React.useState(profileData.phone);
+  const [tne, setTne] = React.useState(null);
+  const [email, setEmail] = React.useState(null);
+  const [phoneNumber, setPhoneNumber] = React.useState(null);
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -67,11 +61,87 @@ const Profile = () => {
       return;
     }
 
-    perfil.phone = phoneNumber;
-    perfil.email = email;
-    perfil.hasTneDiscount = tne;
+    // Update profile data
+    profileData.phone = phoneNumber;
+    profileData.email = email;
+    profileData.hasTneDiscount = tne;
+
+    // Save changes to backend
+    ProfileApiRest.editProfile(profileData)
+      .then((response) => {
+        // Handle success
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
     setIsEditing(false);
   };
+
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      history.push("/auth/register");
+      return;
+    }
+
+    ProfileApiRest.getProfile(token)
+      .then((response) => {
+        // Handle success
+        setProfileData(response.data);
+        setTne(response.data.hasTneDiscount);
+        setEmail(response.data.email);
+        setPhoneNumber(response.data.phone);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+
+        //-----------------
+        //TEMP TEST DATA
+        //-----------------
+        const tempData = {
+          name: "John Doe",
+          hasTneDiscount: true,
+          email: "johndoe@example.com",
+          rut: "12.345.678-9",
+          phone: "+56912345678",
+          puduPoints: 500,
+        };
+
+        setProfileData(tempData);
+        setTne(tempData.hasTneDiscount);
+        setEmail(tempData.email);
+        setPhoneNumber(tempData.phone);
+        //-----------------
+        //TEMP TEST DATA
+        //-----------------
+      });
+  }, []);
+
+  if (!profileData) {
+    return (
+      <CssBaseline>
+        <ResponsiveAppBar position="absolute" />
+
+        <Box
+          style={{
+            flex: 1,
+            height: "90vh",
+
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress color="secondary" size={90} />
+        </Box>
+        <Footer />
+      </CssBaseline>
+    );
+  }
 
   return (
     <CssBaseline>

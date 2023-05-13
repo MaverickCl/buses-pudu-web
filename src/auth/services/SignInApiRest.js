@@ -16,10 +16,10 @@ export async function login(correo,contrasenia) {
         },
       }
     ).then(response =>{
-       console.log(response);
+      return response.data;
     })
-    return console.log("autorizado")
-    //return response.data;
+    console.log("autorizado")
+    return response;
   } catch (error) {
     console.log(error);
   }

@@ -9,6 +9,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { es } from "date-fns/locale";
+import { format } from "date-fns";
 import { AccountCircle, Email, Lock } from "@mui/icons-material";
 import BadgeIcon from "@mui/icons-material/Badge";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -32,11 +33,21 @@ const Registry = () => {
   const [tne, setTne] = useState(false);
   const [tneMessage, setTneMessage] = useState("Tienes una TNE vigente?");
 
+  const formattedBirthDate = birthDate ? format(birthDate, "dd-MM-yyyy") : "";
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log({ name, birthDate, rut, phoneNumber, email, password, tne });
-    registerLogic(name, rut, phoneNumber, birthDate, email, password);
+    console.log({
+      name,
+      formattedBirthDate,
+      rut,
+      phoneNumber,
+      email,
+      password,
+      tne,
+    });
+    registerLogic(name, rut, phoneNumber, formattedBirthDate, email, password);
   };
 
   async function registerLogic(

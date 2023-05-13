@@ -31,12 +31,19 @@ const settings = [
   { title: "Salir", link: "" },
 ];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [authMenuAnchorEl, setAuthMenuAnchorEl] = React.useState(null);
   const [isAuthMenuOpen, setIsAuthMenuOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    handleLogin();
+    if (props.isLoggedIn) {
+      setIsLoggedIn(true);
+    }
+  }, [props.isLoggedIn]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -54,14 +61,19 @@ function ResponsiveAppBar() {
   };
 
   const handleLogin = () => {
-    // add login handler
-    setIsLoggedIn(true);
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
   };
 
   const handleLogout = () => {
-    // add logout handler
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
-    handleCloseUserMenu(); // close user menu after logout
+    handleCloseUserMenu();
   };
 
   const handleOpenAuthMenu = (event) => {
