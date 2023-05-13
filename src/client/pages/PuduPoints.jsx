@@ -83,11 +83,19 @@ const PointsCard = () => {
               marginRight: isPortrait ? 0 : "2rem",
             }}
           >
-            <Link to="/auth/registro" style={{ textDecoration: "none" }}>
-              <Button variant="contained" size="small">
-                Registrarse en Buses Pudú
-              </Button>
-            </Link>
+            {localStorage.getItem("token") ? (
+              <Link to="/perfil" style={{ textDecoration: "none" }}>
+                <Button variant="contained" size="small">
+                  Revisar tus puntos
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/auth/registro" style={{ textDecoration: "none" }}>
+                <Button variant="contained" size="small">
+                  Registrarse en Buses Pudú
+                </Button>
+              </Link>
+            )}
           </CardActions>
         </Grid>
       </Grid>

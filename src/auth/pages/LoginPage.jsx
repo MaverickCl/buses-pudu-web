@@ -13,7 +13,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { login } from "../services/SignInApiRest";
+
 import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
 
@@ -24,6 +27,18 @@ export default function LoginPage() {
   const [contrasenia, setContrasenia] = useState("");
   const [loginError, setLoginError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await loginLogic(correo, contrasenia);
+    navigate("/");
+    if (!result) {
+      setLoginError(true);
+      return;
+    }
+  };
 
   async function loginLogic(correo, contrasenia) {
     const result = await login(correo, contrasenia);
@@ -44,15 +59,6 @@ export default function LoginPage() {
       contrasenia: data.get('contrasenia'),
   })
   }); */
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const result = await loginLogic(correo, contrasenia);
-    if (!result) {
-      setLoginError(true);
-      return;
-    }
-  };
 
   return (
     <CssBaseline>

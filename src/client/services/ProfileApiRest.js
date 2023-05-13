@@ -13,9 +13,6 @@ class ProfileApiRest {
     };
     try {
       const response = await axios.get(`${BASE_URL}/perfil`, config);
-
-     
-
       return response.data;
       
     } catch (error) {

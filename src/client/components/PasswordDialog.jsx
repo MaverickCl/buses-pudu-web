@@ -13,6 +13,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import PasswdApiRest from "../services/PasswdApiRest";
 
 const PasswordDialog = ({ open, onClose }) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -34,8 +35,21 @@ const PasswordDialog = ({ open, onClose }) => {
     setConfirmPasswordVisible(!confirmPasswordVisible);
   };
 
-  const handleSave = () => {
-    // Save password
+  const handleSave = async () => {
+    const tempProfile = {
+      contraseniaActual: currentPassword,
+      contraseniaNueva: password,
+      confirmarContrasenia: confirmPassword,
+    };
+
+    PasswdApiRest.changePass(localStorage.getItem("token"), tempProfile)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     onClose();
   };
 

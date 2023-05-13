@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -41,6 +41,8 @@ const Profile = () => {
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const navigate = useNavigate();
+
   const handleChange = (event) => {
     setProfileData({
       ...profileData,
@@ -48,6 +50,30 @@ const Profile = () => {
     });
   };
 
+  //RETRIEVE DATA FROM API
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/auth/login");
+      return;
+    }
+
+    ProfileApiRest.getProfile(token)
+      .then((response) => {
+        // Handle success
+        setProfileData(response);
+
+        setTne(response.estadoTne);
+        setEmail(response.correo);
+        setPhoneNumber(response.contacto);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  //SAVE EDITED DATA TO API
   const handleSave = () => {
     // TODO: Save changes to backend
 
@@ -62,12 +88,18 @@ const Profile = () => {
     }
 
     // Update profile data
-    profileData.phone = phoneNumber;
-    profileData.email = email;
-    profileData.hasTneDiscount = tne;
+    profileData.contacto = phoneNumber;
+    profileData.correo = email;
+    profileData.estadoTne = tne;
+
+    const tempProfile = {
+      contacto: profileData.contacto,
+      correo: profileData.correo,
+      // estadoTne : profileData.estadoTne
+    };
 
     // Save changes to backend
-    ProfileApiRest.editProfile(profileData)
+    ProfileApiRest.updateProfile(localStorage.getItem("token"), tempProfile)
       .then((response) => {
         // Handle success
         setIsEditing(false);
@@ -78,48 +110,6 @@ const Profile = () => {
       });
     setIsEditing(false);
   };
-
-  React.useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      history.push("/auth/register");
-      return;
-    }
-
-    ProfileApiRest.getProfile(token)
-      .then((response) => {
-        // Handle success
-        setProfileData(response.data);
-        setTne(response.data.hasTneDiscount);
-        setEmail(response.data.email);
-        setPhoneNumber(response.data.phone);
-      })
-      .catch((error) => {
-        // Handle error
-        console.error(error);
-
-        //-----------------
-        //TEMP TEST DATA
-        //-----------------
-        const tempData = {
-          name: "John Doe",
-          hasTneDiscount: true,
-          email: "johndoe@example.com",
-          rut: "12.345.678-9",
-          phone: "+56912345678",
-          puduPoints: 500,
-        };
-
-        setProfileData(tempData);
-        setTne(tempData.hasTneDiscount);
-        setEmail(tempData.email);
-        setPhoneNumber(tempData.phone);
-        //-----------------
-        //TEMP TEST DATA
-        //-----------------
-      });
-  }, []);
 
   if (!profileData) {
     return (
@@ -143,9 +133,17 @@ const Profile = () => {
     );
   }
 
+  const handleLogout = () => {
+    const appbar = document.getElementById("appbar");
+    localStorage.removeItem("token");
+    if (appbar) {
+      appbar.setAttribute("isLoggedIn", "false");
+    }
+  };
+
   return (
     <CssBaseline>
-      <ResponsiveAppBar position="absolute" />
+      <ResponsiveAppBar id="appbar" position="absolute" />
 
       <Container
         maxWidth="sm"
@@ -156,7 +154,7 @@ const Profile = () => {
             <CardContent sx={{ display: "flex", flexDirection: "column" }}>
               <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
                 <Avatar
-                  alt={profileData.name}
+                  alt={profileData.nombre}
                   src="pudu.jpeg"
                   sx={{ width: 100, height: 100 }}
                 />
@@ -168,7 +166,7 @@ const Profile = () => {
               >
                 <Grid item xs={12} sm={6}>
                   <Typography variant="h5" gutterBottom>
-                    {profileData.name}
+                    {profileData.nombre}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -188,10 +186,10 @@ const Profile = () => {
                     <PhoneInput
                       onChange={(value) => setPhoneNumber(value)}
                       icon={false}
-                      number={profileData.phone.substring(3)}
+                      number={profileData.contacto.substring(3)}
                     />
                   ) : (
-                    <Typography>{profileData.phone}</Typography>
+                    <Typography>{profileData.contacto}</Typography>
                   )}
                 </Grid>
 
@@ -213,7 +211,7 @@ const Profile = () => {
                       onChange={(event) => setEmail(event.target.value)}
                     />
                   ) : (
-                    <Typography>{profileData.email}</Typography>
+                    <Typography>{profileData.correo}</Typography>
                   )}
                 </Grid>
               </Grid>
@@ -226,7 +224,7 @@ const Profile = () => {
                 marginTop="1rem"
                 marginBottom="1rem"
               >
-                {profileData.hasTneDiscount ? (
+                {profileData.estadoTne ? (
                   <Typography variant="subtitle2">
                     <VerifiedIcon
                       color="success"
@@ -277,9 +275,7 @@ const Profile = () => {
                   sx={{ mr: 1, height: 24 }}
                   width="50rem"
                 />
-                <Typography fontSize="2rem">
-                  {profileData.puduPoints}
-                </Typography>
+                <Typography fontSize="2rem">{profileData.puntos}</Typography>
               </Grid>
             </CardContent>
 
@@ -352,8 +348,9 @@ const Profile = () => {
                   variant="outlined"
                   color="error"
                   startIcon={<LockIcon />}
+                  onClick={handleLogout}
                 >
-                  <Link to="/auth/logout" style={{ textDecoration: "none" }}>
+                  <Link to="/" style={{ textDecoration: "none" }}>
                     Cerrar Sesión
                   </Link>
                 </Button>

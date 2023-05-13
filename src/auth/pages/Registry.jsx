@@ -15,6 +15,7 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useNavigate } from "react-router-dom";
 
 import TneButton from "../../client/components/TneButton";
 import PhoneInput from "../../client/components/PhoneInput";
@@ -35,19 +36,25 @@ const Registry = () => {
 
   const formattedBirthDate = birthDate ? format(birthDate, "dd-MM-yyyy") : "";
 
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log({
-      name,
-      formattedBirthDate,
-      rut,
-      phoneNumber,
-      email,
-      password,
-      tne,
-    });
-    registerLogic(name, rut, phoneNumber, formattedBirthDate, email, password);
+    try {
+      await registerLogic(
+        name,
+        rut,
+        phoneNumber,
+        formattedBirthDate,
+        email,
+        password
+      );
+
+      navigate("/auth/login");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   async function registerLogic(
