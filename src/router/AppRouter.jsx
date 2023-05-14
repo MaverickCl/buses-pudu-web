@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { AuthRoutes } from "../auth/routes/AuthRoutes";
 import { ClientRoutes } from "../client/routes/ClientRoutes";
+import { BusRoutes } from "../buses/routes/BusRoutes";
 //import { NotFound } from './pages/404';
 
 export const AppRouter = () => {
@@ -11,7 +12,9 @@ export const AppRouter = () => {
       <Route path="/auth/*" element={<AuthRoutes />} />
 
       {/* LandingPage */}
-      <Route path="/*" element={<ClientRoutes />} />
+      <Route path="/*" element={<ClientRoutes/>} />
+      {/* Creacion de buses*/}
+      <Route path="/bus/*" element={<BusRoutes/>} />
     </Routes>
   );
 };
