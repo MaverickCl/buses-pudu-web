@@ -6,12 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
 import Container from "@mui/material/Container";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import Avatar from "@mui/material/Avatar";
 
@@ -37,6 +34,9 @@ function ResponsiveAppBar(props) {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [authMenuAnchorEl, setAuthMenuAnchorEl] = React.useState(null);
   const [isAuthMenuOpen, setIsAuthMenuOpen] = React.useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   React.useEffect(() => {
     handleLogin();
@@ -73,6 +73,13 @@ function ResponsiveAppBar(props) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+
+    setTimeout(() => {
+      if (location.pathname === "/perfil") {
+        navigate("/");
+      }
+    }, 0);
+
     handleCloseUserMenu();
   };
 

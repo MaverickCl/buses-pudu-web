@@ -50,7 +50,6 @@ const Profile = () => {
     });
   };
 
-  //RETRIEVE DATA FROM API
   React.useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -75,8 +74,6 @@ const Profile = () => {
 
   //SAVE EDITED DATA TO API
   const handleSave = () => {
-    // TODO: Save changes to backend
-
     const emailFormat = new RegExp(
       "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}(\\.[a-z]{2,})?$",
       "i"

@@ -33,11 +33,11 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await loginLogic(correo, contrasenia);
-    navigate("/");
+
     if (!result) {
       setLoginError(true);
       return;
-    }
+    } else navigate("/");
   };
 
   async function loginLogic(correo, contrasenia) {
@@ -109,7 +109,7 @@ export default function LoginPage() {
                 value={contrasenia}
                 onChange={(e) => setContrasenia(e.target.value)}
               />
-              {loginError && "Error de login"}
+              {loginError && "Contraseña incorrecta"}
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Recuérdame"
