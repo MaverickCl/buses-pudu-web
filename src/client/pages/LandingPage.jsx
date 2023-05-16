@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Card,
@@ -11,9 +12,7 @@ import {
   Typography,
   Container,
   useMediaQuery,
-  Link,
   TextField,
-  //Grid2,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -26,9 +25,18 @@ const theme = createTheme();
 const paperHeight = `min(70vh, ${42.08}vw)`;
 
 export default function LandingPage() {
-  const [orign, setOrigin] = React.useState("");
+  const [origin, setOrigin] = React.useState("");
   const [destination, setDestination] = React.useState("");
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
+  
+  const navigate = useNavigate();
+
+  const handleSearch = () => {    
+    localStorage.setItem("destination", destination);
+    localStorage.setItem("origin", origin);
+
+    navigate("/busqueda")
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -136,7 +144,7 @@ export default function LandingPage() {
                     justifyContent: isPortrait ? "center" : "flex-start",
                   }}
                 >
-                  <Button variant="contained" size="small">
+                  <Button variant="contained" size="small" onClick={handleSearch}>
                     ver viaje
                   </Button>
                 </CardActions>

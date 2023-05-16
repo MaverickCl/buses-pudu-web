@@ -23,6 +23,8 @@ import Footer from "../components/Footer";
 const TripCard = ({ trip }) => {
   const { origin, destination, departureTime, arrivalTime, price } = trip;
 
+ 
+
   return (
     <Card>
       <CardContent>
@@ -41,8 +43,8 @@ const TripCard = ({ trip }) => {
 };
 
 const InputCard = ({ handleSearch }) => {
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
+  const [origin, setOrigin] = useState(localStorage.getItem("origin"));
+  const [destination, setDestination] = useState(localStorage.getItem("destination"));
 
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
@@ -189,9 +191,10 @@ const SearchResultPage = () => {
   // END OF THEST VALUES
   // -----------------
 
+
   //const [trips, setTrips] = useState([]);
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
+  const [origin, setOrigin] = useState(localStorage.getItem("origin"));
+  const [destination, setDestination] = useState(localStorage.getItem("destination"));
   const [filterValues, setFilterValues] = useState({
     sortBy: "price",
     sortOrder: "asc",

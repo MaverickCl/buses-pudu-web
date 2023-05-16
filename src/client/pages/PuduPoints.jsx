@@ -17,7 +17,6 @@ import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 
 const PointsCard = () => {
-  const navigate = useNavigate();
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
   return (
