@@ -90,7 +90,7 @@ export default function LoginPage() {
                 required
                 fullWidth
                 id="correo"
-                label="Correo Elóctronico"
+                label="Correo Eléctronico"
                 name="correo"
                 autoComplete="email"
                 value={correo}

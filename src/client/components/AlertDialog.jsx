@@ -12,12 +12,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function AlertDialogSlide(props) {
-  const [open, setOpen] = React.useState(true);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <div>
       <Dialog
@@ -34,7 +28,7 @@ export default function AlertDialogSlide(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>{props.button}</Button>
+          <Button onClick={props.onClose}>{props.button}</Button>
         </DialogActions>
       </Dialog>
     </div>

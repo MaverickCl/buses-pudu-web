@@ -144,6 +144,11 @@ const PasswordDialog = ({ open, onClose }) => {
               }
               label="Confirmar Contraseña"
             />
+            {currentPassword == password && (
+              <FormHelperText error>
+                La contraseña ingresada es igual a la anterior
+              </FormHelperText>
+            )}
             {password !== confirmPassword && (
               <FormHelperText error>
                 Las contraseñas no coinciden

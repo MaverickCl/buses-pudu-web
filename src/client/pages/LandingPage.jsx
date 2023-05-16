@@ -28,15 +28,15 @@ export default function LandingPage() {
   const [origin, setOrigin] = React.useState("");
   const [destination, setDestination] = React.useState("");
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
-  
+
   const navigate = useNavigate();
 
-  const handleSearch = () => {    
+  const handleSearch = () => {
     localStorage.setItem("destination", destination);
     localStorage.setItem("origin", origin);
 
-    navigate("/busqueda")
-  }
+    navigate("/busqueda");
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -117,7 +117,7 @@ export default function LandingPage() {
                   fontWeight="bold"
                   align={isPortrait ? "center" : "left"}
                 >
-                  ¿A DONDE TE LLEVAMOS HOY?
+                  ¿A DÓNDE TE LLEVAMOS HOY?
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item sm={6} width="100%">
@@ -144,7 +144,11 @@ export default function LandingPage() {
                     justifyContent: isPortrait ? "center" : "flex-start",
                   }}
                 >
-                  <Button variant="contained" size="small" onClick={handleSearch}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={handleSearch}
+                  >
                     ver viaje
                   </Button>
                 </CardActions>
