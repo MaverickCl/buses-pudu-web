@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import Footer from "../components/Footer";
 
 const tickets = [
   {
@@ -129,6 +130,7 @@ const TicketManagementPage = () => {
           </Dialog>
         </Box>
       </Container>
+      <Footer />
     </CssBaseline>
   );
 };

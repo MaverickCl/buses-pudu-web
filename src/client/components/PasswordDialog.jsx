@@ -25,6 +25,8 @@ const PasswordDialog = ({ open, onClose }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [showAlert, setShowAlert] = React.useState(false);
+  const [passError, setPassError] = useState("");
+  const [allowSave, setAllowSave] = useState(true);
 
   const handleCurrentPasswordVisibility = () => {
     setCurrentPasswordVisible(!currentPasswordVisible);
@@ -57,12 +59,31 @@ const PasswordDialog = ({ open, onClose }) => {
     PasswdApiRest.changePass(localStorage.getItem("token"), tempProfile)
       .then((response) => {
         handleShowAlert();
+        onClose();
       })
       .catch((error) => {
-        console.log(error);
+        setPassError(error.response.data.message);
+        setAllowSave(false);
       });
+  };
 
-    onClose();
+  const SaveError = () => {
+    if (!allowSave) {
+      if (currentPassword == password) {
+        setPassError("La contraseña ingresada es igual a la anterior");
+      }
+      if (password !== confirmPassword) {
+        setPassError("Las contraseñas no coinciden");
+      }
+      if (password == "") {
+        setPassError("Debe ingresar una contraseña nueva");
+      }
+      if (currentPassword == "") {
+        setPassError("Debe ingresar su contraseña actual");
+      }
+
+      return <FormHelperText error>{passError}</FormHelperText>;
+    } else return <></>;
   };
 
   return (
@@ -78,7 +99,10 @@ const PasswordDialog = ({ open, onClose }) => {
               id="current-password"
               type={currentPasswordVisible ? "text" : "password"}
               value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              onChange={(e) => {
+                setCurrentPassword(e.target.value);
+                setAllowSave(true);
+              }}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -103,7 +127,10 @@ const PasswordDialog = ({ open, onClose }) => {
               id="password"
               type={passwordVisible ? "text" : "password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setAllowSave(true);
+              }}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -144,23 +171,15 @@ const PasswordDialog = ({ open, onClose }) => {
               }
               label="Confirmar Contraseña"
             />
-            {currentPassword == password && (
-              <FormHelperText error>
-                La contraseña ingresada es igual a la anterior
-              </FormHelperText>
-            )}
-            {password !== confirmPassword && (
-              <FormHelperText error>
-                Las contraseñas no coinciden
-              </FormHelperText>
-            )}
+
+            <SaveError />
           </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancelar</Button>
           <Button
             onClick={handleSave}
-            disabled={password !== confirmPassword}
+            disabled={!allowSave}
             variant="contained"
             color="primary"
           >

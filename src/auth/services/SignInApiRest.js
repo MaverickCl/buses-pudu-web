@@ -21,6 +21,6 @@ export async function login(correo,contrasenia) {
     console.log("autorizado")
     return response;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }

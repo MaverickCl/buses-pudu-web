@@ -19,25 +19,29 @@ import { login } from "../services/SignInApiRest";
 
 import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
+import { FormHelperText } from "@mui/material";
 
 const theme = createTheme();
 
 export default function LoginPage() {
   const [correo, setCorreo] = useState("");
   const [contrasenia, setContrasenia] = useState("");
-  const [loginError, setLoginError] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await loginLogic(correo, contrasenia);
+    try {
+      const result = await loginLogic(correo, contrasenia);
 
-    if (!result) {
-      setLoginError(true);
-      return;
-    } else navigate("/");
+      if (!result) {
+        return;
+      } else navigate("/");
+    } catch (error) {
+      setLoginError(error.response.data);
+    }
   };
 
   async function loginLogic(correo, contrasenia) {
@@ -52,6 +56,10 @@ export default function LoginPage() {
     return false;
   }
 
+  const handleRecoverPass = async () => {
+    console.log("recovering password");
+  };
+
   //const data = new FormData(e.target);
   /* useEffect(() => {
     console.log({
@@ -60,82 +68,102 @@ export default function LoginPage() {
   })
   }); */
 
+  const LoginErrorDisplay = () => {
+    let errorText = "";
+
+    if (loginError !== "") {
+      if (correo === "") {
+        errorText = "Debe ingresar un correo";
+      } else if (contrasenia === "") {
+        errorText = "Debe ingresar una contraseña";
+      } else {
+        errorText = loginError;
+      }
+    }
+
+    return errorText !== "" ? (
+      <FormHelperText error>{errorText}</FormHelperText>
+    ) : null;
+  };
+
   return (
     <CssBaseline>
       <ResponsiveAppBar position="absolute" isLoggedIn={isLoggedIn} />
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Ingreso
-            </Typography>
+          <Grid container height="90vh" alignItems="center">
             <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="correo"
-                label="Correo Eléctronico"
-                name="correo"
-                autoComplete="email"
-                value={correo}
-                onChange={(e) => setCorreo(e.target.value)}
-                autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="contrasenia"
-                label="Contraseña"
-                type="password"
-                id="contrasenia"
-                autoComplete="current-password"
-                value={contrasenia}
-                onChange={(e) => setContrasenia(e.target.value)}
-              />
-              {loginError && "Contraseña incorrecta"}
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Recuérdame"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                Ingreso
+              </Typography>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{ mt: 1 }}
               >
-                Ingresar
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    ¿Olvidaste tu contraseña?
-                  </Link>
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="correo"
+                  label="Correo Eléctronico"
+                  name="correo"
+                  autoComplete="email"
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
+                  autoFocus
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="contrasenia"
+                  label="Contraseña"
+                  type="password"
+                  id="contrasenia"
+                  autoComplete="current-password"
+                  value={contrasenia}
+                  onChange={(e) => setContrasenia(e.target.value)}
+                />
+                <LoginErrorDisplay />
+                <FormControlLabel
+                  control={<Checkbox value="remember" color="primary" />}
+                  label="Recuérdame"
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Ingresar
+                </Button>
+                <Grid container>
+                  <Grid item xs>
+                    <Link onClick={handleRecoverPass} variant="body2">
+                      ¿Olvidaste tu contraseña?
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <Link href="/auth/registro" variant="body2">
+                      {"¿No tienes una cuenta? Regístrate"}
+                    </Link>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Link href="/auth/registro" variant="body2">
-                    {"¿No tienes una cuenta? Regístrate"}
-                  </Link>
-                </Grid>
-              </Grid>
+              </Box>
             </Box>
-          </Box>
+          </Grid>
         </Container>
       </ThemeProvider>
       <Footer />
