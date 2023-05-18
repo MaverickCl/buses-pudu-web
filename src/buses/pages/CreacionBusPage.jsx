@@ -31,7 +31,7 @@ const CreacionBusPage = () => {
     const updatedBusData = { patenteBus: busData.patente, asientos: updatedAsientosData };
     try {
       const updatedBus = await BusService.enviarAsientos(updatedBusData);
-      console.log('Bus actualizado:', updatedBus);
+      console.log('Bus y asientos actualizados:', updatedBus);
       setBusData(updatedBus);
     } catch (error) {
       console.error(error.message);

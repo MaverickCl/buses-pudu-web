@@ -1,5 +1,3 @@
-// MatrizAsientos.js
-
 import React, { useState } from 'react';
 import { Box, Button, Grid } from '@mui/material';
 import Asiento from './Asiento';

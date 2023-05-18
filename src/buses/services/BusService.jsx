@@ -1,8 +1,6 @@
-// BusService.js
-
 import axios from 'axios';
 
-const apiEndpoint = 'http://localhost:8080/api/bus'; // Cambia esta URL con la URL correcta de tu API
+const apiEndpoint = 'http://localhost:8080/api/bus'; 
 
 const crearBus = async (busData) => {
   try {
@@ -16,7 +14,8 @@ const crearBus = async (busData) => {
 const enviarAsientos = async (busData) => {
   try {
     console.log(busData)
-    const response = await axios.post(`${apiEndpoint}/${busData.patenteBus}/asientos`, busData.asientos);
+    //const response = await axios.post(`${apiEndpoint}/${busData.patenteBus}/asientos`, busData);
+    const response = await axios.post(`${apiEndpoint}/asientos`, busData);
     return response.data;
   } catch (error) {
     throw new Error('Error al enviar los asientos');
