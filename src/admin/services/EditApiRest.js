@@ -27,9 +27,13 @@ class EditApiRest {
   static async updateProfile(token, id , profileData) {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
+      
     };
+    
     try {
-      const response = await axios.put(`${BASE_URL}/${id}`, profileData, config);
+      //console.log(`${BASE_URL}/${id}`, profileData, config)
+      const response = await axios.put(`${BASE_URL}`, profileData, config);
+      
       return response.data;
     } catch (error) {
       console.error(error);

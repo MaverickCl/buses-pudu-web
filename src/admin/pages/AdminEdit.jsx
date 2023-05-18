@@ -77,13 +77,17 @@ export const AdminEdit = () => {
   const handleSave = () => {
     const id = urlParams.get('id')
     profileData.nombre = nombre;
-    profileData.puntos = puntos;
+    //profileData.puntos = puntos;
     profileData.rut = rut;
+
     
 
     const tempProfile = {
         nombre: profileData.nombre,
-        puntos: profileData.puntos,
+        //puntos: profileData.puntos,
+        correo:profileData.correo,
+        id:profileData.id,
+        contacto:profileData.contacto,
         rut: profileData.rut,
         // estadoTne : profileData.estadoTne
       };
@@ -143,7 +147,7 @@ export const AdminEdit = () => {
             <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
                 <Avatar
                 alt={profileData.nombre}
-                src="pudu.jpeg"
+                src="/pudu.jpeg"
                 sx={{ width: 100, height: 100 }}
                 />
             </Box>
@@ -210,7 +214,7 @@ export const AdminEdit = () => {
                 </Grid>
             </Grid>
 
-            <Grid
+            {/* <Grid
                 item
                 xs={12}
                 sm={6}
@@ -239,7 +243,7 @@ export const AdminEdit = () => {
                   ) : (
                     <Typography fontSize="2rem">{profileData.puntos}</Typography>
                   )}
-            </Grid>
+                  </Grid>*/}    
             </CardContent>
 
             <Grid
