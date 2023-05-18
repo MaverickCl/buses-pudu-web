@@ -16,11 +16,14 @@ import {
   TextField,
   useTheme,
   CircularProgress,
+  Tooltip,
+  Alert,
 } from "@mui/material";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 import PhoneInput from "../components/PhoneInput";
 import TneButton from "../components/TneButton";
@@ -29,6 +32,8 @@ import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 
 import ProfileApiRest from "../services/ProfileApiRest";
+import AlertDialogSlide from "../components/AlertDialog";
+import EmailVerifyDialog from "../components/EmailVerifyDialog";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = React.useState(false);
@@ -40,6 +45,9 @@ const Profile = () => {
   const [phoneNumber, setPhoneNumber] = React.useState(null);
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [isVerified, setIsVerified] = React.useState(null);
+  const [isVerifying, setIsVerifying] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -66,6 +74,7 @@ const Profile = () => {
         setTne(response.estadoTne);
         setEmail(response.correo);
         setPhoneNumber(response.contacto);
+        setIsVerified(response.estadoCorreo);
       })
       .catch((error) => {
         console.error(error);
@@ -138,6 +147,18 @@ const Profile = () => {
     }
   };
 
+  const VerifiedAlert = () => {
+    // CHANGE HERE TO MAKE IT LESS INVASIVE
+    if (!isVerified) {
+      return (
+        <Alert severity="warning" sx={{ margin: 1 }}>
+          Su correo no ha sido verificado, por lo que su cuenta no tiene acceso
+          a los beneficios del servicio Pudú Points.
+        </Alert>
+      );
+    } else return <></>;
+  };
+
   return (
     <CssBaseline>
       <ResponsiveAppBar id="appbar" position="absolute" />
@@ -196,9 +217,61 @@ const Profile = () => {
                   sm={6}
                   textAlign={isPortrait ? "left" : "right"}
                 >
-                  <Typography variant="subtitle1" gutterBottom>
-                    Email
-                  </Typography>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      marginLeft: isPortrait ? "-.5rem" : "",
+                    }}
+                    justifyContent={isPortrait ? "left" : "right"}
+                  >
+                    {isVerified ? (
+                      <Tooltip title="Tu correo está verificado">
+                        <VerifiedIcon
+                          color="success"
+                          sx={{
+                            fontSize: "1.5rem",
+                            verticalAlign: "middle",
+                            marginRight: "0.5rem",
+                          }}
+                        />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Tu correo no está verificado">
+                        <ReportProblemIcon
+                          color="error"
+                          sx={{
+                            ml: 1,
+                            fontSize: "1.5rem",
+                            verticalAlign: "middle",
+                            marginRight: "0.5rem",
+                          }}
+                        />
+                      </Tooltip>
+                    )}
+                    <Typography variant="subtitle1" gutterBottom>
+                      Email
+                    </Typography>
+                    {!isVerified && (
+                      <Button
+                        variant="outlined"
+                        color="buttonBlue"
+                        sx={{
+                          height: "1.5rem",
+                          fontSize: "0.75rem",
+                          ml: ".75rem",
+                        }}
+                        onClick={() => {
+                          {
+                            setIsVerifying(true);
+                          }
+                        }}
+                      >
+                        Verificar Correo
+                      </Button>
+                    )}
+                  </Grid>
                   {isEditing ? (
                     <TextField
                       required
@@ -275,7 +348,7 @@ const Profile = () => {
                 <Typography fontSize="2rem">{profileData.puntos}</Typography>
               </Grid>
             </CardContent>
-
+            <VerifiedAlert />
             <Grid
               container
               alignItems="center"
@@ -356,6 +429,12 @@ const Profile = () => {
           </Card>
         </Box>
       </Container>
+
+      <EmailVerifyDialog
+        openDialog={isVerifying}
+        onClose={() => setIsVerifying(false)}
+        email={email}
+      />
       <Footer />
     </CssBaseline>
   );

@@ -5,8 +5,6 @@ const BASE_URL = 'http://localhost:8080/api/cuenta/cliente';
 class ProfileApiRest {
   static async getProfile(token) {
 
-
-
     const config = {
         
       headers: { Authorization: `Bearer ${token}` },

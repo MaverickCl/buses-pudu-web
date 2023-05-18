@@ -15,7 +15,7 @@ export default function AlertDialogSlide(props) {
   return (
     <div>
       <Dialog
-        open={open}
+        open={true}
         TransitionComponent={Transition}
         keepMounted
         aria-describedby="alert-dialog-slide-description"
