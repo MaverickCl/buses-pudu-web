@@ -21,15 +21,13 @@ const EmailVerificationPage = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const token = searchParams.get("token");
 
-    if (data === "") {
-      EmailVerifyApiRest.confirmarValidacionCorreo(token)
-        .then((response) => {
-          setData(response);
-        })
-        .catch((error) => {
-          setData(error.response.data);
-        });
-    }
+    EmailVerifyApiRest.confirmarValidacionCorreo(token)
+      .then((response) => {
+        setData(response);
+      })
+      .catch((error) => {
+        setData(error.response.data);
+      });
   }, []);
 
   return (
