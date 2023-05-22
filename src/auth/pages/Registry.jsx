@@ -184,13 +184,10 @@ const Registry = () => {
                   id="email"
                   label="Email"
                   value={email}
+                  type="email"
                   onChange={(event) => setEmail(event.target.value)}
                   InputProps={{
                     startAdornment: <Email color="secondary" />,
-                  }}
-                  inputProps={{
-                    pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,}$",
-                    title: "Ingresa un formato de correo válido",
                   }}
                 />
               </Grid>

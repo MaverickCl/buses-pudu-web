@@ -7,6 +7,7 @@ import TicketManagement from "../pages/TicketManagement";
 import Search from "../pages/Search";
 import EmailVerified from "../pages/EmailVerified";
 import TripPage from "../pages/TripPage";
+import Reserva from "../pages/ReservePage";
 
 export const ClientRoutes = () => {
   return (
@@ -24,6 +25,8 @@ export const ClientRoutes = () => {
       <Route path="/busqueda" element={<Search />} />
 
       <Route path="/viaje" element={<TripPage />} />
+
+      <Route path="/viaje-reserva" element={<Reserva />} />
 
       <Route path="/verificacion-correo" element={<EmailVerified />} />
     </Routes>

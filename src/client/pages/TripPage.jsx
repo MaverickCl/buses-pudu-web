@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, isPortrait } from "react";
 import {
   Container,
   Paper,
@@ -9,16 +9,21 @@ import {
   IconButton,
   Collapse,
   Zoom,
+  Divider,
+  Button,
 } from "@mui/material";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import Bus from "../components/Bus";
 import Seat from "../components/Seat";
+import { Link } from "react-router-dom";
 
 const TripPage = () => {
   const [selectedSeats, setSelectedSeats] = useState({});
   const [tripData, setTripData] = useState(null);
   const [currentSeat, setCurrentSeat] = useState({});
+
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   //   useEffect(() => {
   //     // Simulating API call to fetch trip data
@@ -56,8 +61,6 @@ const TripPage = () => {
   const { origin, destination, departureTime, price } = tripData;
 
   const seatHandler = (seat) => {
-    //const allSeats = [...selectedSeats, ...allSeats];
-
     setSelectedSeats((prevSelectedSeats) => {
       const updatedSelectedSeats = { ...prevSelectedSeats };
 
@@ -96,12 +99,27 @@ const TripPage = () => {
   const SeatSelection = () => {
     return (
       <div>
+        <Divider
+          variant="middle"
+          sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+        />
         <Typography variant="h6" gutterBottom>
           Sillas Seleccionadas
         </Typography>
-        <Grid container direction="row" alignItems="center">
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          justifyContent={selectedSeats.length === 4 && "space-between"}
+        >
           {Object.values(selectedSeats).map((seat, seatIndex) => (
-            <Grid key={seatIndex} item xs={2.3}>
+            <Grid
+              key={seatIndex}
+              item
+              xs={2.4}
+              display="flex"
+              justifyContent="center"
+            >
               <Zoom in={true}>
                 <IconButton
                   style={{
@@ -141,25 +159,56 @@ const TripPage = () => {
     );
   };
 
+  const TotalCard = () => {
+    let total = 0;
+
+    Object.values(selectedSeats).map((seat) => (total += seat.price));
+
+    return (
+      <>
+        {Object.values(selectedSeats).map((seat, seatIndex) => (
+          <Grid key={seatIndex} item xs={6}>
+            <Zoom in={true}>
+              <Typography>
+                Asiento {seat.seatNumber}: ${seat.price}
+              </Typography>
+            </Zoom>
+          </Grid>
+        ))}
+
+        <Divider variant="middle" />
+        <Typography variant="h6" gutterBottom>
+          Total de la compra: ${total}
+        </Typography>
+        <Grid item sx={{ display: "flex", justifyContent: "center" }}>
+          <Link to="/viaje-reserva">
+            <Button variant="contained">Reservar Boletos</Button>
+          </Link>
+        </Grid>
+      </>
+    );
+  };
+
   return (
     <>
-      <ResponsiveAppBar />
+      <ResponsiveAppBar position="absolute" />
       <Box
         display="flex"
         justifyContent="center"
         alignItems="center"
-        height="100vh"
-        marginTop="5rem"
-        marginBottom="5rem"
+        height="100%"
+        marginTop={isPortrait ? 10 : 12}
       >
         <Container maxWidth="md">
           <Grid
             container
             spacing={2}
-            sx={{ flexDirection: { xs: "column", sm: "row" } }}
+            sx={{
+              flexDirection: { xs: "column", sm: "row" },
+            }}
           >
             <Grid item xs={12} sm={6}>
-              <Paper elevation={3} sx={{ p: 2, m: 2 }}>
+              <Paper elevation={3} sx={{ p: 2, backgroundColor: "#efefef" }}>
                 <Typography variant="h6" gutterBottom>
                   Detalles del Viaje
                 </Typography>
@@ -173,11 +222,14 @@ const TripPage = () => {
                   Hora de salida: {departureTime}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  precio aprox: ${price}
+                  Precio aprox: ${price}
                 </Typography>
               </Paper>
               <Collapse in={Object.keys(selectedSeats).length > 0}>
-                <Paper elevation={3} sx={{ p: 2, m: 2 }}>
+                <Paper
+                  elevation={3}
+                  sx={{ p: 2, mt: 3, backgroundColor: "#f8f8f8" }}
+                >
                   <Typography variant="h6" gutterBottom>
                     Detalles del Asiento
                   </Typography>
@@ -187,13 +239,22 @@ const TripPage = () => {
                   </Collapse>
                 </Paper>
               </Collapse>
+
+              <Collapse in={Object.keys(selectedSeats).length > 0}>
+                <Paper
+                  elevation={3}
+                  sx={{ p: 2, mt: 3, backgroundColor: "#f8f8f8" }}
+                >
+                  <TotalCard />
+                </Paper>
+              </Collapse>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Paper elevation={3} sx={{ p: 2 }}>
                 <Typography variant="h6" gutterBottom>
                   Selecciona tu asiento
                 </Typography>
-                <Grid container spacing={1}>
+                <Grid container>
                   <Bus seatHandler={seatHandler} />
                 </Grid>
               </Paper>

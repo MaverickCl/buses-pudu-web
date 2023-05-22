@@ -32,7 +32,6 @@ import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 
 import ProfileApiRest from "../services/ProfileApiRest";
-import AlertDialogSlide from "../components/AlertDialog";
 import EmailVerifyDialog from "../components/EmailVerifyDialog";
 
 const Profile = () => {
@@ -277,6 +276,7 @@ const Profile = () => {
                       required
                       fullWidth
                       id="email"
+                      type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                     />

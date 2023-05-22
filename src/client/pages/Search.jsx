@@ -19,6 +19,7 @@ import {
 import { getTrips } from "../services/SearchApiRest";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 const TripCard = ({ trip }) => {
   const { origin, destination, departureTime, arrivalTime, price, date } = trip;
@@ -48,6 +49,9 @@ const TripCard = ({ trip }) => {
             <Typography variant="h4" component="h3">
               ${price}
             </Typography>
+            <Link to="/viaje">
+              <Button variant="contained">Seleccionar Asiento</Button>
+            </Link>
           </Grid>
         </Grid>
       </CardContent>
