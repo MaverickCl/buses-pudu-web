@@ -100,7 +100,7 @@ const Profile = () => {
     const tempProfile = {
       contacto: profileData.contacto,
       correo: profileData.correo,
-      // estadoTne : profileData.estadoTne
+      estadoTne: profileData.estadoTne,
     };
 
     // Save changes to backend

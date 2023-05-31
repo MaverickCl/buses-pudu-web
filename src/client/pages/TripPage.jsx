@@ -79,6 +79,10 @@ const TripPage = () => {
     });
   };
 
+  const handleSubmit = () => {
+    localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
+  };
+
   const MappedSeats = () => {
     return (
       <div>
@@ -182,7 +186,9 @@ const TripPage = () => {
         </Typography>
         <Grid item sx={{ display: "flex", justifyContent: "center" }}>
           <Link to="/viaje-reserva">
-            <Button variant="contained">Reservar Boletos</Button>
+            <Button variant="contained" onClick={handleSubmit}>
+              Reservar Boletos
+            </Button>
           </Link>
         </Grid>
       </>

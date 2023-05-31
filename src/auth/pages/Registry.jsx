@@ -48,7 +48,8 @@ const Registry = () => {
         phoneNumber,
         formattedBirthDate,
         email,
-        password
+        password,
+        tne
       );
 
       navigate("/auth/login");
@@ -63,7 +64,8 @@ const Registry = () => {
     contacto,
     birthDate,
     correo,
-    contrasenia
+    contrasenia,
+    estadoTne
   ) {
     const result = await register(
       nombre,
@@ -71,7 +73,8 @@ const Registry = () => {
       contacto,
       birthDate,
       correo,
-      contrasenia
+      contrasenia,
+      estadoTne
     );
 
     return true;

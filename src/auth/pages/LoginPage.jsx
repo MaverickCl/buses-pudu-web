@@ -20,6 +20,7 @@ import { login } from "../services/SignInApiRest";
 import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
 import { FormHelperText } from "@mui/material";
+import ForgottenAlert from "../components/ForgottenAlert";
 
 const theme = createTheme();
 
@@ -28,6 +29,7 @@ export default function LoginPage() {
   const [contrasenia, setContrasenia] = useState("");
   const [loginError, setLoginError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const navigate = useNavigate();
 
@@ -57,16 +59,8 @@ export default function LoginPage() {
   }
 
   const handleRecoverPass = async () => {
-    console.log("recovering password");
+    setOpenAlert(true);
   };
-
-  //const data = new FormData(e.target);
-  /* useEffect(() => {
-    console.log({
-      correo: data.get('correo'),
-      contrasenia: data.get('contrasenia'),
-  })
-  }); */
 
   const LoginErrorDisplay = () => {
     let errorText = "";
@@ -166,6 +160,9 @@ export default function LoginPage() {
           </Grid>
         </Container>
       </ThemeProvider>
+
+      <ForgottenAlert open={openAlert} onClose={() => setOpenAlert(false)} />
+
       <Footer />
     </CssBaseline>
   );
