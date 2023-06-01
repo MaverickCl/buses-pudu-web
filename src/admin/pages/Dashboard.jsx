@@ -4,7 +4,10 @@ import * as React from "react";
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from "react-router-dom";
 import UsersApiRest from '../services/UsersApiRest';
-import EditApiRest from '../services/EditApiRest';
+
+import Footer from "../../client/components/Footer";
+import ResponsiveAppBar from '../../client/components/ResponsiveAppBar';
+import { Container, CssBaseline } from '@mui/material';
 
 function RenderButton(props) {
   const { value } = props;
@@ -41,12 +44,12 @@ RenderButton.propTypes = {
 
 
 const columns = [
+
   { field: 'rut', headerName: 'Rut', width: 110 },
   { field: 'nombre', headerName: 'Nombre', width: 130 },
   { field: 'correo', headerName: 'Correo' , width: 130 },
   { field: 'contacto',headerName: 'Contacto', sortable: false, width: 130,},
   { field: 'puntos', headerName: 'Puntos', width: 130 },
-  { field: 'puntos', headerName: 'Puntos', width: 130,},
   { field: 'id',headerName:'', renderCell: RenderButton }
 
 ];
@@ -74,7 +77,14 @@ const DashBoard = () =>{
 
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <CssBaseline>
+      
+    <ResponsiveAppBar position="absolute" />
+    <Container
+        maxWidth="sm"
+        sx={{ height: "100vh", display: "flex", alignItems: "center",justifyContent:"center" }}
+      >
+    <div style={{ width:'157%', justifyContent:"center"}}>
       <DataGrid
         rows={data}
         columns={columns}
@@ -84,9 +94,12 @@ const DashBoard = () =>{
           },
         }}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
+        
       />
     </div>
+    </Container>
+    <Footer />
+    </CssBaseline>
   );
 };
 
