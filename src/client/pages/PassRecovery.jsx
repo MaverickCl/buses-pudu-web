@@ -7,28 +7,169 @@ import {
   Typography,
   Grid,
   Button,
+  CssBaseline,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
+  DialogActions,
+  FormHelperText,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 import PasswordRecoveryApiRest from "../../auth/services/PasswordRecoveryApiRest";
+import AlertDialogSlide from "../components/AlertDialog";
 
 const PassRecovery = () => {
-  const [data, setData] = useState("");
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
-  // useEffect(() => {
-  //   const searchParams = new URLSearchParams(window.location.search);
-  //   const token = searchParams.get("token");
+  //PASS RECOVERY INPUT
 
-  //   EmailVerifyApiRest.confirmarValidacionCorreo(token)
-  //     .then((response) => {
-  //       setData(response);
-  //     })
-  //     .catch((error) => {
-  //       setData(error.response.data);
-  //     });
-  // }, []);
+  const PassSetter = () => {
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+    const [showAlert, setShowAlert] = React.useState(false);
+    const [passError, setPassError] = useState("");
+    const [allowSave, setAllowSave] = useState(true);
+
+    const handlePasswordVisibility = () => {
+      setPasswordVisible(!passwordVisible);
+    };
+
+    const handleConfirmPasswordVisibility = () => {
+      setConfirmPasswordVisible(!confirmPasswordVisible);
+    };
+
+    const handleHideAlert = () => {
+      setShowAlert(false);
+      onClose();
+    };
+
+    const handleShowAlert = () => {
+      setShowAlert(true);
+    };
+
+    const handleSave = async () => {
+      const tempProfile = {
+        nuevaContrasenia: password,
+        confirmacionContrasenia: confirmPassword,
+      };
+
+      const searchParams = new URLSearchParams(window.location.search);
+      const token = searchParams.get("token");
+
+      PasswordRecoveryApiRest.resetPassword(token, tempProfile)
+        .then((response) => {
+          handleShowAlert();
+          onClose();
+        })
+        .catch((error) => {
+          setPassError(error.response.data.message);
+          setAllowSave(false);
+        });
+    };
+
+    const SaveError = () => {
+      if (!allowSave) {
+        if (password !== confirmPassword) {
+          setPassError("Las contraseñas no coinciden");
+        }
+        if (password == "") {
+          setPassError("Debe ingresar una contraseña nueva");
+        }
+
+        return <FormHelperText error>{passError}</FormHelperText>;
+      } else return <></>;
+    };
+
+    return (
+      <CssBaseline>
+        <Grid>
+          <Typography variant="h5" gutterBottom>
+            Cambiar Contraseña
+          </Typography>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel htmlFor="password">Contraseña Nueva</InputLabel>
+            <OutlinedInput
+              id="password"
+              type={passwordVisible ? "text" : "password"}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setAllowSave(true);
+              }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handlePasswordVisibility}
+                    edge="end"
+                  >
+                    {passwordVisible ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Contraseña"
+            />
+          </FormControl>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel htmlFor="confirm-password">
+              Confirmar Contraseña
+            </InputLabel>
+            <OutlinedInput
+              id="confirm-password"
+              type={confirmPasswordVisible ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirm password visibility"
+                    onClick={handleConfirmPasswordVisibility}
+                    edge="end"
+                  >
+                    {confirmPasswordVisible ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Confirmar Contraseña"
+            />
+
+            <SaveError />
+          </FormControl>
+          <DialogActions>
+            <Button
+              onClick={handleSave}
+              disabled={!allowSave}
+              variant="contained"
+              color="primary"
+            >
+              Guardar
+            </Button>
+          </DialogActions>
+        </Grid>
+        {showAlert && (
+          <AlertDialogSlide
+            title="Contraseña cambiada correctamente"
+            text="Su contraseña ha sido actualizada correctamente."
+            button="OK"
+            onClose={handleHideAlert}
+          />
+        )}
+      </CssBaseline>
+    );
+  };
+
+  //PASS RECOVERY INPUT
 
   return (
     <div>
@@ -58,27 +199,7 @@ const PassRecovery = () => {
               justifyContent="center"
             >
               <Grid item xs={12} sm={8}>
-                <Typography variant="h5" gutterBottom textAlign="center">
-                  {data.message !== "Su correo se ha validado correctamente"
-                    ? "Ups!, algo salió mal"
-                    : "¡Bien! Tu cuenta ha sido verificada"}
-                </Typography>
-                <Typography variant="body1" textAlign="center">
-                  {data.message !== "Su correo se ha validado correctamente"
-                    ? data.message
-                    : "Gracias por verificar tu correo en Buses Pudú, ahora hemos confirmado que eres tú quien se ha registrado en BusesPudú y no un Cóndor. También ahora tendrás acceso a los beneficios del servicio PudúPoints."}
-                </Typography>
-                <Grid item display="flex" justifyContent="center" margin="2rem">
-                  <Link to="/">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      sx={{ padding: ".5rem 2rem" }}
-                    >
-                      OK!
-                    </Button>
-                  </Link>
-                </Grid>
+                <PassSetter />
               </Grid>
               <Grid
                 item

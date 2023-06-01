@@ -14,12 +14,12 @@ class PasswordRecoveryApiRest {
     }
   }
 
-  static async resetPassword(token, newPassword) {
+  static async resetPassword(token, recuperacionContraseniaDTO) {
     try {
-      const response = await this.api.post("/restablecer-contrasenia", {
-        token,
-        newPassword,
-      });
+      const response = await axios.post(
+        `${BASE_URL}/restablecer-contrasenia?token=${token}`,
+        recuperacionContraseniaDTO
+      );
       return response.data;
     } catch (error) {
       throw error;

@@ -13,24 +13,42 @@ import {
   StepLabel,
   StepContent,
   FormControlLabel,
+  StepButton,
 } from "@mui/material";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import TneButton from "../components/TneButton";
+import { set } from "date-fns";
 
 const TicketPage = () => {
   const [selectedSeats, setSelectedSeats] = useState(
     JSON.parse(localStorage.getItem("selectedSeats"))
   );
   const [passengers, setPassengers] = useState([]);
+  const [completed, setCompleted] = React.useState({});
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   const InputPassengers = (seats) => {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [completed, setCompleted] = React.useState(false);
 
     const handleNext = () => {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      const newActiveStep =
+        isLastStep() && !allStepsCompleted()
+          ? // It's the last step, but not all steps have been completed,
+            // find the first step that has been completed
+            steps.findIndex((step, i) => !(i in completed))
+          : activeStep + 1;
+      setActiveStep(newActiveStep);
+    };
+
+    const totalSteps = () => {
+      return steps.length;
+    };
+
+    const isLastStep = () => {
+      return activeStep === totalSteps() - 1;
     };
 
     const handleBack = () => {
@@ -41,48 +59,88 @@ const TicketPage = () => {
       setActiveStep(0);
     };
 
+    const handleStep = (step) => () => {
+      setActiveStep(step);
+    };
+
+    const completedSteps = () => {
+      return Object.keys(completed).length;
+    };
+
+    const allStepsCompleted = () => {
+      return completedSteps() === totalSteps();
+    };
+
+    const handleComplete = (e) => {
+      handleSubmit(e);
+
+      if (false) {
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        //setCompleted(newCompleted);
+        handleNext();
+      }
+    };
+
+    const handleSubmit = (e) => {
+      console.log("submitted");
+      console.log(e.defaultPrevented);
+      e.preventDefault();
+    };
+
     const steps = [];
 
-    Object.values(seats.seats).map((seat) => {
+    Object.values(seats.seats).map((seat, index) => {
       steps.push({
         label: "Pasajero en asiento " + seat.seatNumber,
-        description: <InputForm />,
+        description: (
+          <>
+            <InputForm handleSubmit={handleSubmit} />
+            <Box sx={{ mb: 2 }}>
+              <div>
+                <Button
+                  sx={{ mt: 1, mr: 1 }}
+                  variant="contained"
+                  type="submit"
+                  onClick={(e) => handleComplete(e)}
+                >
+                  {completedSteps() === totalSteps() - 1
+                    ? "Finalizar"
+                    : "Pasajero listo"}
+                </Button>
+                <Button
+                  disabled={index === 0}
+                  onClick={handleBack}
+                  sx={{ mt: 1, mr: 1 }}
+                >
+                  Atrás
+                </Button>
+              </div>
+            </Box>
+          </>
+        ),
       });
     });
 
     return (
       <Paper sx={{ padding: 4 }}>
-        <Stepper activeStep={activeStep} orientation="vertical">
+        <Stepper nonLinear activeStep={activeStep} orientation="vertical">
           {steps.map((step, index) => (
             <Step key={step.label}>
-              <StepLabel>{step.label}</StepLabel>
+              <StepButton color="inherit" onClick={handleStep(index)}>
+                {step.label}
+              </StepButton>
               <StepContent>
                 <Typography>{step.description}</Typography>
-                <Box sx={{ mb: 2 }}>
-                  <div>
-                    <Button
-                      variant="contained"
-                      onClick={handleNext}
-                      sx={{ mt: 1, mr: 1 }}
-                    >
-                      {index === steps.length - 1 ? "Finalizar" : "Continuar"}
-                    </Button>
-                    <Button
-                      disabled={index === 0}
-                      onClick={handleBack}
-                      sx={{ mt: 1, mr: 1 }}
-                    >
-                      Back
-                    </Button>
-                  </div>
-                </Box>
               </StepContent>
             </Step>
           ))}
         </Stepper>
         {activeStep === steps.length && (
           <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>As completado el formulario!, estás listo</Typography>
+            <Typography>
+              ¡Has completado el formulario! ¡Estás listo!
+            </Typography>
             <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
               Volver
             </Button>
@@ -92,7 +150,7 @@ const TicketPage = () => {
     );
   };
 
-  const InputForm = (props) => {
+  const InputForm = ({ handleSubmit }) => {
     const [name, setName] = useState("");
     const [rut, setRut] = useState("");
     const [email, setEmail] = useState("");
@@ -116,9 +174,10 @@ const TicketPage = () => {
       setPhone(e.target.value);
     };
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-    };
+    // const handleSubmit = (e) => {
+    //   console.log("submitted");
+    //   e.preventDefault();
+    // };
 
     return (
       <Grid container padding={2}>
@@ -206,7 +265,7 @@ const TicketPage = () => {
 
             <Grid item xs={12} md={4}>
               <Paper>
-                <Grid container padding={2}>
+                <Grid container padding={2} flexDirection="column">
                   <Typography variant="h4" align="center" gutterBottom>
                     Compra de Pasajes
                   </Typography>
@@ -216,11 +275,7 @@ const TicketPage = () => {
                   </Typography>
 
                   <Typography variant="h6" gutterBottom>
-                    Seats:{" "}
-                    {selectedSeats.seats &&
-                      Object.values(selectedSeats.seats).map((seat) => {
-                        return seat.seatNumber + ", ";
-                      })}
+                    Pasajeros:
                   </Typography>
 
                   <Grid item sx={{ display: "flex", justifyContent: "center" }}>

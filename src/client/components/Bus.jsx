@@ -127,16 +127,17 @@ const BusComponent = ({ seatHandler }, props) => {
                 justifyContent="space-between"
               >
                 {row.map((seat, seatIndex) => (
-                  <Grid key={seatIndex} item xs={2.3} mb={2}>
-                    <Tooltip
-                      title={
-                        seat.status === "RESERVED"
-                          ? "Asiento reservado"
-                          : seat.status === "BLOCKED"
-                          ? "Asiento ocupado"
-                          : seat.type
-                      }
-                    >
+                  <Tooltip
+                    key={seatIndex}
+                    title={
+                      seat.status === "RESERVED"
+                        ? "Asiento reservado"
+                        : seat.status === "BLOCKED"
+                        ? "Asiento ocupado"
+                        : seat.type
+                    }
+                  >
+                    <Grid item xs={2.3} mb={2}>
                       <span>
                         <IconButton
                           style={{
@@ -171,8 +172,8 @@ const BusComponent = ({ seatHandler }, props) => {
                           </span>
                         </IconButton>
                       </span>
-                    </Tooltip>
-                  </Grid>
+                    </Grid>
+                  </Tooltip>
                 ))}
               </Grid>
             ))}
