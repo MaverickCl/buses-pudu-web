@@ -24,14 +24,31 @@ const TicketPage = () => {
   const [selectedSeats, setSelectedSeats] = useState(
     JSON.parse(localStorage.getItem("selectedSeats"))
   );
-  const [passengers, setPassengers] = useState([]);
+  const [passengers, setPassengers] = useState(() => {
+    const newPassenger = {
+      name:"",
+      rut:"",
+      email:"",
+      pkone:"",
+      tne:false
+    };
+  
+    for (var i = 0; i < selectedSeats.length; i++) {
+      const updatedPassengers = [...passengers];
+      updatedPassengers.splice(i, 0, newPassenger);
+      setPassengers(updatedPassengers);
+    }
+  });
   const [completed, setCompleted] = React.useState({});
+
+
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
-  const InputPassengers = (seats) => {
+  const InputPassengers = ({ seats, passengers, setPassengers }) => {
     const [activeStep, setActiveStep] = React.useState(0);
-    const [completed, setCompleted] = React.useState(false);
+    const [completed, setCompleted] = React.useState({});
+
 
     const handleNext = () => {
       const newActiveStep =
@@ -42,6 +59,7 @@ const TicketPage = () => {
           : activeStep + 1;
       setActiveStep(newActiveStep);
     };
+    
 
     const totalSteps = () => {
       return steps.length;
@@ -71,53 +89,29 @@ const TicketPage = () => {
       return completedSteps() === totalSteps();
     };
 
-    const handleComplete = (e) => {
-      handleSubmit(e);
+    const handleComplete = () => {
 
-      if (false) {
-        const newCompleted = completed;
-        newCompleted[activeStep] = true;
-        //setCompleted(newCompleted);
-        handleNext();
-      }
-    };
-
-    const handleSubmit = (e) => {
       console.log("submitted");
-      console.log(e.defaultPrevented);
-      e.preventDefault();
+      
+      const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+        
+
+      handleNext();
+      
     };
 
     const steps = [];
 
-    Object.values(seats.seats).map((seat, index) => {
+    console.log(passengers);
+
+    Object.values(seats).map((seat, index) => {
+     
       steps.push({
         label: "Pasajero en asiento " + seat.seatNumber,
         description: (
-          <>
-            <InputForm handleSubmit={handleSubmit} />
-            <Box sx={{ mb: 2 }}>
-              <div>
-                <Button
-                  sx={{ mt: 1, mr: 1 }}
-                  variant="contained"
-                  type="submit"
-                  onClick={(e) => handleComplete(e)}
-                >
-                  {completedSteps() === totalSteps() - 1
-                    ? "Finalizar"
-                    : "Pasajero listo"}
-                </Button>
-                <Button
-                  disabled={index === 0}
-                  onClick={handleBack}
-                  sx={{ mt: 1, mr: 1 }}
-                >
-                  Atrás
-                </Button>
-              </div>
-            </Box>
-          </>
+            <InputForm handleComplete={handleComplete} completedSteps={completedSteps} totalSteps={totalSteps} handleBack={handleBack} index={index} passengers={passengers} setPassengers={setPassengers}/>
         ),
       });
     });
@@ -150,20 +144,17 @@ const TicketPage = () => {
     );
   };
 
-  const InputForm = ({ handleSubmit }) => {
-    const [name, setName] = useState("");
-    const [rut, setRut] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [tne, setTne] = useState(false);
+  const InputForm = (props) => {
+    const [name, setName] = useState(props.passengers[props.index].name || "");
+    const [rut, setRut] = useState(props.passengers[props.index].rut || "");
+    const [email, setEmail] = useState(props.passengers[props.index].email || "");
+    const [phone, setPhone] = useState(props.passengers[props.index].phone || "");
+    const [tne, setTne] = useState(props.passengers[props.index].tne || false);
     const [tneMessage, setTneMessage] = useState("Tienes una TNE vigente?");
 
     const handleNameChange = (e) => {
-      setName(e.target.value);
-    };
 
-    const handleRutChange = (e) => {
-      setRut(e.target.value);
+      setName(e.target.value);
     };
 
     const handleEmailChange = (e) => {
@@ -174,10 +165,41 @@ const TicketPage = () => {
       setPhone(e.target.value);
     };
 
-    // const handleSubmit = (e) => {
-    //   console.log("submitted");
-    //   e.preventDefault();
-    // };
+     const handleSubmit = (e) => {
+       
+       e.preventDefault();
+
+       const newPassenger = {
+        name:{name},
+        rut:{rut},
+        email:{email},
+        pkone:{phone},
+        tne:{tne}
+      };
+    
+      const updatedPassengers = [...props.passengers];
+      updatedPassengers.splice(props.index, 0, newPassenger);
+      props.setPassengers(updatedPassengers);
+
+       props.handleComplete()
+     };
+
+     const formatRut = (value) => {
+      // Remove all characters except numbers and the letter k or K
+      const rutNumbers = value.replace(/[^0-9kK]/g, "");
+  
+      if (rutNumbers.length > 1) {
+        // Format the RUT with dots and hyphen
+        const formattedRut = `${rutNumbers
+          .slice(0, -1)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}-${rutNumbers
+          .slice(-1)
+          .toUpperCase()}`;
+        setRut(formattedRut);
+      } else {
+        setRut(rutNumbers.toUpperCase());
+      }
+    };
 
     return (
       <Grid container padding={2}>
@@ -195,7 +217,8 @@ const TicketPage = () => {
               <TextField
                 label="Rut"
                 value={rut}
-                onChange={handleRutChange}
+                onChange={(event) => formatRut(event.target.value)}
+                
                 fullWidth
                 margin="normal"
                 required
@@ -233,7 +256,30 @@ const TicketPage = () => {
             margin="normal"
             required
           />
+
+<Box sx={{ mb: 2 }}>
+              <div>
+                <Button
+                  sx={{ mt: 1, mr: 1 }}
+                  variant="contained"
+                  type="submit"
+
+                >
+                  {props.completedSteps() === props.totalSteps() - 1
+                    ? "Finalizar"
+                    : "Pasajero listo"}
+                </Button>
+                <Button
+                  disabled={props.index === 0}
+                  onClick={props.handleBack}
+                  sx={{ mt: 1, mr: 1 }}
+                >
+                  Atrás
+                </Button>
+              </div>
+            </Box>
         </form>
+       
       </Grid>
     );
   };
@@ -260,7 +306,7 @@ const TicketPage = () => {
             spacing={2}
           >
             <Grid item xs={12} md={6}>
-              <InputPassengers seats={selectedSeats} />
+              <InputPassengers seats={selectedSeats} passengers={passengers} setPassengers={setPassengers}/>
             </Grid>
 
             <Grid item xs={12} md={4}>
