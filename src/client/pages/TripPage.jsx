@@ -124,7 +124,7 @@ const TripPage = () => {
               display="flex"
               justifyContent="center"
             >
-              <Zoom in={true}>
+              <Zoom in>
                 <IconButton
                   style={{
                     position: "relative",
@@ -172,11 +172,9 @@ const TripPage = () => {
       <>
         {Object.values(selectedSeats).map((seat, seatIndex) => (
           <Grid key={seatIndex} item xs={6}>
-            <Zoom in={true}>
-              <Typography>
-                Asiento {seat.seatNumber}: ${seat.price}
-              </Typography>
-            </Zoom>
+            <Typography>
+              Asiento {seat.seatNumber}: ${seat.price}
+            </Typography>
           </Grid>
         ))}
 

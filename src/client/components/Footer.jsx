@@ -20,11 +20,11 @@ function Footer() {
   return (
     <Box
       sx={{
-        display: "flex",
-        position: "relative",
-        marginTop: "2rem",
+        display: "block",
+        marginTop: "5rem",
         bgcolor: "black",
         width: "100%",
+        height: "10rem",
         color: "white",
         bottom: "0",
         right: "0",

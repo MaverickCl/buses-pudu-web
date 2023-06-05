@@ -44,7 +44,7 @@ export default function CircularIntegration(props) {
     "&:hover": {
       backgroundColor: "buttonBlue.hover",
     },
-    ...(success && {
+    ...((success || props.isValid) && {
       bgcolor: "success.main",
       "&:hover": {
         bgcolor: "success.hover",
@@ -112,13 +112,13 @@ export default function CircularIntegration(props) {
           onMouseOver={() => setHovering(true)}
           onMouseOut={() => setHovering(false)}
         >
-          {success ? (
+          {success || props.isValid ? (
             <CheckRoundedIcon />
           ) : loading ? (
             <AutorenewRoundedIcon />
           ) : failed && !hovering ? (
             <PriorityHighRoundedIcon />
-          ) : failed && hovering ? (
+          ) : (failed && hovering) || (invalid && hovering) ? (
             <AutorenewRoundedIcon />
           ) : invalid ? (
             <CancelRoundedIcon />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, isPortrait } from "react";
 import {
   Container,
   Grid,
@@ -23,6 +23,8 @@ import { Link } from "react-router-dom";
 
 const TripCard = ({ trip }) => {
   const { origin, destination, departureTime, arrivalTime, price, date } = trip;
+
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   return (
     <Card
@@ -49,10 +51,21 @@ const TripCard = ({ trip }) => {
             <Typography variant="h4" component="h3">
               ${price}
             </Typography>
-            <Link to="/viaje">
-              <Button variant="contained">Seleccionar Asiento</Button>
-            </Link>
+            {!isPortrait && (
+              <Link to="/viaje">
+                <Button variant="contained">Seleccionar Asiento</Button>
+              </Link>
+            )}
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          {isPortrait && (
+            <Link to="/viaje">
+              <Button sx={{ width: "100%", marginTop: 1 }} variant="contained">
+                Seleccionar Asiento
+              </Button>
+            </Link>
+          )}
         </Grid>
       </CardContent>
     </Card>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   CardContent,
@@ -13,13 +13,11 @@ import {
   OutlinedInput,
   InputAdornment,
   IconButton,
-  DialogActions,
   FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
 import PasswordRecoveryApiRest from "../../auth/services/PasswordRecoveryApiRest";
 import AlertDialogSlide from "../components/AlertDialog";
 
@@ -89,73 +87,75 @@ const PassRecovery = () => {
 
     return (
       <CssBaseline>
-        <Grid>
-          <Typography variant="h5" gutterBottom>
-            Cambiar Contraseña
-          </Typography>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel htmlFor="password">Contraseña Nueva</InputLabel>
-            <OutlinedInput
-              id="password"
-              type={passwordVisible ? "text" : "password"}
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setAllowSave(true);
-              }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handlePasswordVisibility}
-                    edge="end"
-                  >
-                    {passwordVisible ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Contraseña"
-            />
-          </FormControl>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel htmlFor="confirm-password">
-              Confirmar Contraseña
-            </InputLabel>
-            <OutlinedInput
-              id="confirm-password"
-              type={confirmPasswordVisible ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle confirm password visibility"
-                    onClick={handleConfirmPasswordVisibility}
-                    edge="end"
-                  >
-                    {confirmPasswordVisible ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Confirmar Contraseña"
-            />
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item sm={6}>
+            <Typography variant="h5" gutterBottom>
+              Cambiar Contraseña
+            </Typography>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel htmlFor="password">Contraseña Nueva</InputLabel>
+              <OutlinedInput
+                id="password"
+                type={passwordVisible ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setAllowSave(true);
+                }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handlePasswordVisibility}
+                      edge="end"
+                    >
+                      {passwordVisible ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Contraseña Nueva"
+              />
+            </FormControl>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <InputLabel htmlFor="confirm-password">
+                Confirmar Contraseña
+              </InputLabel>
+              <OutlinedInput
+                id="confirm-password"
+                type={confirmPasswordVisible ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle confirm password visibility"
+                      onClick={handleConfirmPasswordVisibility}
+                      edge="end"
+                    >
+                      {confirmPasswordVisible ? (
+                        <VisibilityOff />
+                      ) : (
+                        <Visibility />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Confirmar Contraseña"
+              />
 
-            <SaveError />
-          </FormControl>
-          <DialogActions>
+              <SaveError />
+            </FormControl>
+
             <Button
               onClick={handleSave}
               disabled={!allowSave}
               variant="contained"
               color="primary"
+              sx={{ width: "100%" }}
             >
               Guardar
             </Button>
-          </DialogActions>
+          </Grid>
         </Grid>
         {showAlert && (
           <AlertDialogSlide
