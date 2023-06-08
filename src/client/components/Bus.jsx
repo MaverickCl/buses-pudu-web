@@ -175,7 +175,7 @@ const BusComponent = ({ seatHandler, createdSeats }, props) => {
                       ? "Asiento reservado"
                       : seat.status === "BLOCKED"
                       ? "Asiento ocupado"
-                      : (createdSeats && seat.type) + "\n" + seat.seatType
+                      : (createdSeats != undefined ? seat.type + "\n" + seat.seatType : seat.seatType)
                   }
                 >
                   <Grid item xs={2.3} mb={2}>

@@ -11,6 +11,7 @@ const SeatMatrix = ({
   selectedSeats,
   multiSelect,
   seats,
+  setSeats
 }) => {
   const addFloors = () => {
     //STRICT MODE CREATES 2 FLOORS INSTEAD OF ONLY ONE

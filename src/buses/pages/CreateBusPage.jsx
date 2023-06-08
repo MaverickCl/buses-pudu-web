@@ -15,7 +15,6 @@ import SeatMatrix from "../components/SeatMatrix";
 import SelectionOptions from "../components/SelectionOptions";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { set } from "date-fns";
 
 const CreateBusPage = () => {
   const [busData, setBusData] = useState(null);
@@ -68,31 +67,33 @@ const CreateBusPage = () => {
   const handleSeatsSubmit = async () => {
     let transformedSeats;
     for (let i = 0; i < Object.values(seats.floors).length; i++) {
-      console.log(i);
+     
       transformedSeats = Object.values(seats.floors[0]).map((seat) => ({
         id: seat.index,
         numero: seat.seatNumber,
         segundoPiso: !seat.floor,
-        posicionX: 2,
-        posicionY: 2,
-        porcentajeAdicional:
+        posicionX: seat.index % 5 ,
+        posicionY: Math.floor(seat.index/5),
+        porcentajeAdicional:parseFloat(
           seat.seatType === "Estándar"
             ? 0
             : seat.seatType === "SemiCama"
             ? 1.25
             : seat.seatType === "Cama"
             ? 1.5
-            : 2,
+            : 2),
         tipoAsiento: seat.seatType,
         bus: busData,
-      }));
+      }
+      )
+      );
     }
 
-    console.log(transformedSeats);
+    //console.log(transformedSeats);
 
     const updatedBusData = {
       patenteBus: busData.patente,
-      asientos: seats,
+      asientos: transformedSeats,
     };
 
     try {
@@ -174,6 +175,7 @@ const CreateBusPage = () => {
                   setSelectedSeats={setSelectedSeats}
                   multiSelect={multiSelect}
                   seats={seats}
+                  setSeats={setSeats}
                 />
               ) : (
                 <Typography variant="body1" align="center">
