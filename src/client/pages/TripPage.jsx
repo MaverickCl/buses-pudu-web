@@ -91,7 +91,8 @@ const TripPage = () => {
           {typeof currentSeat === "object" && currentSeat.seatNumber}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Tipo de Asiento: {typeof currentSeat === "object" && currentSeat.type}
+          Tipo de Asiento:{" "}
+          {typeof currentSeat === "object" && currentSeat.seatType}
         </Typography>
         <Typography variant="body1" gutterBottom>
           Precio: ${typeof currentSeat === "object" && currentSeat.price}

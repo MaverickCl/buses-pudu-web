@@ -10,9 +10,13 @@ import {
 import AlertDialog from "../components/AlertDialog";
 import BusSeatsApiRest from "../services/BusSeatsApiRest";
 import Seat from "./Seat";
+import StairsIcon from "@mui/icons-material/Stairs";
+import CalendarViewDayIcon from "@mui/icons-material/CalendarViewDay";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import WcIcon from "@mui/icons-material/Wc";
 
-const BusComponent = ({ seatHandler }, props) => {
-  const [busData, setBusData] = useState(null);
+const BusComponent = ({ seatHandler, createdSeats }, props) => {
+  const [busData, setBusData] = useState(createdSeats ? createdSeats : null);
   const [currentFloor, setCurrentFloor] = useState(1);
   const [selectedSeats, setSelectedSeats] = useState({});
   const [showAlert, setShowAlert] = useState(false);
@@ -20,14 +24,16 @@ const BusComponent = ({ seatHandler }, props) => {
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   useEffect(() => {
-    const fetchBusSeats = async () => {
-      try {
-        const seats = await BusSeatsApiRest.getBusSeats(props.busId);
-        setBusData(seats);
-      } catch (error) {}
-    };
+    if (busData === null) {
+      const fetchBusSeats = async () => {
+        try {
+          const seats = await BusSeatsApiRest.getBusSeats(props.busId);
+          setBusData(seats);
+        } catch (error) {}
+      };
 
-    fetchBusSeats();
+      fetchBusSeats();
+    }
   }, [props.busId]);
 
   const handleFloorChange = () => {
@@ -41,42 +47,64 @@ const BusComponent = ({ seatHandler }, props) => {
   }
 
   const handleSeatSelect = (floorIndex, seatIndex) => {
-    if (
-      busData &&
-      busData.floors &&
-      busData.floors[floorIndex] &&
-      busData.floors[floorIndex][0] &&
-      busData.floors[floorIndex][0][seatIndex]
-    ) {
-      const updatedFloors = [...busData.floors];
-      const clickedSeat = updatedFloors[floorIndex][0][seatIndex];
-
-      if (clickedSeat.status === "FREE") {
-        if (Object.keys(selectedSeats).length < 5) {
-          clickedSeat.status = "SELECTED";
-          setSelectedSeats((prevSelectedSeats) => ({
-            ...prevSelectedSeats,
-            [`${floorIndex}-${seatIndex}`]: clickedSeat,
-          }));
+    const updatedFloors = [...busData.floors];
+    const clickedSeat = updatedFloors[floorIndex][seatIndex];
+    if (busData === null) {
+      if (
+        busData &&
+        busData.floors &&
+        busData.floors[floorIndex] &&
+        busData.floors[floorIndex] &&
+        busData.floors[floorIndex][seatIndex]
+      ) {
+        if (clickedSeat.status === "FREE") {
+          if (Object.keys(selectedSeats).length < 5) {
+            clickedSeat.status = "SELECTED";
+            setSelectedSeats((prevSelectedSeats) => ({
+              ...prevSelectedSeats,
+              [`${floorIndex}-${seatIndex}`]: clickedSeat,
+            }));
+            seatHandler(clickedSeat);
+          } else {
+            setShowAlert(true);
+          }
+        } else if (clickedSeat.status === "SELECTED") {
+          clickedSeat.status = "FREE";
+          setSelectedSeats((prevSelectedSeats) => {
+            const updatedSelectedSeats = { ...prevSelectedSeats };
+            delete updatedSelectedSeats[`${floorIndex}-${seatIndex}`];
+            return updatedSelectedSeats;
+          });
           seatHandler(clickedSeat);
-        } else {
-          setShowAlert(true);
         }
+
+        setBusData({ ...busData, floors: updatedFloors });
+      }
+    } else {
+      if (clickedSeat.status !== "SELECTED") {
+        clickedSeat.status = "SELECTED";
+        setSelectedSeats((prevSelectedSeats) => ({
+          ...prevSelectedSeats,
+          [`${floorIndex}-${seatIndex}`]: clickedSeat,
+        }));
+        seatHandler(clickedSeat);
       } else if (clickedSeat.status === "SELECTED") {
-        clickedSeat.status = "FREE";
+        clickedSeat.type === "Asiento" && (clickedSeat.status = "FREE");
+        clickedSeat.type === "Pasillo" && (clickedSeat.status = "HALL");
+        clickedSeat.type === "Baño" && (clickedSeat.status = "WC");
+        clickedSeat.type === "Escaleras" && (clickedSeat.status = "STAIRS");
+        clickedSeat.type === "Vacío" && (clickedSeat.status = "EMPTY");
+
         setSelectedSeats((prevSelectedSeats) => {
           const updatedSelectedSeats = { ...prevSelectedSeats };
           delete updatedSelectedSeats[`${floorIndex}-${seatIndex}`];
           return updatedSelectedSeats;
         });
+
         seatHandler(clickedSeat);
       }
-
-      setBusData({ ...busData, floors: updatedFloors });
     }
   };
-
-  const { floors, seats } = busData;
 
   const getSeatColor = (seat) => {
     if (seat == "SELECTED") {
@@ -87,6 +115,21 @@ const BusComponent = ({ seatHandler }, props) => {
     }
     if (seat == "BLOCKED") {
       return "#c21515";
+    }
+    if (seat == "HALL") {
+      return "#878787";
+    }
+    if (seat == "WC") {
+      return "#0e7eed";
+    }
+    if (seat == "STAIRS") {
+      return "#5e1787";
+    }
+    if (seat == "FREE") {
+      return "#000000";
+    }
+    if (seat == "EMPTY") {
+      return "#dedede";
     }
     return "#000000";
   };
@@ -99,9 +142,9 @@ const BusComponent = ({ seatHandler }, props) => {
             <Button
               variant="contained"
               onClick={handleFloorChange}
-              sx={{ display: floors[1].length > 0 ? "all" : "none" }}
+              sx={{ display: busData.floors.length > 1 ? "all" : "none" }}
             >
-              {currentFloor === 1 && floors[1].length > 0
+              {currentFloor === 1 && busData.floors.length > 0
                 ? "Ver 2ᵈᵒ piso"
                 : "Ver 1ᵉʳ piso"}
             </Button>
@@ -117,66 +160,104 @@ const BusComponent = ({ seatHandler }, props) => {
               backgroundColor: "#efefef",
             }}
           >
-            {floors[currentFloor - 1].map((row, rowIndex) => (
-              <Grid
-                key={rowIndex}
-                width="100%"
-                item
-                xs={12}
-                container
-                justifyContent="space-between"
-              >
-                {row.map((seat, seatIndex) => (
-                  <Tooltip
-                    key={seatIndex}
-                    title={
-                      seat.status === "RESERVED"
-                        ? "Asiento reservado"
-                        : seat.status === "BLOCKED"
-                        ? "Asiento ocupado"
-                        : seat.type
-                    }
-                  >
-                    <Grid item xs={2.3} mb={2}>
-                      <span>
-                        <IconButton
-                          style={{
-                            position: "relative",
-                            color: "black",
-                            opacity: seat.seatNumber === "" && "0",
-                            pointerEvents: seat.seatNumber === "" && "none",
-                          }}
-                          disabled={
-                            seat.status === "BLOCKED" ||
-                            seat.status === "RESERVED"
-                          }
-                          onClick={() => {
-                            handleSeatSelect(currentFloor - 1, seatIndex);
-                          }}
-                        >
+            <Grid
+              width="100%"
+              item
+              xs={12}
+              container
+              justifyContent="space-between"
+            >
+              {busData.floors[currentFloor - 1].map((seat, seatIndex) => (
+                <Tooltip
+                  key={seatIndex}
+                  title={
+                    seat.status === "RESERVED"
+                      ? "Asiento reservado"
+                      : seat.status === "BLOCKED"
+                      ? "Asiento ocupado"
+                      : (createdSeats && seat.type) + "\n" + seat.seatType
+                  }
+                >
+                  <Grid item xs={2.3} mb={2}>
+                    <span>
+                      <IconButton
+                        style={{
+                          position: "relative",
+                          color: "black",
+
+                          pointerEvents: createdSeats
+                            ? "all"
+                            : seat.type !== "Asiento" && "none",
+                        }}
+                        disabled={
+                          seat.status === "BLOCKED" ||
+                          seat.status === "RESERVED"
+                        }
+                        onClick={() => {
+                          handleSeatSelect(currentFloor - 1, seatIndex);
+                        }}
+                      >
+                        {seat.type === "Pasillo" && (
+                          <CalendarViewDayIcon
+                            style={{
+                              width: "100%",
+                              transform: "rotate(90deg)",
+                              height: "100%",
+                              color: getSeatColor(seat.status),
+                            }}
+                          />
+                        )}
+                        {seat.type === "Escaleras" && (
+                          <StairsIcon
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              color: getSeatColor(seat.status),
+                            }}
+                          />
+                        )}
+                        {seat.type === "Vacío" && (
+                          <CheckBoxOutlineBlankIcon
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              color: getSeatColor(seat.status),
+                            }}
+                          />
+                        )}
+                        {seat.type === "Asiento" && (
                           <Seat
                             style={{
                               width: "100%",
                             }}
                             color={getSeatColor(seat.status)}
                           />
-
-                          <span
+                        )}
+                        {seat.type === "Baño" && (
+                          <WcIcon
                             style={{
-                              position: "absolute",
-                              marginBottom: "-.5rem",
-                              fontSize: isPortrait ? "1rem" : "1.25rem",
+                              width: "100%",
+                              height: "100%",
+                              color: getSeatColor(seat.status),
                             }}
-                          >
-                            {seat.seatNumber}
-                          </span>
-                        </IconButton>
-                      </span>
-                    </Grid>
-                  </Tooltip>
-                ))}
-              </Grid>
-            ))}
+                          />
+                        )}
+
+                        <span
+                          style={{
+                            position: "absolute",
+                            marginBottom: "-.5rem",
+                            fontSize: isPortrait ? "1rem" : "1.25rem",
+                          }}
+                        >
+                          {seat.seatNumber}
+                        </span>
+                      </IconButton>
+                    </span>
+                  </Grid>
+                </Tooltip>
+              ))}
+            </Grid>
           </Box>
         </Grid>
       </Container>
