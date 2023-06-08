@@ -7,28 +7,37 @@ import {
   Collapse,
   FormControlLabel,
   Checkbox,
+  Button,
 } from "@mui/material";
 import BusForm from "../components/BusForm";
 import BusService from "../services/BusService";
 import SeatMatrix from "../components/SeatMatrix";
 import SelectionOptions from "../components/SelectionOptions";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { set } from "date-fns";
 
 const CreateBusPage = () => {
   const [busData, setBusData] = useState(null);
+  const [seatData, setSeatData] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState({});
   const [multiSelect, setMultiSelect] = useState(false);
+  const [seats, setSeats] = useState({
+    floors: [],
+  });
 
   const handleFormSubmit = async (data) => {
     try {
       //Create bus in api
 
-      // const createdBus = await BusService.crearBus(data);
-      // console.log("Bus creado:", createdBus);
-      // setBusData(createdBus);
+      const createdBus = await BusService.crearBus(
+        data,
+        localStorage.getItem("token")
+      );
+      console.log("Bus creado:", createdBus);
+      setBusData(createdBus);
 
-      setBusData(data);
+      setSeatData(data);
     } catch (error) {
       console.error(error.message);
     }
@@ -38,43 +47,61 @@ const CreateBusPage = () => {
     setMultiSelect(!multiSelect);
 
     if (multiSelect) {
-      setSelectedSeats({});
       Object.keys(selectedSeats).forEach((key) => {
         const status =
-          Object.values(selectedSeats)[0].type === "Asiento"
+          selectedSeats[key].type === "Asiento"
             ? "FREE"
-            : Object.values(selectedSeats)[0].type === "Pasillo"
+            : selectedSeats[key].type === "Pasillo"
             ? "HALL"
-            : Object.values(selectedSeats)[0].type === "Vacío"
+            : selectedSeats[key].type === "Vacío"
             ? "EMPTY"
-            : Object.values(selectedSeats)[0].type === "Baño"
+            : selectedSeats[key].type === "Baño"
             ? "WC"
-            : Object.values(selectedSeats)[0].type === "Escaleras" && "STAIRS";
+            : selectedSeats[key].type === "Escaleras" && "STAIRS";
+
         selectedSeats[key].status = status;
       });
+      setSelectedSeats({});
     }
   };
 
-  const handleAsientosSubmit = async (asientosData) => {
-    const updatedAsientosData = asientosData.map((asiento) => {
-      if (!asiento.tipoAsiento) {
-        return {
-          ...asiento,
-          tipoAsiento: "desocupado", // Cambia 'desocupado' por asiento.tipoAsiento para usar el tipo seleccionado en la matriz
-        };
-      }
-      return asiento;
-    });
+  const handleSeatsSubmit = async () => {
+    let transformedSeats;
+    for (let i = 0; i < Object.values(seats.floors).length; i++) {
+      console.log(i);
+      transformedSeats = Object.values(seats.floors[0]).map((seat) => ({
+        id: seat.index,
+        numero: seat.seatNumber,
+        segundoPiso: !seat.floor,
+        posicionX: 2,
+        posicionY: 2,
+        porcentajeAdicional:
+          seat.seatType === "Estándar"
+            ? 0
+            : seat.seatType === "SemiCama"
+            ? 1.25
+            : seat.seatType === "Cama"
+            ? 1.5
+            : 2,
+        tipoAsiento: seat.seatType,
+        bus: busData,
+      }));
+    }
+
+    console.log(transformedSeats);
 
     const updatedBusData = {
       patenteBus: busData.patente,
-      asientos: updatedAsientosData,
+      asientos: seats,
     };
 
     try {
-      const updatedBus = await BusService.enviarAsientos(updatedBusData);
+      const updatedBus = await BusService.enviarAsientos(
+        updatedBusData,
+        localStorage.getItem("token")
+      );
       console.log("Bus y asientos actualizados:", updatedBus);
-      setBusData(updatedBus);
+      //setBusData(updatedBus);
     } catch (error) {
       console.error(error.message);
     }
@@ -96,19 +123,32 @@ const CreateBusPage = () => {
                 sx={{ p: 2, mt: 3, backgroundColor: "#f8f8f8" }}
               >
                 <Grid container margin={1}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onClick={handleCheckboxChange}
-                        checked={multiSelect}
-                        style={{
-                          position: "relative",
-                          color: "green",
-                        }}
-                      />
-                    }
-                    label="Selección múltiple"
-                  />
+                  <Grid item xs={12} align="center">
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          onClick={handleCheckboxChange}
+                          checked={multiSelect}
+                          style={{
+                            position: "relative",
+                            color: "green",
+                          }}
+                        />
+                      }
+                      label="Selección múltiple"
+                    />
+                  </Grid>
+                  <Grid item xs={12} align="center">
+                    <Button
+                      variant="contained"
+                      color="buttonBlue"
+                      sx={{ fontWeight: "bold", color: "white" }}
+                      onClick={() => handleSeatsSubmit()}
+                      startIcon={<SaveIcon />}
+                    >
+                      Guardar Bus
+                    </Button>
+                  </Grid>
                 </Grid>
               </Paper>
             </Collapse>
@@ -128,11 +168,12 @@ const CreateBusPage = () => {
             >
               {busData ? (
                 <SeatMatrix
-                  seatAmount={busData.numeroAsientos}
-                  floors={busData.soloUnPiso}
+                  seatAmount={seatData.numeroAsientos}
+                  floors={seatData.soloUnPiso}
                   selectedSeats={selectedSeats}
                   setSelectedSeats={setSelectedSeats}
                   multiSelect={multiSelect}
+                  seats={seats}
                 />
               ) : (
                 <Typography variant="body1" align="center">

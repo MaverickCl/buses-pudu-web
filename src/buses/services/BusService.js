@@ -3,20 +3,28 @@ import axios from "axios";
 const apiEndpoint = "http://localhost:8080/api/bus";
 
 class BusService {
-  static async crearBus(busData) {
+  static async crearBus(busData, token) {
     try {
-      const response = await axios.post(`${apiEndpoint}/crear`, busData);
+      const response = await axios.post(`${apiEndpoint}/crear`, busData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
-      throw new Error("Error al crear el bus");
+      throw error;
     }
   }
 
-  static async enviarAsientos(busData) {
+  static async enviarAsientos(busData, token) {
     try {
       console.log(busData);
       //const response = await axios.post(`${apiEndpoint}/${busData.patenteBus}/asientos`, busData);
-      const response = await axios.post(`${apiEndpoint}/asientos`, busData);
+      const response = await axios.post(`${apiEndpoint}/asientos`, busData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       return response.data;
     } catch (error) {
       throw new Error("Error al enviar los asientos");

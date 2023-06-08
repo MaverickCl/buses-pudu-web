@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Bus from "../../client/components/Bus";
 import { Button, Grid } from "@mui/material";
-import Seat from "../../client/components/Seat";
+
 import seatCreator from "./SeatCreator";
 
 const SeatMatrix = ({
@@ -10,23 +10,16 @@ const SeatMatrix = ({
   setSelectedSeats,
   selectedSeats,
   multiSelect,
+  seats,
 }) => {
-  //GOTTA FIX SEAT AMOUNT TO MATCH BUS SIZE
-  //console.log(Math.ceil(seatAmount / 5));
-
-  const [seats, setSeats] = useState({
-    floors: [],
-  });
-
   const addFloors = () => {
+    //STRICT MODE CREATES 2 FLOORS INSTEAD OF ONLY ONE
     for (let i = 0; i < (floors ? 1 : 2); i++) {
       seats.floors.push(seatCreator(seatAmount, floors, i));
     }
   };
 
-  useMemo(() => addFloors(), []);
-
-  const reArrangeNumbers = useMemo(() => {
+  const arrangeSeatNumbers = () => {
     const updatedSeats = { ...seats };
     let seatIndex = 1;
 
@@ -42,6 +35,12 @@ const SeatMatrix = ({
     });
 
     return updatedSeats;
+  };
+
+  useMemo(() => addFloors(), []);
+
+  const reArrangeNumbers = useMemo(() => {
+    arrangeSeatNumbers();
   }, [selectedSeats]);
 
   const seatHandler = (seat) => {
@@ -104,6 +103,7 @@ const SeatMatrix = ({
     }
 
     setSeats(updatedSeats);
+    arrangeSeatNumbers();
   };
 
   return (

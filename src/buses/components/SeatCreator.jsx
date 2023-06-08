@@ -1,7 +1,7 @@
 export default function seatCreator(seatAmount, floors, floor) {
   const matrixSize = floors
     ? (Math.ceil(seatAmount / 5) + 2) * 5
-    : ((Math.ceil(seatAmount / 5) + 4) * 5) / 2;
+    : Math.ceil(((Math.ceil(seatAmount / 5) + 4) * 5) / 2 / 5) * 5;
 
   const seats = Array.from({ length: matrixSize }, (_, index) => ({
     seatNumber:
@@ -28,7 +28,7 @@ export default function seatCreator(seatAmount, floors, floor) {
         ? "Vacío"
         : "Asiento",
     price: 0,
-    index: floor === 1 ? index + seatAmount / 2 : index,
+    index: floor === 1 ? index + matrixSize : index,
     seatType: index === 2 + parseInt(index / 5) * 5 ? "" : "Estándar",
   }));
 

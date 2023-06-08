@@ -24,7 +24,7 @@ const BusForm = ({ onSubmit }) => {
   const [plate, setPlate] = useState("");
   const [seatAmount, setSeatAmount] = useState(25);
   const [floors, setFloors] = useState(1);
-  const [year, setYear] = useState(0);
+  const [year, setYear] = useState(1969);
 
   const [formSent, setFormSent] = useState(true);
 
@@ -175,7 +175,7 @@ const BusForm = ({ onSubmit }) => {
                   id="anioFabricacion"
                   label="Año de fabricación"
                   value={year}
-                  onChange={(date) => setYear(date)}
+                  onChange={(date) => setYear(date.getFullYear())}
                 />
               </LocalizationProvider>
             </Grid>
