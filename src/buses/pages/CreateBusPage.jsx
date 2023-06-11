@@ -65,6 +65,7 @@ const CreateBusPage = () => {
   };
 
   const handleSeatsSubmit = async () => {
+    console.log(seats)
     let transformedSeats;
     for (let i = 0; i < Object.values(seats.floors).length; i++) {
      
