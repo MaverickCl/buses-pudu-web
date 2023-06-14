@@ -32,5 +32,5 @@ export default function seatCreator(seatAmount, floors, floor) {
     seatType: index === 2 + parseInt(index / 5) * 5 ? "" : "Estándar",
   }));
 
-  return seats;
+  return { seats: seats };
 }

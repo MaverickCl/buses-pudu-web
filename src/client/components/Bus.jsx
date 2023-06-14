@@ -16,7 +16,8 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import WcIcon from "@mui/icons-material/Wc";
 
 const BusComponent = ({ seatHandler, createdSeats }, props) => {
-  const [busData, setBusData] = useState(createdSeats ? createdSeats : null);
+  const [adminMode, setAdminMode] = useState(createdSeats ? true : false);
+  const [busData, setBusData] = useState(adminMode ? createdSeats : null);
   const [currentFloor, setCurrentFloor] = useState(1);
   const [selectedSeats, setSelectedSeats] = useState({});
   const [showAlert, setShowAlert] = useState(false);
@@ -47,39 +48,48 @@ const BusComponent = ({ seatHandler, createdSeats }, props) => {
   }
 
   const handleSeatSelect = (floorIndex, seatIndex) => {
-    const updatedFloors = [...busData.floors];
-    const clickedSeat = updatedFloors[floorIndex][seatIndex];
-    if (busData === null) {
-      if (
-        busData &&
-        busData.floors &&
-        busData.floors[floorIndex] &&
-        busData.floors[floorIndex] &&
-        busData.floors[floorIndex][seatIndex]
-      ) {
-        if (clickedSeat.status === "FREE") {
-          if (Object.keys(selectedSeats).length < 5) {
-            clickedSeat.status = "SELECTED";
-            setSelectedSeats((prevSelectedSeats) => ({
-              ...prevSelectedSeats,
-              [`${floorIndex}-${seatIndex}`]: clickedSeat,
-            }));
-            seatHandler(clickedSeat);
-          } else {
-            setShowAlert(true);
-          }
-        } else if (clickedSeat.status === "SELECTED") {
-          clickedSeat.status = "FREE";
-          setSelectedSeats((prevSelectedSeats) => {
-            const updatedSelectedSeats = { ...prevSelectedSeats };
-            delete updatedSelectedSeats[`${floorIndex}-${seatIndex}`];
-            return updatedSelectedSeats;
-          });
-          seatHandler(clickedSeat);
-        }
+    const updatedSeats = [...busData.floors[floorIndex].seats];
+    const clickedSeat = updatedSeats[seatIndex];
 
-        setBusData({ ...busData, floors: updatedFloors });
+    if (!adminMode) {
+      if (clickedSeat.status === "FREE") {
+        if (Object.keys(selectedSeats).length < 5) {
+          clickedSeat.status = "SELECTED";
+
+          setSelectedSeats((prevSelectedSeats) => ({
+            ...prevSelectedSeats,
+            [`${floorIndex}-${seatIndex}`]: clickedSeat,
+          }));
+
+          seatHandler(clickedSeat);
+        } else {
+          setShowAlert(true);
+        }
+      } else if (clickedSeat.status === "SELECTED") {
+        clickedSeat.status = "FREE";
+
+        setSelectedSeats((prevSelectedSeats) => {
+          const updatedSelectedSeats = { ...prevSelectedSeats };
+          delete updatedSelectedSeats[`${floorIndex}-${seatIndex}`];
+          return updatedSelectedSeats;
+        });
+        seatHandler(clickedSeat);
       }
+
+      let updatedFloors = [];
+      if (floorIndex === 0) {
+        updatedFloors = [
+          { seats: (busData.floors[floorIndex].seats = updatedSeats) },
+          busData.floors[1],
+        ];
+      } else {
+        updatedFloors = [
+          busData.floors[0],
+          { seats: (busData.floors[floorIndex].seats = updatedSeats) },
+        ];
+      }
+
+      setBusData({ floors: updatedFloors });
     } else {
       if (clickedSeat.status !== "SELECTED") {
         clickedSeat.status = "SELECTED";
@@ -167,7 +177,7 @@ const BusComponent = ({ seatHandler, createdSeats }, props) => {
               container
               justifyContent="space-between"
             >
-              {busData.floors[currentFloor - 1].map((seat, seatIndex) => (
+              {busData.floors[currentFloor - 1].seats.map((seat, seatIndex) => (
                 <Tooltip
                   key={seatIndex}
                   title={
@@ -175,7 +185,9 @@ const BusComponent = ({ seatHandler, createdSeats }, props) => {
                       ? "Asiento reservado"
                       : seat.status === "BLOCKED"
                       ? "Asiento ocupado"
-                      : (createdSeats != undefined ? seat.type + "\n" + seat.seatType : seat.seatType)
+                      : createdSeats != undefined
+                      ? seat.type + "\n" + seat.seatType
+                      : seat.seatType
                   }
                 >
                   <Grid item xs={2.3} mb={2}>

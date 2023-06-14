@@ -11,21 +11,23 @@ const SeatMatrix = ({
   selectedSeats,
   multiSelect,
   seats,
-  setSeats
+  setSeats,
 }) => {
   const addFloors = () => {
-    //STRICT MODE CREATES 2 FLOORS INSTEAD OF ONLY ONE
     for (let i = 0; i < (floors ? 1 : 2); i++) {
-      seats.floors.push(seatCreator(seatAmount, floors, i));
+      if (seats.floors.length < (floors ? 1 : 2)) {
+        seats.floors.push(seatCreator(seatAmount, floors, i));
+      }
     }
   };
 
   const arrangeSeatNumbers = () => {
     const updatedSeats = { ...seats };
+
     let seatIndex = 1;
 
     updatedSeats.floors.forEach((floor) => {
-      floor.forEach((seat, index) => {
+      floor.seats.forEach((seat, index) => {
         if (seat.type === "Asiento") {
           seat.seatNumber = seatIndex.toString().padStart(2, "0");
           seatIndex++;

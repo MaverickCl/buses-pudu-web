@@ -103,6 +103,7 @@ const InputCard = ({ handleSearch }) => {
         >
           <TextField
             fullWidth
+            required
             variant="outlined"
             label="Origen"
             value={origin}
@@ -111,6 +112,7 @@ const InputCard = ({ handleSearch }) => {
           />
           <TextField
             fullWidth
+            required
             variant="outlined"
             label="Destino"
             value={destination}

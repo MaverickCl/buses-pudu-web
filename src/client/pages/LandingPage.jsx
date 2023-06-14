@@ -31,7 +31,10 @@ export default function LandingPage() {
 
   const navigate = useNavigate();
 
-  const handleSearch = () => {
+  const handleSubmit = (e) => {
+    console.log("submitted");
+    e.preventDefault();
+
     localStorage.setItem("destination", destination);
     localStorage.setItem("origin", origin);
 
@@ -119,39 +122,42 @@ export default function LandingPage() {
                 >
                   ¿A DÓNDE TE LLEVAMOS HOY?
                 </Typography>
-                <Grid container spacing={2}>
-                  <Grid item sm={6} width="100%">
-                    <TextField
-                      required
-                      fullWidth
-                      id="origin"
-                      label="Origen"
-                      onChange={(event) => setOrigin(event.target.value)}
-                    />
+                <form onSubmit={handleSubmit}>
+                  <Grid container spacing={2}>
+                    <Grid item sm={6} width="100%">
+                      <TextField
+                        required
+                        fullWidth
+                        id="origin"
+                        label="Origen"
+                        onChange={(event) => setOrigin(event.target.value)}
+                      />
+                    </Grid>
+                    <Grid item sm={6} width="100%">
+                      <TextField
+                        required
+                        fullWidth
+                        id="destination"
+                        label="Destino"
+                        onChange={(event) => setDestination(event.target.value)}
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item sm={6} width="100%">
-                    <TextField
-                      required
-                      fullWidth
-                      id="destination"
-                      label="Destino"
-                      onChange={(event) => setDestination(event.target.value)}
-                    />
-                  </Grid>
-                </Grid>
-                <CardActions
-                  style={{
-                    justifyContent: isPortrait ? "center" : "flex-start",
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={handleSearch}
+                  <CardActions
+                    style={{
+                      justifyContent: isPortrait ? "center" : "flex-start",
+                    }}
                   >
-                    ver viaje
-                  </Button>
-                </CardActions>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      type="submit"
+                      // onClick={handleSearch}
+                    >
+                      ver viaje
+                    </Button>
+                  </CardActions>
+                </form>
               </CardContent>
             </Card>
           </Container>

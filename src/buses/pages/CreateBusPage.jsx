@@ -8,13 +8,15 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import BusForm from "../components/BusForm";
 import BusService from "../services/BusService";
 import SeatMatrix from "../components/SeatMatrix";
 import SelectionOptions from "../components/SelectionOptions";
 import SaveIcon from "@mui/icons-material/Save";
-
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const CreateBusPage = () => {
   const [busData, setBusData] = useState(null);
@@ -25,10 +27,11 @@ const CreateBusPage = () => {
     floors: [],
   });
 
+  const [saveIcon, setSaveIcon] = useState(<SaveIcon />);
+  const [saveMessage, setSaveMessage] = useState("Guardar Bus");
+
   const handleFormSubmit = async (data) => {
     try {
-      //Create bus in api
-
       const createdBus = await BusService.crearBus(
         data,
         localStorage.getItem("token")
@@ -65,36 +68,12 @@ const CreateBusPage = () => {
   };
 
   const handleSeatsSubmit = async () => {
-    console.log(seats)
-    let transformedSeats;
-    for (let i = 0; i < Object.values(seats.floors).length; i++) {
-     
-      transformedSeats = Object.values(seats.floors[0]).map((seat) => ({
-        id: seat.index,
-        numero: seat.seatNumber,
-        segundoPiso: !seat.floor,
-        posicionX: seat.index % 5 ,
-        posicionY: Math.floor(seat.index/5),
-        porcentajeAdicional:parseFloat(
-          seat.seatType === "Estándar"
-            ? 0
-            : seat.seatType === "SemiCama"
-            ? 1.25
-            : seat.seatType === "Cama"
-            ? 1.5
-            : 2),
-        tipoAsiento: seat.seatType,
-        bus: busData,
-      }
-      )
-      );
-    }
-
-    //console.log(transformedSeats);
+    setSaveIcon(<CircularProgress size={24} color="inherit" />);
+    setSaveMessage("Guardando...");
 
     const updatedBusData = {
-      patenteBus: busData.patente,
-      asientos: transformedSeats,
+      patentBus: busData.patente,
+      floors: seats.floors,
     };
 
     try {
@@ -102,9 +81,14 @@ const CreateBusPage = () => {
         updatedBusData,
         localStorage.getItem("token")
       );
+
       console.log("Bus y asientos actualizados:", updatedBus);
-      //setBusData(updatedBus);
+
+      setSaveIcon(<CheckCircleIcon />);
+      setSaveMessage("Guardado");
     } catch (error) {
+      setSaveIcon(<ErrorIcon />);
+      setSaveMessage("Reintentar");
       console.error(error.message);
     }
   };
@@ -146,9 +130,9 @@ const CreateBusPage = () => {
                       color="buttonBlue"
                       sx={{ fontWeight: "bold", color: "white" }}
                       onClick={() => handleSeatsSubmit()}
-                      startIcon={<SaveIcon />}
+                      startIcon={saveIcon}
                     >
-                      Guardar Bus
+                      {saveMessage}
                     </Button>
                   </Grid>
                 </Grid>

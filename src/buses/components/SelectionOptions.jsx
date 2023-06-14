@@ -19,6 +19,9 @@ const SelectionOptions = ({ selectedSeats, setSelectedSeats }) => {
     const updatedSeats = { ...selectedSeats };
     Object.keys(updatedSeats).forEach((seat) => {
       updatedSeats[seat].type = option;
+      if (option === "Asiento") {
+        updatedSeats[seat].seatType = "Estándar";
+      }
     });
     setSelectedSeats(updatedSeats);
   };
