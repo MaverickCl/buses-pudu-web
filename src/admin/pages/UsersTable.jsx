@@ -12,6 +12,8 @@ import { Container, CssBaseline, Grid } from '@mui/material';
 function RenderButton(props) {
   const { value } = props;
 
+  
+
   const handleButtonClick = () => {
     
     
@@ -43,6 +45,7 @@ RenderButton.propTypes = {
 }
 
 
+
 const columns = [
 
   { field: 'rut', headerName: 'Rut', width: 110 },
@@ -50,6 +53,7 @@ const columns = [
   { field: 'correo', headerName: 'Correo' , width: 130 },
   { field: 'contacto',headerName: 'Contacto', sortable: false, width: 130,},
   { field: 'puntos', headerName: 'Puntos', width: 130 },
+  { field: 'estadoCuenta', headerName: 'Estado', width: 130 },
   { field: 'id',headerName:'', renderCell: RenderButton }
 
 ];

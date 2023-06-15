@@ -27,6 +27,7 @@ import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
 
 import EditApiRest from "../services/EditApiRest";
+import DeleteApiRest from "../services/DeleteApiRest";
 
 
 
@@ -125,12 +126,19 @@ export const AdminEdit = () => {
         );
     }
 
-    const handleLogout = () => {
-        const appbar = document.getElementById("appbar");
-        localStorage.removeItem("token");
-        if (appbar) {
-        appbar.setAttribute("isLoggedIn", "false");
-        }
+    const handleDelete = () => {
+        const id = urlParams.get('id')
+        
+        DeleteApiRest.deleteUser(localStorage.getItem("token"), id)
+      .then((response) => {
+        // Handle success
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
+        setIsEditing(false);
     };
 
     return (
@@ -282,6 +290,8 @@ export const AdminEdit = () => {
                 >
                     Editar
                 </Button>
+                
+                
                 )}
             </Grid>
             <Grid
@@ -295,13 +305,14 @@ export const AdminEdit = () => {
                 variant="outlined"
                 color="error"
                 startIcon={<LockIcon />}
-                onClick={handleLogout}
+                onClick={handleDelete}
                 >
-                <Link to="/" style={{ textDecoration: "none" }}>
-                    Cerrar Sesión
+                <Link to="/admin" style={{ textDecoration: "none" }}>
+                    Eliminar
                 </Link>
                 </Button>
             </Grid>
+            
             </Grid>
         </Card>
         </Box>
