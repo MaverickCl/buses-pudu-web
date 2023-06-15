@@ -15,7 +15,7 @@ import CalendarViewDayIcon from "@mui/icons-material/CalendarViewDay";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import WcIcon from "@mui/icons-material/Wc";
 
-const BusComponent = ({ seatHandler, createdSeats }, props) => {
+const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
   const [adminMode, setAdminMode] = useState(createdSeats ? true : false);
   const [busData, setBusData] = useState(adminMode ? createdSeats : null);
   const [currentFloor, setCurrentFloor] = useState(1);
@@ -28,7 +28,7 @@ const BusComponent = ({ seatHandler, createdSeats }, props) => {
     if (busData === null) {
       const fetchBusSeats = async () => {
         try {
-          const seats = await BusSeatsApiRest.getBusSeats(props.busId);
+          const seats = await BusSeatsApiRest.getBusSeats(trip);
           setBusData(seats);
         } catch (error) {}
       };

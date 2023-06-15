@@ -41,19 +41,20 @@ const TripPage = () => {
   if (!tripData) {
     // Show loading indicator or return null while fetching data
 
-    //TEST DATA
+    const trip = JSON.parse(localStorage.getItem("trip"));
+
+    //console.log(trip);
 
     setTripData({
-      id: 1,
-      origin: "New York",
-      destination: "Los Angeles",
-      departureTime: "10:00 AM",
-      arrivalTime: "12:30 PM",
-      price: 250,
-      date: "15-05-2023",
+      code: trip.codigo,
+      id: trip.id,
+      origin: trip.origen,
+      destination: trip.destino,
+      departureTime: trip.horaSalida,
+      arrivalTime: trip.horaLlegada,
+      price: trip.precio,
+      date: trip.fecha,
     });
-
-    //ENDTEST DATA
 
     return null;
   }
@@ -260,7 +261,7 @@ const TripPage = () => {
                   Selecciona tu asiento
                 </Typography>
                 <Grid container>
-                  <Bus seatHandler={seatHandler} />
+                  <Bus seatHandler={seatHandler} trip={tripData.code} />
                 </Grid>
               </Paper>
             </Grid>

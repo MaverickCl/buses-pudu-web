@@ -21,7 +21,6 @@ import {
 import SearchApiRest from "../services/SearchApiRest";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
 
 const TripCard = ({ trip }) => {
   const { origen, destino, horaSalida, horaLlegada, precio, fecha } = trip;
@@ -32,6 +31,7 @@ const TripCard = ({ trip }) => {
     event.preventDefault();
 
     localStorage.setItem("trip", JSON.stringify(trip));
+
     window.location.href = "/viaje";
   };
 
@@ -61,9 +61,9 @@ const TripCard = ({ trip }) => {
               ${precio}
             </Typography>
             {!isPortrait && (
-              <Link to="/viaje">
-                <Button variant="contained">Seleccionar Asiento</Button>
-              </Link>
+              <Button onClick={handleSubmit} variant="contained">
+                Seleccionar Asiento
+              </Button>
             )}
           </Grid>
         </Grid>
