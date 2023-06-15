@@ -18,6 +18,20 @@ class PaymentApiRest {
       console.log(error);
     }
   }
+
+  static async getPayment(token) {
+    try {
+      console.log(`${BASE_URL}/webpay_plus/commit?token_ws=` + token);
+
+      const response = await axios.post(
+        `${BASE_URL}/webpay_plus/commit?token_ws=` + token
+      );
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default PaymentApiRest;

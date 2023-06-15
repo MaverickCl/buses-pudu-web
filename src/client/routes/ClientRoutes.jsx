@@ -9,6 +9,7 @@ import EmailVerified from "../pages/EmailVerified";
 import TripPage from "../pages/TripPage";
 import Reserva from "../pages/ReservePage";
 import PassRecovery from "../pages/PassRecovery";
+import PaymentVerificationPage from "../pages/PaymentVerified";
 
 export const ClientRoutes = () => {
   return (
@@ -32,6 +33,8 @@ export const ClientRoutes = () => {
       <Route path="/verificacion-correo" element={<EmailVerified />} />
 
       <Route path="/restablecer-contrasena" element={<PassRecovery />} />
+
+      <Route path="/verificacion-pago" element={<PaymentVerificationPage />} />
     </Routes>
   );
 };
