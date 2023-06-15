@@ -6,7 +6,7 @@ class BusSeatsApiRest {
   static async getBusSeats(busId) {
     try {
       const response = await axios.get(`${BASE_URL}/api/bus/${busId}/seats`);
-      return response.data;
+      //return response.data;
     } catch (error) {
       return {
         floors: [

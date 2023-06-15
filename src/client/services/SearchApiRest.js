@@ -1,17 +1,22 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/";
+const API_BASE_URL = "http://localhost:8080/api/viajes";
 
+class SearchApiRest {
+  static async getTrips(origin, destination) {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/buscar`, {
+        params: {
+          origen: origin,
+          destino: destination,
+        },
+      });
 
-  
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
 
-export const getTrips = async (origin, destination) => {
-  const response = await axios.get(
-    `${API_BASE_URL}/trips?origin=${origin}&destination=${destination}`
-  );
-  //return response.data;
-  return trips;
-};
-
-//origin, destination, departureTime, arrivalTime, price
-// Other API functions can be added here
+export default SearchApiRest;

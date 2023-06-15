@@ -14,17 +14,26 @@ import {
   CssBaseline,
   useTheme,
   useMediaQuery,
+  CircularProgress,
+  Box,
 } from "@mui/material";
 
-import { getTrips } from "../services/SearchApiRest";
+import SearchApiRest from "../services/SearchApiRest";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
 
 const TripCard = ({ trip }) => {
-  const { origin, destination, departureTime, arrivalTime, price, date } = trip;
+  const { origen, destino, horaSalida, horaLlegada, precio, fecha } = trip;
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    localStorage.setItem("trip", JSON.stringify(trip));
+    window.location.href = "/viaje";
+  };
 
   return (
     <Card
@@ -37,19 +46,19 @@ const TripCard = ({ trip }) => {
         <Grid container spacing={2}>
           <Grid item xs={8}>
             <Typography variant="h6" component="h2">
-              {origin} - {destination}
+              {origen} - {destino}
             </Typography>
             <Typography color="textSecondary" gutterBottom>
-              Fecha: {date}
+              Fecha: {fecha}
             </Typography>
             <Typography color="textSecondary" gutterBottom>
-              Salida: {departureTime} | Llegada: {arrivalTime}
+              Salida: {horaSalida} | Llegada: {horaLlegada}
             </Typography>
           </Grid>
           <Grid item xs={4}>
             <Typography color="textSecondary">Desde:</Typography>
             <Typography variant="h4" component="h3">
-              ${price}
+              ${precio}
             </Typography>
             {!isPortrait && (
               <Link to="/viaje">
@@ -60,11 +69,13 @@ const TripCard = ({ trip }) => {
         </Grid>
         <Grid item xs={12}>
           {isPortrait && (
-            <Link to="/viaje">
-              <Button sx={{ width: "100%", marginTop: 1 }} variant="contained">
-                Seleccionar Asiento
-              </Button>
-            </Link>
+            <Button
+              onClick={handleSubmit}
+              sx={{ width: "100%", marginTop: 1 }}
+              variant="contained"
+            >
+              Seleccionar Asiento
+            </Button>
           )}
         </Grid>
       </CardContent>
@@ -188,140 +199,9 @@ const FiltersCard = ({ filterValues, handleFilterChange }) => {
 };
 
 const SearchResultPage = () => {
-  // ------------------
-  //  TEST VALUES
-  // -----------------
-
-  const oldTrips = [
-    {
-      id: 1,
-      origin: "New York",
-      destination: "Los Angeles",
-      departureTime: "10:00 AM",
-      arrivalTime: "12:30 PM",
-      price: 250,
-      date: "15-05-2023",
-    },
-    {
-      id: 2,
-      origin: "Chicago",
-      destination: "Miami",
-      departureTime: "12:00 PM",
-      arrivalTime: "4:00 PM",
-      price: 300,
-      date: "16-05-2023",
-    },
-    {
-      id: 3,
-      origin: "Houston",
-      destination: "Denver",
-      departureTime: "8:00 AM",
-      arrivalTime: "10:30 AM",
-      price: 200,
-      date: "17-05-2023",
-    },
-    {
-      id: 4,
-      origin: "San Francisco",
-      destination: "Seattle",
-      departureTime: "11:30 AM",
-      arrivalTime: "1:00 PM",
-      price: 150,
-      date: "18-05-2023",
-    },
-    {
-      id: 5,
-      origin: "Boston",
-      destination: "Washington DC",
-      departureTime: "9:00 AM",
-      arrivalTime: "11:30 AM",
-      price: 175,
-      date: "19-05-2023",
-    },
-    {
-      id: 6,
-      origin: "Dallas",
-      destination: "Houston",
-      departureTime: "2:30 PM",
-      arrivalTime: "4:00 PM",
-      price: 75,
-      date: "28-05-2023",
-    },
-    {
-      id: 7,
-      origin: "Las Vegas",
-      destination: "Phoenix",
-      departureTime: "6:00 AM",
-      arrivalTime: "7:30 AM",
-      price: 120,
-      date: "30-05-2023",
-    },
-    {
-      id: 8,
-      origin: "Atlanta",
-      destination: "New Orleans",
-      departureTime: "12:00 PM",
-      arrivalTime: "2:00 PM",
-      price: 200,
-      date: "01-06-2023",
-    },
-    {
-      id: 9,
-      origin: "San Francisco",
-      destination: "Seattle",
-      departureTime: "8:30 AM",
-      arrivalTime: "11:00 AM",
-      price: 150,
-      date: "18-05-2023",
-    },
-    {
-      id: 10,
-      origin: "Chicago",
-      destination: "Denver",
-      departureTime: "1:00 PM",
-      arrivalTime: "3:15 PM",
-      price: 175,
-      date: "20-05-2023",
-    },
-    {
-      id: 11,
-      origin: "Boston",
-      destination: "Miami",
-      departureTime: "9:45 AM",
-      arrivalTime: "12:30 PM",
-      price: 300,
-      date: "22-05-2023",
-    },
-    {
-      id: 12,
-      origin: "Seattle",
-      destination: "Portland",
-      departureTime: "11:00 AM",
-      arrivalTime: "12:15 PM",
-      price: 100,
-      date: "25-05-2023",
-    },
-  ];
-
-  const trips = oldTrips.map((trip) => {
-    const departureTime = new Date(`01/01/2021 ${trip.departureTime}`);
-    const arrivalTime = new Date(`01/01/2021 ${trip.arrivalTime}`);
-    const duration = arrivalTime.getTime() - departureTime.getTime();
-
-    return {
-      ...trip,
-      duration: duration,
-    };
-  });
-
-  // ------------------
-  // END OF THEST VALUES
-  // -----------------
-
+  const [trips, setTrips] = useState([]);
   const [filteredArray, setFilteredArray] = useState(trips);
   const [maxItems, setMaxItems] = useState(5);
-
-  //const [trips, setTrips] = useState([]);
   const [origin, setOrigin] = useState(localStorage.getItem("origin"));
   const [destination, setDestination] = useState(
     localStorage.getItem("destination")
@@ -330,26 +210,55 @@ const SearchResultPage = () => {
     sortBy: "price",
     sortOrder: "asc",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = async (origin, destination) => {
+  useEffect(() => {
+    fetchTrips(origin, destination);
+  }, []);
+
+  const fetchTrips = async (origin, destination) => {
+    setIsLoading(true);
+    try {
+      const trips = await SearchApiRest.getTrips(origin, destination);
+
+      setTrips(
+        trips.map((trip) => {
+          const departureTime = new Date(`01/01/2021 ${trip.horaSalida}`);
+          const arrivalTime = new Date(`01/01/2021 ${trip.horaLlegada}`);
+          const duration = arrivalTime.getTime() - departureTime.getTime();
+
+          return {
+            ...trip,
+            duration: duration,
+          };
+        })
+      );
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSearch = (origin, destination) => {
     setOrigin(origin);
     setDestination(destination);
     localStorage.setItem("origin", origin);
     localStorage.setItem("destination", destination);
 
-    //handle search
-    // async () => {
-    //   const results = await getTrips(origin, destination);
-    //   setTrips(results);
-    // };
+    fetchTrips(origin, destination);
   };
+
+  const updateTrips = useMemo(() => {
+    setFilteredArray(trips);
+  }, [trips]);
 
   const filterArrays = useMemo(() => {
     const auxArray = trips.sort((a, b) => {
       if (filterValues.sortBy === "price") {
         return filterValues.sortOrder === "asc"
-          ? a.price - b.price
-          : b.price - a.price;
+          ? a.precio - b.precio
+          : b.precio - a.precio;
       }
       if (filterValues.sortBy === "duration") {
         return filterValues.sortOrder === "asc"
@@ -358,21 +267,19 @@ const SearchResultPage = () => {
       }
 
       if (filterValues.sortBy === "departureTime") {
-        const dateA = new Date(`01/01/2021 ${a.departureTime}`);
-        const dateB = new Date(`01/01/2021 ${b.departureTime}`);
+        const dateA = new Date(`01/01/2021 ${a.horaSalida}`);
+        const dateB = new Date(`01/01/2021 ${b.horaSalida}`);
         return filterValues.sortOrder === "asc"
           ? dateA.getTime() - dateB.getTime()
           : dateB.getTime() - dateA.getTime();
       }
       if (filterValues.sortBy === "arrivalTime") {
-        const dateA = new Date(`01/01/2021 ${a.arrivalTime}`);
-        const dateB = new Date(`01/01/2021 ${b.arrivalTime}`);
+        const dateA = new Date(`01/01/2021 ${a.horaLlegada}`);
+        const dateB = new Date(`01/01/2021 ${b.horaLlegada}`);
         return filterValues.sortOrder === "asc"
           ? dateA.getTime() - dateB.getTime()
           : dateB.getTime() - dateA.getTime();
       }
-
-      //return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
     setFilteredArray(auxArray);
   }, [filterValues]);
@@ -423,9 +330,27 @@ const SearchResultPage = () => {
             />
           </Grid>
           <Grid item xs={12} md={9}>
-            {filteredArray.slice(0, maxItems).map((trip) => (
-              <TripCard key={trip.id} trip={trip} />
-            ))}
+            {isLoading ? (
+              <Box
+                style={{
+                  flex: 1,
+                  height: "90vh",
+
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress color="secondary" size={90} />
+              </Box>
+            ) : (
+              <>
+                {filteredArray.slice(0, maxItems).map((trip) => (
+                  <TripCard key={trip.id} trip={trip} />
+                ))}
+              </>
+            )}
+
             <Grid container justifyContent="center" alignItems="center">
               <ButtonLoad
                 sx={{
