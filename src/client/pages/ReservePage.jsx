@@ -12,6 +12,7 @@ import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import LoggedPassengerSelection from "../components/LoggedPassengerSelection";
 import PassengersInput from "../components/PassengersInput";
+import PaymentApiRest from "../services/PaymentApiRest";
 
 const TicketPage = () => {
   const [selectedSeats, setSelectedSeats] = useState(
@@ -19,11 +20,53 @@ const TicketPage = () => {
   );
   const [passengers, setPassengers] = useState({});
   const [loading, setLoading] = useState(localStorage.getItem("token"));
+  const [paymentResponse, setPaymentResponse] = useState({});
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   const handleSubmit = (event) => {
-    // go to payment page.
+    //FIX TOTAL TO MATCH DOCUMENTATION
+    let total = 0;
+    Object.values(selectedSeats).map(
+      (seat) =>
+        (total +=
+          JSON.parse(localStorage.getItem("trip")).precio *
+          (1 + seat.price / 100))
+    );
+
+    //DO FOR EACH PASSENGER
+
+    let pasajero = {
+      nombre: Object.values(passengers)[0].name,
+      correo: Object.values(passengers)[0].email,
+      rut: Object.values(passengers)[0].rut,
+      contacto: Object.values(passengers)[0].phone,
+    };
+
+    let paymentData = {
+      pasajero: pasajero,
+      servicio: Object.values(selectedSeats)[0].seatType,
+      numeroAsiento: Object.values(selectedSeats)[0].seatNumber,
+      codigoViaje: JSON.parse(localStorage.getItem("trip")).codigo,
+      montoBruto: total,
+    };
+
+    handlePayment(paymentData);
+  };
+
+  const handlePayment = async (paymentData) => {
+    await PaymentApiRest.postPayment(paymentData)
+      .then((response) => {
+        const redirectUrl = `${response.url}?token_ws=${response.token}`;
+
+        window.location.href = redirectUrl;
+        //window.open(redirectUrl, "_blank");
+      })
+      .catch((error) => {
+        // setIsVerifying(false);
+        // setTitle("Algo salió mal, intenta más tarde");
+        // setMessage(error.response.data);
+      });
   };
 
   return (
@@ -82,6 +125,12 @@ const TicketPage = () => {
                     );
                   })}
                   <Grid item sx={{ display: "flex", justifyContent: "center" }}>
+                    {/* <form action={paymentResponse.url} method="POST">
+                      <input
+                        type="hidden"
+                        name="token_ws"
+                        value={paymentResponse.token}
+                      /> */}
                     <Button
                       onClick={handleSubmit}
                       variant="contained"
@@ -95,6 +144,7 @@ const TicketPage = () => {
                     >
                       Proceder al Pago
                     </Button>
+                    {/* </form> */}
                   </Grid>
                 </Grid>
               </Paper>
