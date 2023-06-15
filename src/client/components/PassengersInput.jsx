@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import InputForm from "./InputForm";
 
-const PassengersInput = ({ seats, passengers, setPassengers, loading }) => {
+const PassengersInput = ({ seats, passengers, setPassengers, loading , setTneDiscount}) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
@@ -111,6 +111,7 @@ const PassengersInput = ({ seats, passengers, setPassengers, loading }) => {
                       index={index}
                       passengers={passengers}
                       setPassengers={setPassengers}
+                      setTneDiscount={setTneDiscount}
                     />
                   </StepContent>
                 </Step>

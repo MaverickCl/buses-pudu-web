@@ -25,25 +25,9 @@ const TripPage = () => {
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
-  //   useEffect(() => {
-  //     // Simulating API call to fetch trip data
-  //     // Replace this with your actual API call
-  //     const fetchTripData = async () => {
-  //       // Assuming you're fetching the JSON from an API endpoint
-  //       const response = await fetch("https://api.example.com/trips/1");
-  //       const data = await response.json();
-  //       setTripData(data);
-  //     };
-
-  //     fetchTripData();
-  //   }, []);
-
   if (!tripData) {
-    // Show loading indicator or return null while fetching data
 
     const trip = JSON.parse(localStorage.getItem("trip"));
-
-    //console.log(trip);
 
     setTripData({
       code: trip.codigo,
@@ -96,7 +80,7 @@ const TripPage = () => {
           {typeof currentSeat === "object" && currentSeat.seatType}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Precio: ${typeof currentSeat === "object" && currentSeat.price}
+          Precio: ${typeof currentSeat === "object" && price*((currentSeat.price/100)+1)}
         </Typography>
       </div>
     );
@@ -168,14 +152,14 @@ const TripPage = () => {
   const TotalCard = () => {
     let total = 0;
 
-    Object.values(selectedSeats).map((seat) => (total += seat.price));
+    Object.values(selectedSeats).map((seat) => (total += price*((seat.price/100)+1)));
 
     return (
       <>
         {Object.values(selectedSeats).map((seat, seatIndex) => (
           <Grid key={seatIndex} item xs={6}>
             <Typography>
-              Asiento {seat.seatNumber}: ${seat.price}
+              Asiento {seat.seatNumber}: ${price*((seat.price/100)+1)}
             </Typography>
           </Grid>
         ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Button,
@@ -20,7 +20,16 @@ const TicketPage = () => {
   );
   const [passengers, setPassengers] = useState({});
   const [loading, setLoading] = useState(localStorage.getItem("token"));
-  const [paymentResponse, setPaymentResponse] = useState({});
+  const [price, setPrice] = useState(0);
+  const [tneDiscount, setTneDiscount] = useState([1,1,1,1,1]);
+
+  useEffect(() => {
+    let total = 0;
+    const tripPrice = JSON.parse(localStorage.getItem("trip")).precio;
+    Object.values(selectedSeats).map((seat, index) => (total += tneDiscount[index]*tripPrice*((seat.price/100)+1)));
+
+    setPrice(total);
+  }, [tneDiscount]);
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
@@ -60,7 +69,6 @@ const TicketPage = () => {
         const redirectUrl = `${response.url}?token_ws=${response.token}`;
 
         window.location.href = redirectUrl;
-        //window.open(redirectUrl, "_blank");
       })
       .catch((error) => {
         // setIsVerifying(false);
@@ -96,6 +104,7 @@ const TicketPage = () => {
                 passengers={passengers}
                 setPassengers={setPassengers}
                 loading={loading}
+                setTneDiscount={setTneDiscount}
               />
             </Grid>
 
@@ -111,7 +120,7 @@ const TicketPage = () => {
                     Compra de Pasajes
                   </Typography>
                   <Typography variant="h6" gutterBottom>
-                    Precio: $100
+                    Precio: ${price}
                   </Typography>
                   <Typography variant="h6" gutterBottom>
                     Pasajeros:
@@ -125,12 +134,7 @@ const TicketPage = () => {
                     );
                   })}
                   <Grid item sx={{ display: "flex", justifyContent: "center" }}>
-                    {/* <form action={paymentResponse.url} method="POST">
-                      <input
-                        type="hidden"
-                        name="token_ws"
-                        value={paymentResponse.token}
-                      /> */}
+                    
                     <Button
                       onClick={handleSubmit}
                       variant="contained"
@@ -144,7 +148,7 @@ const TicketPage = () => {
                     >
                       Proceder al Pago
                     </Button>
-                    {/* </form> */}
+                
                   </Grid>
                 </Grid>
               </Paper>

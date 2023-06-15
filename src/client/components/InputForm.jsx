@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, FormControlLabel, TextField, Box, Button } from "@mui/material";
 import TneButton from "./TneButton";
 
@@ -18,6 +18,14 @@ const InputForm = (props) => {
   );
 
   const [tneMessage, setTneMessage] = useState("Tienes una TNE vigente?");
+
+  useEffect(() => {
+    props.setTneDiscount((prevTneDiscount) => { 
+      const newTneDiscount = [...prevTneDiscount];
+      newTneDiscount[props.index] = passenger.tne ? 0.7 : 1;
+      return newTneDiscount;
+      });
+  }, [tneMessage]);
 
   const handleNameChange = (e) => {
     setPassenger({ ...passenger, name: e.target.value });

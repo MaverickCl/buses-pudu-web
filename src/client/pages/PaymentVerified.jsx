@@ -29,7 +29,7 @@ const PaymentVerificationPage = () => {
     PaymentApiRest.getPayment(token)
       .then((response) => {
         setData(response);
-        console.log(response);
+        //console.log(response);
         setLoading(false);
       })
       .catch((error) => {
@@ -55,27 +55,28 @@ const PaymentVerificationPage = () => {
             display: "flex",
             flexDirection: isPortrait ? "column" : "row",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <CardContent>
             {loading ? (
-              <Grid container alignItems="center" justifyContent="center">
-                <Grid item xs={12}>
-                  {/* <Box
+            
+                   <Box
                     style={{
                       flex: 1,
-                      height: "90vh",
-                      width: "100%",
+                      
+                      margin: "auto",
+                      height: "70vh",
+                      //width: "70vw",
 
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                     }}
-                  > */}
+                  > 
                   <CircularProgress color="secondary" size={90} />
-                  {/* </Box> */}
-                </Grid>
-              </Grid>
+                   </Box> 
+                  
             ) : (
               <Grid
                 container
