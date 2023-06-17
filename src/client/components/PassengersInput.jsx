@@ -12,16 +12,20 @@ import {
 } from "@mui/material";
 import InputForm from "./InputForm";
 
-const PassengersInput = ({ seats, passengers, setPassengers, loading , setTneDiscount}) => {
+const PassengersInput = ({
+  seats,
+  passengers,
+  setPassengers,
+  loading,
+  setTneDiscount,
+}) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
 
   const handleNext = () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
-        ? // It's the last step, but not all steps have been completed,
-          // find the first step that has been completed
-          steps.findIndex((step, i) => !(i in completed))
+        ? steps.findIndex((step, i) => !(i in completed))
         : activeStep + 1;
     setActiveStep(newActiveStep);
   };

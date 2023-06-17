@@ -7,11 +7,16 @@ import {
   Box,
   Grid,
   Paper,
+  CircularProgress,
 } from "@mui/material";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import LoggedPassengerSelection from "../components/LoggedPassengerSelection";
 import PassengersInput from "../components/PassengersInput";
+
 import PaymentApiRest from "../services/PaymentApiRest";
 
 const TicketPage = () => {
@@ -21,12 +26,19 @@ const TicketPage = () => {
   const [passengers, setPassengers] = useState({});
   const [loading, setLoading] = useState(localStorage.getItem("token"));
   const [price, setPrice] = useState(0);
-  const [tneDiscount, setTneDiscount] = useState([1,1,1,1,1]);
+  const [tneDiscount, setTneDiscount] = useState([1, 1, 1, 1, 1]);
+  const [paymentMessage, setPaymentMessage] = useState("Proceder al pago");
+  const [paymentIcon, setPaymentIcon] = useState(<AttachMoneyIcon />);
 
   useEffect(() => {
     let total = 0;
     const tripPrice = JSON.parse(localStorage.getItem("trip")).precio;
-    Object.values(selectedSeats).map((seat, index) => (total += tneDiscount[index]*tripPrice*((seat.price/100)+1)));
+    Object.values(selectedSeats).map(
+      (seat, index) =>
+        (total += Math.floor(
+          tneDiscount[index] * tripPrice * (seat.price / 100 + 1)
+        ))
+    );
 
     setPrice(total);
   }, [tneDiscount]);
@@ -64,6 +76,8 @@ const TicketPage = () => {
   };
 
   const handlePayment = async (paymentData) => {
+    setPaymentMessage("Redireccionando a WebPay...");
+    setPaymentIcon(<CircularProgress size={24} color="inherit" />);
     await PaymentApiRest.postPayment(paymentData)
       .then((response) => {
         const redirectUrl = `${response.url}?token_ws=${response.token}`;
@@ -71,9 +85,9 @@ const TicketPage = () => {
         window.location.href = redirectUrl;
       })
       .catch((error) => {
-        // setIsVerifying(false);
-        // setTitle("Algo salió mal, intenta más tarde");
-        // setMessage(error.response.data);
+        setPaymentMessage("Error al redireccionar a WebPay");
+        setPaymentIcon(<ReportProblemIcon />);
+        console.error(error);
       });
   };
 
@@ -128,13 +142,17 @@ const TicketPage = () => {
 
                   {Object.values(passengers).map((passengers, index) => {
                     return (
-                      <Typography key={index} variant="h7" gutterBottom>
-                        {passengers.name}
+                      <Typography
+                        key={index}
+                        variant="h7"
+                        gutterBottom
+                        style={{ marginLeft: 20 }}
+                      >
+                        - {passengers.name}
                       </Typography>
                     );
                   })}
                   <Grid item sx={{ display: "flex", justifyContent: "center" }}>
-                    
                     <Button
                       onClick={handleSubmit}
                       variant="contained"
@@ -145,13 +163,14 @@ const TicketPage = () => {
                           Object.values(selectedSeats).length
                         )
                       }
+                      startIcon={paymentIcon}
                     >
-                      Proceder al Pago
+                      {paymentMessage}
                     </Button>
-                
                   </Grid>
                 </Grid>
               </Paper>
+
               {localStorage.getItem("token") && (
                 <Grid item xs={12} mt={2}>
                   <LoggedPassengerSelection

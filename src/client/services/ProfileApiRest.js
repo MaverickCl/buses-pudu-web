@@ -17,7 +17,6 @@ class ProfileApiRest {
   }
 
   static async updateProfile(token, profileData) {
-    console.log(profileData);
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };

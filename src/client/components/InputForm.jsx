@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Grid, FormControlLabel, TextField, Box, Button } from "@mui/material";
+
 import TneButton from "./TneButton";
+import PhoneInput from "./PhoneInput";
 
 const InputForm = (props) => {
   const [showAlert, setShowAlert] = useState(false);
+
   // create json object with passenger data
   const [passenger, setPassenger] = useState(
     props.passengers[props.index]
@@ -20,12 +23,26 @@ const InputForm = (props) => {
   const [tneMessage, setTneMessage] = useState("Tienes una TNE vigente?");
 
   useEffect(() => {
-    props.setTneDiscount((prevTneDiscount) => { 
+    props.setTneDiscount((prevTneDiscount) => {
       const newTneDiscount = [...prevTneDiscount];
-      newTneDiscount[props.index] = passenger.tne ? 0.7 : 1;
+      newTneDiscount[props.index] = passenger.tne ? 0.75 : 1;
       return newTneDiscount;
-      });
+    });
   }, [tneMessage]);
+
+  useMemo(() => {
+    setPassenger(
+      props.passengers[props.index]
+        ? props.passengers[props.index]
+        : {
+            name: "",
+            email: "",
+            phone: "",
+            rut: "",
+            tne: false,
+          }
+    );
+  }, [props.passengers]);
 
   const handleNameChange = (e) => {
     setPassenger({ ...passenger, name: e.target.value });
@@ -36,7 +53,7 @@ const InputForm = (props) => {
   };
 
   const handlePhoneChange = (e) => {
-    setPassenger({ ...passenger, phone: e.target.value });
+    setPassenger({ ...passenger, phone: e });
   };
 
   const handleSubmit = (e) => {
@@ -128,13 +145,10 @@ const InputForm = (props) => {
           type="email"
         />
 
-        <TextField
-          label="Teléfono"
-          value={passenger.phone}
-          onChange={handlePhoneChange}
-          fullWidth
-          margin="normal"
-          required
+        <PhoneInput
+          onChange={(e) => handlePhoneChange(e)}
+          icon={false}
+          number={passenger.phone}
         />
 
         <Box sx={{ mb: 2 }}>

@@ -1,25 +1,36 @@
 import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+
+import {
+  Grid,
+  Button,
+  Typography,
+  CssBaseline,
+  Avatar,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Box,
+  Container,
+  InputAdornment,
+  IconButton,
+  FormHelperText,
+  OutlinedInput,
+  InputLabel,
+  FormControl,
+  CircularProgress,
+} from "@mui/material";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 import { login } from "../services/SignInApiRest";
 
 import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
-import { FormHelperText } from "@mui/material";
 import ForgottenAlert from "../components/ForgottenAlert";
 
 const theme = createTheme();
@@ -30,11 +41,18 @@ export default function LoginPage() {
   const [loginError, setLoginError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [loginMessage, setLoginMessage] = useState("Ingresar");
+  const [loginIcon, setLoginIcon] = useState(<LockOutlinedIcon />);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoginMessage("Ingresando...");
+    setLoginIcon(<CircularProgress size={24} color="inherit" />);
+
     try {
       const result = await loginLogic(correo, contrasenia);
 
@@ -43,7 +61,13 @@ export default function LoginPage() {
       } else navigate("/");
     } catch (error) {
       setLoginError(error.response.data);
+      setLoginMessage("Ingresar");
+      setLoginIcon(<LockOutlinedIcon />);
     }
+  };
+
+  const handlePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
   };
 
   async function loginLogic(correo, contrasenia) {
@@ -100,49 +124,60 @@ export default function LoginPage() {
               <Typography component="h1" variant="h5">
                 Ingreso
               </Typography>
-              <Box
-                component="form"
-                onSubmit={handleSubmit}
-                noValidate
-                sx={{ mt: 1 }}
-              >
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="correo"
-                  label="Correo Eléctronico"
-                  name="correo"
-                  autoComplete="email"
-                  value={correo}
-                  onChange={(e) => setCorreo(e.target.value)}
-                  autoFocus
-                />
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="contrasenia"
-                  label="Contraseña"
-                  type="password"
-                  id="contrasenia"
-                  autoComplete="current-password"
-                  value={contrasenia}
-                  onChange={(e) => setContrasenia(e.target.value)}
-                />
-                <LoginErrorDisplay />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Recuérdame"
-                />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Ingresar
-                </Button>
+              <Box onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <form>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="correo"
+                    label="Correo Eléctronico"
+                    name="correo"
+                    autoComplete="email"
+                    value={correo}
+                    onChange={(e) => setCorreo(e.target.value)}
+                    autoFocus
+                  />
+                  <FormControl fullWidth sx={{ mb: 2 }} required>
+                    <InputLabel htmlFor="password">Contraseña</InputLabel>
+                    <OutlinedInput
+                      id="confirm-password"
+                      type={passwordVisible ? "text" : "password"}
+                      value={contrasenia}
+                      onChange={(e) => setContrasenia(e.target.value)}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle confirm password visibility"
+                            onClick={handlePasswordVisibility}
+                            edge="end"
+                          >
+                            {passwordVisible ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Contraseña"
+                    />
+                  </FormControl>
+                  <LoginErrorDisplay />
+                  <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Recuérdame"
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    startIcon={loginIcon}
+                  >
+                    {loginMessage}
+                  </Button>
+                </form>
                 <Grid container>
                   <Grid item xs>
                     <Link onClick={handleRecoverPass} variant="body2">

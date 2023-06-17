@@ -33,6 +33,8 @@ import Footer from "../components/Footer";
 
 import ProfileApiRest from "../services/ProfileApiRest";
 import EmailVerifyDialog from "../components/EmailVerifyDialog";
+import FrecuentPassengersCard from "../components/FrecuentPassengersCard";
+import { set } from "date-fns";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = React.useState(false);
@@ -42,6 +44,9 @@ const Profile = () => {
   const [tne, setTne] = React.useState(null);
   const [email, setEmail] = React.useState(null);
   const [phoneNumber, setPhoneNumber] = React.useState(null);
+
+  const [frecuentPassengers, setFrecuentPassengers] = React.useState([]);
+
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -164,7 +169,12 @@ const Profile = () => {
 
       <Container
         maxWidth="sm"
-        sx={{ height: "100vh", display: "flex", alignItems: "center" }}
+        sx={{
+          mt: 2,
+          display: "flex",
+
+          flexDirection: "column",
+        }}
       >
         <Box sx={{ maxWidth: "600px", mx: "auto", py: 8 }}>
           <Card>
@@ -203,7 +213,7 @@ const Profile = () => {
                     <PhoneInput
                       onChange={(value) => setPhoneNumber(value)}
                       icon={false}
-                      number={profileData.contacto.substring(3)}
+                      number={profileData.contacto}
                     />
                   ) : (
                     <Typography>{profileData.contacto}</Typography>
@@ -428,6 +438,10 @@ const Profile = () => {
             </Grid>
           </Card>
         </Box>
+        <FrecuentPassengersCard
+          frecuentPassengers={frecuentPassengers}
+          setFrecuentPassengers={setFrecuentPassengers}
+        />
       </Container>
 
       <EmailVerifyDialog

@@ -13,10 +13,26 @@ const PhoneInput = (props) => {
     // add more country codes as needed
   ];
 
-  const [phoneNumber, setPhoneNumber] = useState(props.number);
+  const [phoneNumber, setPhoneNumber] = useState(props.number.substring(3));
 
-  const [countryCode, setCountryCode] = useState(countryCodes[0]);
+  const extractCountryCode = (phoneNumber) => {
+    const countryCode = countryCodes.findIndex((code) =>
+      phoneNumber.startsWith(code.value)
+    );
+
+    if (countryCode === -1) {
+      const customCode = phoneNumber.substring(0, 3).substring(1);
+      setCustomCountryCode(customCode);
+    }
+
+    return countryCode !== -1 ? countryCodes[countryCode] : "+";
+  };
+
   const [customCountryCode, setCustomCountryCode] = useState("");
+
+  const [countryCode, setCountryCode] = useState(() =>
+    extractCountryCode(props.number)
+  );
 
   useEffect(() => {
     handlePhoneNumberChange();

@@ -162,9 +162,31 @@ const SearchResultPage = () => {
               </Box>
             ) : (
               <>
-                {filteredArray.slice(0, maxItems).map((trip) => (
-                  <TripCard key={trip.id} trip={trip} />
-                ))}
+                {filteredArray.length === 0 ? (
+                  <Box
+                    style={{
+                      flex: 1,
+                      height: "90vh",
+
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h1>No hay viajes disponibles</h1>
+                  </Box>
+                ) : (
+                  <Grid
+                    item
+                    sx={{
+                      height: filteredArray.length > 4 ? "inherit" : "90vh",
+                    }}
+                  >
+                    {filteredArray.slice(0, maxItems).map((trip) => (
+                      <TripCard key={trip.id} trip={trip} />
+                    ))}
+                  </Grid>
+                )}
               </>
             )}
 

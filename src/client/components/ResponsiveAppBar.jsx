@@ -49,7 +49,6 @@ function ResponsiveAppBar(props) {
   const [authMenuAnchorEl, setAuthMenuAnchorEl] = React.useState(null);
   const [isAuthMenuOpen, setIsAuthMenuOpen] = React.useState(false);
   const [state, setState] = React.useState(false);
-  //const { vertical, horizontal, open } = state;
 
   const navigate = useNavigate();
   const location = useLocation();

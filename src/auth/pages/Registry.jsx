@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -7,20 +8,35 @@ import {
   Typography,
   FormControlLabel,
   CssBaseline,
+  InputAdornment,
+  IconButton,
+  OutlinedInput,
+  InputLabel,
+  FormControl,
+  CircularProgress,
 } from "@mui/material";
+import {
+  AccountCircle,
+  Email,
+  Lock,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
+import BadgeIcon from "@mui/icons-material/Badge";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import CheckIcon from "@mui/icons-material/Check";
+
 import { es } from "date-fns/locale";
 import { format } from "date-fns";
-import { AccountCircle, Email, Lock } from "@mui/icons-material";
-import BadgeIcon from "@mui/icons-material/Badge";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useNavigate } from "react-router-dom";
 
 import TneButton from "../../client/components/TneButton";
 import PhoneInput from "../../client/components/PhoneInput";
 import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
+import AlertDialog from "../../client/components/AlertDialog";
 
 import { register } from "../services/SignUpApiRest";
 
@@ -31,8 +47,13 @@ const Registry = () => {
   const [birthDate, setBirthDate] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [tne, setTne] = useState(false);
   const [tneMessage, setTneMessage] = useState("Tienes una TNE vigente?");
+
+  const [registerMessage, setRegisterMessage] = useState("Registrarse");
+  const [registerIcon, setRegisterIcon] = useState(<PersonAddIcon />);
+  const [showAlert, setShowAlert] = useState(false);
 
   const formattedBirthDate = birthDate ? format(birthDate, "dd-MM-yyyy") : "";
 
@@ -41,21 +62,36 @@ const Registry = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      await registerLogic(
-        name,
-        rut,
-        phoneNumber,
-        formattedBirthDate,
-        email,
-        password,
-        tne
-      );
+    if (!birthDate) {
+      alert("Debes ingresar tu fecha de nacimiento");
+    } else {
+      setRegisterMessage("Registrando...");
+      setRegisterIcon(<CircularProgress size={24} color="inherit" />);
+      try {
+        await registerLogic(
+          name,
+          rut,
+          phoneNumber,
+          formattedBirthDate,
+          email,
+          password,
+          tne
+        );
 
-      navigate("/auth/login");
-    } catch (error) {
-      console.error(error);
+        setRegisterMessage("Registrado!");
+        setRegisterIcon(<CheckIcon />);
+        setShowAlert(true);
+      } catch (error) {
+        setRegisterMessage("Registrarse");
+        setRegisterIcon(<PersonAddIcon />);
+        console.error(error);
+      }
     }
+  };
+
+  const handleShowAlert = () => {
+    navigate("/auth/login");
+    setShowAlert(false);
   };
 
   async function registerLogic(
@@ -79,6 +115,10 @@ const Registry = () => {
 
     return true;
   }
+
+  const handlePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const formatRut = (value) => {
     // Remove all characters except numbers and the letter k or K
@@ -132,10 +172,10 @@ const Registry = () => {
                 <LocalizationProvider
                   dateAdapter={AdapterDateFns}
                   adapterLocale={es}
+                  required
                 >
                   <DatePicker
                     sx={{ display: "flex" }}
-                    required
                     fullWidth
                     id="birthDate"
                     label="Fecha Nacimiento"
@@ -195,28 +235,57 @@ const Registry = () => {
                 />
               </Grid>
               <Grid item xs={12} sx={{ marginBottom: 2 }}>
-                <TextField
-                  required
-                  fullWidth
-                  id="password"
-                  label="Contraseña"
-                  type="password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  InputProps={{
-                    startAdornment: <Lock color="secondary" />,
-                  }}
-                />
+                <FormControl fullWidth sx={{ mb: 2 }} required>
+                  <InputLabel htmlFor="password">Contraseña</InputLabel>
+                  <OutlinedInput
+                    id="confirm-password"
+                    type={passwordVisible ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle confirm password visibility"
+                          onClick={handlePasswordVisibility}
+                          edge="end"
+                        >
+                          {passwordVisible ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <Lock color="secondary" />
+                      </InputAdornment>
+                    }
+                    label="Contraseña"
+                  />
+                </FormControl>
               </Grid>
             </Grid>
             <Grid container alignItems="center"></Grid>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Registrarse
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              startIcon={registerIcon}
+            >
+              {registerMessage}
             </Button>
           </form>
         </Grid>
       </Container>
       <Footer />
+
+      {showAlert && (
+        <AlertDialog
+          title="Su cuenta se ha creado exitosamente!"
+          text="Redireccionando a la página de inicio de sesión..."
+          button="OK"
+          onClose={() => handleShowAlert(false)}
+        />
+      )}
     </CssBaseline>
   );
 };
