@@ -1,22 +1,19 @@
 import React from "react";
-import { useEffect, useState, isPortrait } from "react";
+import { useState } from "react";
 import {
   Container,
   Paper,
   Box,
   Typography,
   Grid,
-  IconButton,
   Collapse,
-  Zoom,
-  Divider,
-  Button,
 } from "@mui/material";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import Bus from "../components/Bus";
-import Seat from "../components/Seat";
-import { Link } from "react-router-dom";
+import MappedSeats from "../components/MappedSeats";
+import SeatSelection from "../components/SeatSelection";
+import TotalCard from "../components/TotalCard";
 
 const TripPage = () => {
   const [selectedSeats, setSelectedSeats] = useState({});
@@ -26,7 +23,6 @@ const TripPage = () => {
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   if (!tripData) {
-
     const trip = JSON.parse(localStorage.getItem("trip"));
 
     setTripData({
@@ -62,121 +58,6 @@ const TripPage = () => {
 
       return updatedSelectedSeats;
     });
-  };
-
-  const handleSubmit = () => {
-    localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
-  };
-
-  const MappedSeats = () => {
-    return (
-      <div>
-        <Typography variant="body1" gutterBottom>
-          Asiento N°:{" "}
-          {typeof currentSeat === "object" && currentSeat.seatNumber}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Tipo de Asiento:{" "}
-          {typeof currentSeat === "object" && currentSeat.seatType}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Precio: ${typeof currentSeat === "object" && price*((currentSeat.price/100)+1)}
-        </Typography>
-      </div>
-    );
-  };
-
-  const SeatSelection = () => {
-    return (
-      <div>
-        <Divider
-          variant="middle"
-          sx={{ marginTop: "1rem", marginBottom: "1rem" }}
-        />
-        <Typography variant="h6" gutterBottom>
-          Sillas Seleccionadas
-        </Typography>
-        <Grid
-          container
-          direction="row"
-          alignItems="center"
-          justifyContent={selectedSeats.length === 4 && "space-between"}
-        >
-          {Object.values(selectedSeats).map((seat, seatIndex) => (
-            <Grid
-              key={seatIndex}
-              item
-              xs={2.4}
-              display="flex"
-              justifyContent="center"
-            >
-              <Zoom in>
-                <IconButton
-                  style={{
-                    position: "relative",
-                    color: "black",
-                  }}
-                  onClick={() => {
-                    setCurrentSeat(seat);
-                  }}
-                >
-                  <Seat
-                    style={{
-                      height: "3rem",
-                    }}
-                    color={
-                      currentSeat.seatNumber === seat.seatNumber
-                        ? "#0e7eed"
-                        : "#000000"
-                    }
-                  />
-
-                  <span
-                    style={{
-                      position: "absolute",
-                      marginBottom: "-.5rem",
-                      fontSize: "1.25rem",
-                    }}
-                  >
-                    {seat.seatNumber}
-                  </span>
-                </IconButton>
-              </Zoom>
-            </Grid>
-          ))}
-        </Grid>
-      </div>
-    );
-  };
-
-  const TotalCard = () => {
-    let total = 0;
-
-    Object.values(selectedSeats).map((seat) => (total += price*((seat.price/100)+1)));
-
-    return (
-      <>
-        {Object.values(selectedSeats).map((seat, seatIndex) => (
-          <Grid key={seatIndex} item xs={6}>
-            <Typography>
-              Asiento {seat.seatNumber}: ${price*((seat.price/100)+1)}
-            </Typography>
-          </Grid>
-        ))}
-
-        <Divider variant="middle" />
-        <Typography variant="h6" gutterBottom>
-          Total de la compra: ${total}
-        </Typography>
-        <Grid item sx={{ display: "flex", justifyContent: "center" }}>
-          <Link to="/viaje-reserva">
-            <Button variant="contained" onClick={handleSubmit}>
-              Reservar Boletos
-            </Button>
-          </Link>
-        </Grid>
-      </>
-    );
   };
 
   return (
@@ -223,9 +104,14 @@ const TripPage = () => {
                   <Typography variant="h6" gutterBottom>
                     Detalles del Asiento
                   </Typography>
-                  <MappedSeats />
+                  <MappedSeats currentSeat={currentSeat} price={price} />
+
                   <Collapse in={Object.keys(selectedSeats).length > 1}>
-                    <SeatSelection />
+                    <SeatSelection
+                      currentSeat={currentSeat}
+                      setCurrentSeat={setCurrentSeat}
+                      selectedSeats={selectedSeats}
+                    />
                   </Collapse>
                 </Paper>
               </Collapse>
@@ -235,7 +121,7 @@ const TripPage = () => {
                   elevation={3}
                   sx={{ p: 2, mt: 3, backgroundColor: "#f8f8f8" }}
                 >
-                  <TotalCard />
+                  <TotalCard selectedSeats={selectedSeats} price={price} />
                 </Paper>
               </Collapse>
             </Grid>
