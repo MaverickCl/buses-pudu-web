@@ -19,7 +19,7 @@ export const AppRouter = () => {
       <Route path="/bus/*" element={<BusRoutes />} />
 
       {/* Creacion de Viajes*/}
-      <Route path="/viaje/*" element={<TripRoutes />} />
+      <Route path="/viajes/*" element={<TripRoutes />} />
     </Routes>
   );
 };
