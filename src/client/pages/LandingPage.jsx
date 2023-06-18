@@ -19,6 +19,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import ImgMediaCard from "../components/ImgMediaCard";
+import CitySelector from "../../trips/components/CitySelector";
+import AlertDialogSlide from "../components/AlertDialog";
 
 const theme = createTheme();
 
@@ -27,18 +29,35 @@ const paperHeight = `min(70vh, ${42.08}vw)`;
 export default function LandingPage() {
   const [origin, setOrigin] = React.useState("");
   const [destination, setDestination] = React.useState("");
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [alertData, setAlertData] = React.useState({});
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    console.log("submitted");
     e.preventDefault();
 
-    localStorage.setItem("destination", destination);
-    localStorage.setItem("origin", origin);
+    if (origin === "" || destination === "") {
+      setAlertData({
+        title: "Rellena los campos",
+        message: "Debes seleccionar un origen y un destino",
+        button: "Aceptar",
+      });
+      setShowAlert(true);
+    } else if (origin === destination) {
+      setAlertData({
+        title: "A donde vas?",
+        message: "El origen y el destino no pueden ser iguales",
+        button: "Aceptar",
+      });
+      setShowAlert(true);
+    } else {
+      localStorage.setItem("destination", destination);
+      localStorage.setItem("origin", origin);
 
-    navigate("/busqueda");
+      navigate("/busqueda");
+    }
   };
 
   return (
@@ -125,21 +144,17 @@ export default function LandingPage() {
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={2}>
                     <Grid item sm={6} width="100%">
-                      <TextField
+                      <CitySelector
+                        label="Origen *"
+                        setCity={setOrigin}
                         required
-                        fullWidth
-                        id="origin"
-                        label="Origen"
-                        onChange={(event) => setOrigin(event.target.value)}
                       />
                     </Grid>
                     <Grid item sm={6} width="100%">
-                      <TextField
+                      <CitySelector
+                        label="Destino *"
+                        setCity={setDestination}
                         required
-                        fullWidth
-                        id="destination"
-                        label="Destino"
-                        onChange={(event) => setDestination(event.target.value)}
                       />
                     </Grid>
                   </Grid>
@@ -196,9 +211,17 @@ export default function LandingPage() {
           </Grid>
         </Grid>
       </Container>
-      {/* Footer */}
+
+      {showAlert && (
+        <AlertDialogSlide
+          title={alertData.title}
+          text={alertData.message}
+          button={alertData.button}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
+
       <Footer />
-      {/* End footer */}
     </ThemeProvider>
   );
 }

@@ -5,10 +5,6 @@ import { Link } from "react-router-dom";
 const TotalCard = ({ selectedSeats, price }) => {
   let total = 0;
 
-  console.log(total);
-  console.log(price);
-  console.log(selectedSeats);
-
   const handleSubmit = () => {
     localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
   };

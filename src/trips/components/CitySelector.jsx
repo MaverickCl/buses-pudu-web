@@ -4,7 +4,7 @@ import { TextField, Autocomplete } from "@mui/material";
 
 import CityFetcher from "../services/CityFetcher";
 
-const CitySelector = ({ label, setCity }) => {
+const CitySelector = ({ label, setCity, city }) => {
   const [data, setData] = useState(CityFetcher.fetchJSON());
 
   const options = data.regiones.flatMap((region) => [
@@ -26,10 +26,13 @@ const CitySelector = ({ label, setCity }) => {
     <Autocomplete
       id="citySelector"
       options={options}
+      isOptionEqualToValue={(option, value) => option.title === value.title}
+      value={city && { title: city }}
       groupBy={(option) => (option.group ? option.group : "")}
       getOptionLabel={(option) => option.title}
       renderInput={(params) => <TextField {...params} label={label} />}
       onChange={handleCityChange}
+      fullWidth
     />
   );
 };
