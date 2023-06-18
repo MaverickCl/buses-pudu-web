@@ -23,11 +23,14 @@ const InputForm = (props) => {
   const [tneMessage, setTneMessage] = useState("Tienes una TNE vigente?");
 
   useEffect(() => {
-    props.setTneDiscount((prevTneDiscount) => {
-      const newTneDiscount = [...prevTneDiscount];
-      newTneDiscount[props.index] = passenger.tne ? 0.75 : 1;
-      return newTneDiscount;
-    });
+    {
+      props.setTneDiscount &&
+        props.setTneDiscount((prevTneDiscount) => {
+          const newTneDiscount = [...prevTneDiscount];
+          newTneDiscount[props.index] = passenger.tne ? 0.75 : 1;
+          return newTneDiscount;
+        });
+    }
   }, [tneMessage]);
 
   useMemo(() => {
@@ -154,16 +157,17 @@ const InputForm = (props) => {
         <Box sx={{ mb: 2 }}>
           <div>
             <Button sx={{ mt: 1, mr: 1 }} variant="contained" type="submit">
-              {props.completedSteps() === props.totalSteps() - 1
+              {props.completedSteps &&
+              props.completedSteps() === props.totalSteps() - 1
                 ? "Finalizar"
                 : "Pasajero listo"}
             </Button>
             <Button
-              disabled={props.index === 0}
+              disabled={props.back ? false : props.index === 0}
               onClick={props.handleBack}
               sx={{ mt: 1, mr: 1 }}
             >
-              Atrás
+              {props.back ? "Cancelar" : "Atrás"}
             </Button>
           </div>
         </Box>

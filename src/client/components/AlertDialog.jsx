@@ -27,6 +27,9 @@ export default function AlertDialogSlide(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          {props.onCancel && (
+            <Button onClick={props.onCancel}>{props.cancelButton}</Button>
+          )}
           <Button onClick={props.onClose}>{props.button}</Button>
         </DialogActions>
       </Dialog>

@@ -45,7 +45,7 @@ const Profile = () => {
   const [email, setEmail] = React.useState(null);
   const [phoneNumber, setPhoneNumber] = React.useState(null);
 
-  const [frecuentPassengers, setFrecuentPassengers] = React.useState([]);
+  const [frecuentPassengers, setFrecuentPassengers] = React.useState({});
 
   const theme = useTheme();
   const isPortrait = useMediaQuery(theme.breakpoints.down("sm"));
@@ -170,9 +170,8 @@ const Profile = () => {
       <Container
         maxWidth="sm"
         sx={{
-          mt: 2,
+          mt: 10,
           display: "flex",
-
           flexDirection: "column",
         }}
       >
