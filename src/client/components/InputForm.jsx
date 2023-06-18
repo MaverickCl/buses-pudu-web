@@ -40,7 +40,7 @@ const InputForm = (props) => {
         : {
             name: "",
             email: "",
-            phone: "",
+            phone: "+56",
             rut: "",
             tne: false,
           }
@@ -102,14 +102,16 @@ const InputForm = (props) => {
   return (
     <Grid container padding={2}>
       <form onSubmit={handleSubmit}>
-        <TextField
-          label="Nombre"
-          value={passenger.name}
-          onChange={handleNameChange}
-          fullWidth
-          margin="normal"
-          required
-        />
+        <Grid item xs={12}>
+          <TextField
+            label="Nombre"
+            value={passenger.name}
+            onChange={handleNameChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+        </Grid>
         <Grid container alignItems="center" spacing={1}>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -138,21 +140,25 @@ const InputForm = (props) => {
             />
           </Grid>
         </Grid>
-        <TextField
-          label="Email"
-          value={passenger.email}
-          onChange={handleEmailChange}
-          fullWidth
-          margin="normal"
-          required
-          type="email"
-        />
+        <Grid item xs={12}>
+          <TextField
+            label="Email"
+            value={passenger.email}
+            onChange={handleEmailChange}
+            fullWidth
+            margin="normal"
+            required
+            type="email"
+          />
+        </Grid>
 
-        <PhoneInput
-          onChange={(e) => handlePhoneChange(e)}
-          icon={false}
-          number={passenger.phone}
-        />
+        <Grid item xs={12} my={2}>
+          <PhoneInput
+            onChange={(e) => handlePhoneChange(e)}
+            icon={false}
+            number={passenger.phone}
+          />
+        </Grid>
 
         <Box sx={{ mb: 2 }}>
           <div>

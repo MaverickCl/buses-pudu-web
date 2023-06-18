@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import CreateBusPage from "../pages/CreateBusPage";
+import CreateTripPage from "../pages/CreateTripPage";
 
-export const BusRoutes = () => {
+export const TripRoutes = () => {
   return (
     <Routes>
-      <Route path="/crear-bus" element={<CreateBusPage />} />
+      <Route path="/crear-viaje" element={<CreateTripPage />} />
 
       <Route path="/*" element={<Navigate to="/auth/login" />} />
     </Routes>
