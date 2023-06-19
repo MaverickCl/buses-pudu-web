@@ -14,31 +14,40 @@ class BusSeatsApiRest {
       let floor2 = [];
 
       for (let i = 0; i < seats.length; i++) {
-        let floor = seats[i].segundoPiso ? 2 : 1;
+        if(seats[i].estado !=  "EMPTY") {
 
-        let seat = seats[i].numero;
-        let status =
-          seats[i].estado == "Disponible"
-            ? "FREE"
-            : seats[i].estado == "Reservado"
-            ? "RESERVED"
-            : "BLOCKED";
-        let seatType = seats[i].tipoAsiento;
-        let price = seats[i].precio;
-        let type = "Asiento";
+        let floor;
+          
+        if(seats[i].segundoPiso) {
+            floor = 2;
+        }else{
+            floor = 1;
+        }
 
-        let seatObject = {
-          seatNumber: seat,
-          status: status,
-          seatType: seatType,
-          price: price,
-          type: type,
-        };
+          let seat = seats[i].index+1;
+          let status = seats[i].estado;
+          
+          let seatType = seats[i].tipoAsiento;
+          let price = seats[i].precio;
+          let type = seats[i].tipo;
 
-        if (floor === 1) {
-          floor1.push(seatObject);
-        } else if (floor === 2) {
-          floor2.push(seatObject);
+          if(type === "Pasillo") {
+            seat = "";
+          }
+
+          let seatObject = {
+            seatNumber: seat,
+            status: status,
+            seatType: seatType,
+            price: price,
+            type: type,
+          };
+
+          if (floor === 1) {
+            floor1.push(seatObject);
+          } else if (floor === 2 && seat !== "") {
+            floor2.push(seatObject);
+          }
         }
       }
 
