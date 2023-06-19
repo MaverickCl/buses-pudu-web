@@ -8,6 +8,7 @@ import {
   Grid,
   Paper,
   CircularProgress,
+  Divider,
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
@@ -18,6 +19,7 @@ import LoggedPassengerSelection from "../components/LoggedPassengerSelection";
 import PassengersInput from "../components/PassengersInput";
 
 import PaymentApiRest from "../services/PaymentApiRest";
+import PuduDiscountButton from "../components/PuduDiscountButton";
 
 const TicketPage = () => {
   const [selectedSeats, setSelectedSeats] = useState(
@@ -26,53 +28,54 @@ const TicketPage = () => {
   const [passengers, setPassengers] = useState({});
   const [loading, setLoading] = useState(localStorage.getItem("token"));
   const [price, setPrice] = useState(0);
+  const [discounts, setDiscounts] = useState({ tne: 0, points: 0 });
   const [tneDiscount, setTneDiscount] = useState([1, 1, 1, 1, 1]);
   const [paymentMessage, setPaymentMessage] = useState("Proceder al pago");
   const [paymentIcon, setPaymentIcon] = useState(<AttachMoneyIcon />);
 
   useEffect(() => {
     let total = 0;
+    let discount = 0;
     const tripPrice = JSON.parse(localStorage.getItem("trip")).precio;
-    Object.values(selectedSeats).map(
-      (seat, index) =>
-        (total += Math.floor(
-          tneDiscount[index] * tripPrice * (seat.price / 100 + 1)
-        ))
-    );
+    Object.values(selectedSeats).map((seat, index) => {
+      total += Math.floor(tripPrice * (seat.price / 100 + 1));
+      discount += (1 - tneDiscount[index]) * tripPrice * (seat.price / 100 + 1);
+    });
 
+    setDiscounts((discounts) => ({
+      ...discounts,
+      tne: discount,
+    }));
     setPrice(total);
   }, [tneDiscount]);
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   const handleSubmit = (event) => {
-    //FIX TOTAL TO MATCH DOCUMENTATION
-    let total = 0;
-    Object.values(selectedSeats).map(
-      (seat) =>
-        (total +=
-          JSON.parse(localStorage.getItem("trip")).precio *
-          (1 + seat.price / 100))
-    );
+    let ticketDto = [];
 
-    //DO FOR EACH PASSENGER
+    Object.values(passengers).map((passenger, index) => {
+      let pasajero = {
+        nombre: passenger.name,
+        correo: passenger.email,
+        rut: passenger.rut,
+        contacto: passenger.phone,
+      };
 
-    let pasajero = {
-      nombre: Object.values(passengers)[0].name,
-      correo: Object.values(passengers)[0].email,
-      rut: Object.values(passengers)[0].rut,
-      contacto: Object.values(passengers)[0].phone,
-    };
+      ticketDto.push({
+        pasajero: pasajero,
+        servicio: passenger.seatType,
+        numeroAsiento: passenger.seatNumber,
+        codigoViaje: JSON.parse(localStorage.getItem("trip")).codigo,
+        montoBruto: Math.floor(
+          tneDiscount[index] *
+            JSON.parse(localStorage.getItem("trip")).precio *
+            (Object.values(selectedSeats)[index].price / 100 + 1)
+        ),
+      });
+    });
 
-    let paymentData = {
-      pasajero: pasajero,
-      servicio: Object.values(selectedSeats)[0].seatType,
-      numeroAsiento: Object.values(selectedSeats)[0].seatNumber,
-      codigoViaje: JSON.parse(localStorage.getItem("trip")).codigo,
-      montoBruto: total,
-    };
-
-    handlePayment(paymentData);
+    handlePayment(ticketDto);
   };
 
   const handlePayment = async (paymentData) => {
@@ -123,6 +126,9 @@ const TicketPage = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
+              <Grid container justifyContent="flex-end">
+                <PuduDiscountButton total={price} />
+              </Grid>
               <Paper
                 style={{
                   backgroundColor: "#efefef",
@@ -133,9 +139,62 @@ const TicketPage = () => {
                   <Typography variant="h4" align="center" gutterBottom>
                     Compra de Pasajes
                   </Typography>
-                  <Typography variant="h6" gutterBottom>
-                    Precio: ${price}
-                  </Typography>
+
+                  {(discounts.tne > 0 || discounts.points > 0) && (
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      flexDirection="row"
+                    >
+                      <Typography variant="h6" gutterBottom>
+                        Precio:
+                      </Typography>
+                      <Typography variant="h6" gutterBottom>
+                        ${price}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {discounts.tne > 0 && (
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      flexDirection="row"
+                    >
+                      <Typography variant="h7" gutterBottom>
+                        Descuento TNE:
+                      </Typography>
+                      <Typography variant="h7" gutterBottom>
+                        - ${discounts.tne}
+                      </Typography>
+                    </Grid>
+                  )}
+                  {discounts.points > 0 && (
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      flexDirection="row"
+                    >
+                      <Typography variant="h7" gutterBottom>
+                        Descuento Puntos:
+                      </Typography>
+                      <Typography variant="h7" gutterBottom>
+                        - ${discounts.points}
+                      </Typography>
+                    </Grid>
+                  )}
+                  <Divider />
+                  <Grid
+                    container
+                    justifyContent="space-between"
+                    flexDirection="row"
+                  >
+                    <Typography variant="h6" gutterBottom>
+                      Total:
+                    </Typography>
+                    <Typography variant="h6" gutterBottom>
+                      ${price - discounts.tne - discounts.points}
+                    </Typography>
+                  </Grid>
                   <Typography variant="h6" gutterBottom>
                     Pasajeros:
                   </Typography>

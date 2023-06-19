@@ -4,8 +4,6 @@ const BASE_URL = "http://localhost:8080/api/pago"; // Replace with your API base
 
 class PaymentApiRest {
   static async postPayment(boletoDTO) {
-    //console.log(boletoDTO);
-
     try {
       const response = await axios.post(
         `${BASE_URL}/webpay_plus/create`,
@@ -21,8 +19,6 @@ class PaymentApiRest {
 
   static async getPayment(token) {
     try {
-      console.log(`${BASE_URL}/webpay_plus/commit?token_ws=` + token);
-
       const response = await axios.post(
         `${BASE_URL}/webpay_plus/commit?token_ws=` + token
       );

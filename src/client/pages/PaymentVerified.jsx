@@ -24,13 +24,14 @@ const PaymentVerificationPage = () => {
 
     const token = searchParams.get("token_ws");
 
-    console.log(token);
-
     PaymentApiRest.getPayment(token)
       .then((response) => {
         setData(response);
-        //console.log(response);
-        setLoading(false);
+        console.log(response);
+
+        {
+          response && setLoading(false);
+        }
       })
       .catch((error) => {
         setData(error.response.data);
@@ -60,23 +61,25 @@ const PaymentVerificationPage = () => {
         >
           <CardContent>
             {loading ? (
-            
-                   <Box
-                    style={{
-                      flex: 1,
-                      
-                      margin: "auto",
-                      height: "70vh",
-                      //width: "70vw",
+              <Box
+                style={{
+                  flex: 1,
 
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  > 
-                  <CircularProgress color="secondary" size={90} />
-                   </Box> 
-                  
+                  margin: "auto",
+                  height: "70vh",
+                  //width: "70vw",
+
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <Typography variant="h5" gutterBottom textAlign="center">
+                  Verificando Pago...
+                </Typography>
+                <CircularProgress color="secondary" size={90} />
+              </Box>
             ) : (
               <Grid
                 container
@@ -87,13 +90,13 @@ const PaymentVerificationPage = () => {
                 <>
                   <Grid item xs={12} sm={8}>
                     <Typography variant="h5" gutterBottom textAlign="center">
-                      {data !== "AUTHORIZED"
+                      {data.message !== "0"
                         ? "Ups!, algo salió mal"
                         : "Pago Existoso!"}
                     </Typography>
                     <Typography variant="body1" textAlign="center">
-                      {data !== "AUTHORIZED"
-                        ? data.message
+                      {data.message !== "0"
+                        ? data.status
                         : "Su pago ha sido realizado con éxito, en breve recibirá un correo con los detalles de su compra y boleto"}
                     </Typography>
                     <Grid

@@ -24,7 +24,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 import CitySelector from "./CitySelector";
-import DistanceCalculator from "../services/DistanceCalculator";
 import DataApiRest from "../services/DataApiRest";
 import AlertDialogSlide from "../../client/components/AlertDialog";
 import TripApiRest from "../services/TripApiRest";
@@ -49,10 +48,6 @@ const TripForm = ({ setParentTrip }) => {
     message: "",
     button: "",
   });
-
-  //GOTTA MAKE THIS WORK
-  //DistanceCalculator.fetchDistance("Santiago", "Temuco");
-  // IF THIS WORKS, THEN DISTANCE AND ARRIVAL TIME IS AUTOMATIC.
 
   const handleSubmit = (event) => {
     event.preventDefault();

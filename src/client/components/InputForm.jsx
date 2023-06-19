@@ -6,15 +6,13 @@ import PhoneInput from "./PhoneInput";
 
 const InputForm = (props) => {
   const [showAlert, setShowAlert] = useState(false);
-
-  // create json object with passenger data
   const [passenger, setPassenger] = useState(
     props.passengers[props.index]
       ? props.passengers[props.index]
       : {
           name: "",
           email: "",
-          phone: "",
+          phone: "+56",
           rut: "",
           tne: false,
         }
