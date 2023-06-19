@@ -126,9 +126,14 @@ const TicketPage = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
+              {localStorage.getItem("token") && (
               <Grid container justifyContent="flex-end">
-                <PuduDiscountButton total={price} />
-              </Grid>
+                
+                <PuduDiscountButton total={price} setPoints={(value) => setDiscounts((discounts) => ({
+      ...discounts,
+      points: value,
+    }))}/>
+              </Grid>)}
               <Paper
                 style={{
                   backgroundColor: "#efefef",

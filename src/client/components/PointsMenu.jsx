@@ -13,12 +13,15 @@ import {
   Popper,
   Fade,
   Paper,
+  TextField,
 } from "@mui/material";
 
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
-const PointsMenu = ({ showMenu, handleClose, anchorEl, total }) => {
+const PointsMenu = ({ showMenu, handleClose, anchorEl, total , setParentPoints}) => {
+
+  //SET POINTS TO USER'S
   const [points, setPoints] = React.useState(5000);
   const [pointsToUse, setPointsToUse] = React.useState(0);
   const [inputAnchorEl, setInputAnchorEl] = React.useState(null);
@@ -35,26 +38,17 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total }) => {
     }
   };
 
+  const handleSubmit = () => {
+    setParentPoints( pointsToUse);
+    handleClose();
+  };
+
+
+
+
   return (
     <>
-      <Popper
-        open={pointsToUse == total * 0.2}
-        timeout={50}
-        anchorEl={inputAnchorEl}
-        placement="top"
-        transition
-        sx={{ zIndex: 5 }}
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={50}>
-            <Paper>
-              <Typography sx={{ p: 2 }}>
-                El máximo descuento es del 20%
-              </Typography>
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
+
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -115,7 +109,7 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total }) => {
           <Grid item xs={9} mr={1.2} flexDirection="row">
             <Grid container justifyContent="flex-end" flexDirection="row">
               <img src="./Pudu Point.png" style={{ width: 30, height: 30 }} />
-              <Typography mt={0.4}>{points}</Typography>
+              <Typography mt={0.4}>{points-pointsToUse}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -132,26 +126,32 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total }) => {
             <Typography mt={0.4}>Usar</Typography>
           </Grid>
           <Grid item xs={9}>
-            <Input
+            <TextField
               id="outlined-basic"
               label="Points"
               type="number"
-              variant="outlined"
+              variant="standard"
               size="small"
+              
+              helperText={pointsToUse == total * 0.2 && "Máximo 20%"}
+              error={pointsToUse == total * 0.2}
               onChange={(e) => {
                 handlePoints(e.target.value);
               }}
               onClick={(e) => setInputAnchorEl(e.currentTarget)}
               value={pointsToUse}
-              sx={{ maxWidth: 120, height: 30 }}
-              startAdornment={
+              sx={{ maxWidth: 120, height: 30 , mt:-2}}
+              InputProps={{
+                startAdornment: (
                 <InputAdornment position="start" sx={{ ml: -1 }}>
                   <img
                     src="./Pudu Point.png"
                     style={{ width: 30, height: 30 }}
                   />
                 </InputAdornment>
-              }
+              ),
+              }}
+
             />
           </Grid>
         </Grid>
@@ -160,6 +160,7 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total }) => {
           justifyContent="space-around"
           flexDirection="row"
           p={1}
+          mt={1}
           pl={2}
           pb={0}
           ml={2}
@@ -177,7 +178,7 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total }) => {
           </Grid>
           <Grid item xs={6}>
             <Tooltip title="Aplicar Puntos">
-              <IconButton variant="contained" color="success">
+              <IconButton variant="contained" color="success" onClick={handleSubmit}>
                 <CheckCircleRoundedIcon />
               </IconButton>
             </Tooltip>
