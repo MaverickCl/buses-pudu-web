@@ -13,6 +13,7 @@ const LoggedPassengerSelection = ({
   passengers,
   setPassengers,
   setLoading,
+  setUserPoints,
 }) => {
   const [name, setName] = React.useState("");
   const [passengerData, setPassengerData] = React.useState({});
@@ -24,6 +25,7 @@ const LoggedPassengerSelection = ({
     ProfileApiRest.getProfile(token)
       .then((response) => {
         setName(response.nombre);
+        setUserPoints(response.puntos);
 
         const savedPassenger = {
           name: response.nombre,

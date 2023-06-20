@@ -27,7 +27,6 @@ const PaymentVerificationPage = () => {
     PaymentApiRest.getPayment(token)
       .then((response) => {
         setData(response);
-        console.log(response);
 
         {
           response && setLoading(false);

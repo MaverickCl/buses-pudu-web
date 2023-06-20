@@ -8,27 +8,30 @@ import {
   Grid,
   InputAdornment,
   IconButton,
-  Input,
   Tooltip,
-  Popper,
-  Fade,
-  Paper,
   TextField,
 } from "@mui/material";
 
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 
-const PointsMenu = ({ showMenu, handleClose, anchorEl, total , setParentPoints}) => {
-
+const PointsMenu = ({
+  showMenu,
+  handleClose,
+  anchorEl,
+  total,
+  setParentPoints,
+  userPoints,
+}) => {
   //SET POINTS TO USER'S
-  const [points, setPoints] = React.useState(5000);
+  const [points, setPoints] = React.useState(userPoints);
   const [pointsToUse, setPointsToUse] = React.useState(0);
-  const [inputAnchorEl, setInputAnchorEl] = React.useState(null);
+
+  React.useEffect(() => {
+    setPoints(userPoints);
+  }, [userPoints]);
 
   const handlePoints = (value) => {
-    console.log(pointsToUse == total * 0.2);
-
     if (value >= 0 && value <= points) {
       if (value < total * 0.2) {
         setPointsToUse(value);
@@ -39,16 +42,12 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total , setParentPoints})
   };
 
   const handleSubmit = () => {
-    setParentPoints( pointsToUse);
+    setParentPoints(pointsToUse);
     handleClose();
   };
 
-
-
-
   return (
     <>
-
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -109,7 +108,7 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total , setParentPoints})
           <Grid item xs={9} mr={1.2} flexDirection="row">
             <Grid container justifyContent="flex-end" flexDirection="row">
               <img src="./Pudu Point.png" style={{ width: 30, height: 30 }} />
-              <Typography mt={0.4}>{points-pointsToUse}</Typography>
+              <Typography mt={0.4}>{points - pointsToUse}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -132,26 +131,23 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total , setParentPoints})
               type="number"
               variant="standard"
               size="small"
-              
               helperText={pointsToUse == total * 0.2 && "Máximo 20%"}
               error={pointsToUse == total * 0.2}
               onChange={(e) => {
                 handlePoints(e.target.value);
               }}
-              onClick={(e) => setInputAnchorEl(e.currentTarget)}
               value={pointsToUse}
-              sx={{ maxWidth: 120, height: 30 , mt:-2}}
+              sx={{ maxWidth: 120, height: 30, mt: -2 }}
               InputProps={{
                 startAdornment: (
-                <InputAdornment position="start" sx={{ ml: -1 }}>
-                  <img
-                    src="./Pudu Point.png"
-                    style={{ width: 30, height: 30 }}
-                  />
-                </InputAdornment>
-              ),
+                  <InputAdornment position="start" sx={{ ml: -1 }}>
+                    <img
+                      src="./Pudu Point.png"
+                      style={{ width: 30, height: 30 }}
+                    />
+                  </InputAdornment>
+                ),
               }}
-
             />
           </Grid>
         </Grid>
@@ -178,7 +174,11 @@ const PointsMenu = ({ showMenu, handleClose, anchorEl, total , setParentPoints})
           </Grid>
           <Grid item xs={6}>
             <Tooltip title="Aplicar Puntos">
-              <IconButton variant="contained" color="success" onClick={handleSubmit}>
+              <IconButton
+                variant="contained"
+                color="success"
+                onClick={handleSubmit}
+              >
                 <CheckCircleRoundedIcon />
               </IconButton>
             </Tooltip>

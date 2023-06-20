@@ -32,6 +32,7 @@ const TicketPage = () => {
   const [tneDiscount, setTneDiscount] = useState([1, 1, 1, 1, 1]);
   const [paymentMessage, setPaymentMessage] = useState("Proceder al pago");
   const [paymentIcon, setPaymentIcon] = useState(<AttachMoneyIcon />);
+  const [userPoints, setUserPoints] = useState(0);
 
   useEffect(() => {
     let total = 0;
@@ -52,7 +53,7 @@ const TicketPage = () => {
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   const handleSubmit = (event) => {
-    let ticketDto = [];
+    let boletoDTOS = [];
 
     Object.values(passengers).map((passenger, index) => {
       let pasajero = {
@@ -62,26 +63,34 @@ const TicketPage = () => {
         contacto: passenger.phone,
       };
 
-      ticketDto.push({
+      boletoDTOS.push({
         pasajero: pasajero,
-        servicio: passenger.seatType,
-        numeroAsiento: passenger.seatNumber,
+        aplicaTne: tneDiscount[index] !== 1,
+        servicio: Object.values(selectedSeats)[index].seatType,
+        numeroAsiento: Object.values(selectedSeats)[index].seatNumber,
         codigoViaje: JSON.parse(localStorage.getItem("trip")).codigo,
         montoBruto: Math.floor(
-          tneDiscount[index] *
-            JSON.parse(localStorage.getItem("trip")).precio *
+          JSON.parse(localStorage.getItem("trip")).precio *
             (Object.values(selectedSeats)[index].price / 100 + 1)
         ),
       });
     });
 
+    let ticketDto = {
+      montoTotal: price - discounts.points - discounts.tne, //Price after discounts.
+      descuentoPudu: discounts.points,
+      boletoDTOS: boletoDTOS,
+    };
+
+    console.log(ticketDto);
     handlePayment(ticketDto);
   };
 
   const handlePayment = async (paymentData) => {
     setPaymentMessage("Redireccionando a WebPay...");
     setPaymentIcon(<CircularProgress size={24} color="inherit" />);
-    await PaymentApiRest.postPayment(paymentData)
+
+    await PaymentApiRest.postPayment(paymentData, localStorage.getItem("token"))
       .then((response) => {
         const redirectUrl = `${response.url}?token_ws=${response.token}`;
 
@@ -127,13 +136,19 @@ const TicketPage = () => {
 
             <Grid item xs={12} md={4}>
               {localStorage.getItem("token") && (
-              <Grid container justifyContent="flex-end">
-                
-                <PuduDiscountButton total={price} setPoints={(value) => setDiscounts((discounts) => ({
-      ...discounts,
-      points: value,
-    }))}/>
-              </Grid>)}
+                <Grid container justifyContent="flex-end">
+                  <PuduDiscountButton
+                    total={price}
+                    userPoints={userPoints}
+                    setPoints={(value) =>
+                      setDiscounts((discounts) => ({
+                        ...discounts,
+                        points: value,
+                      }))
+                    }
+                  />
+                </Grid>
+              )}
               <Paper
                 style={{
                   backgroundColor: "#efefef",
@@ -241,6 +256,7 @@ const TicketPage = () => {
                     passengers={passengers}
                     setPassengers={setPassengers}
                     setLoading={setLoading}
+                    setUserPoints={setUserPoints}
                   />
                 </Grid>
               )}

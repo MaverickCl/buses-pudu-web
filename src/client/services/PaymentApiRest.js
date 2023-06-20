@@ -3,11 +3,13 @@ import axios from "axios";
 const BASE_URL = "http://localhost:8080/api/pago"; // Replace with your API base URL
 
 class PaymentApiRest {
-  static async postPayment(boletoDTO) {
+  static async postPayment(boletoDTO, token) {
+    console.log(token && { headers: { Authorization: `Bearer ${token}` } });
     try {
       const response = await axios.post(
         `${BASE_URL}/webpay_plus/create`,
-        boletoDTO
+        boletoDTO,
+        token && { headers: { Authorization: `Bearer ${token}` } }
       );
 
       //console.log(response.data);

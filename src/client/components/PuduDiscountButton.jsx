@@ -5,7 +5,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 import PointsMenu from "./PointsMenu";
 
-const PuduDiscountButton = ({ total ,setPoints}) => {
+const PuduDiscountButton = ({ total, setPoints, userPoints }) => {
   const [showMenu, setShowMenu] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -67,6 +67,7 @@ const PuduDiscountButton = ({ total ,setPoints}) => {
         handleClose={() => setShowMenu(false)}
         anchorEl={anchorEl}
         total={total}
+        userPoints={userPoints}
         setParentPoints={(value) => setPoints(value)}
       />
     </>
