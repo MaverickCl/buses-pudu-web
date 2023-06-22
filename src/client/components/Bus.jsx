@@ -187,6 +187,8 @@ const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
                       ? "Asiento ocupado"
                       : createdSeats != undefined
                       ? seat.type + "\n" + seat.seatType
+                      : seat.type !== "Vacío" && seat.type !== "Asiento"
+                      ? seat.type
                       : seat.seatType
                   }
                 >

@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Typography, Grid, Divider, Button } from "@mui/material";
 import { encode } from "base-64";
+import ReservaApiRest from "../services/ReserveApiRest";
 
 const TotalCard = ({ selectedSeats, price, tripData }) => {
   const navigate = useNavigate();
@@ -27,14 +28,22 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
 
     localStorage.setItem("sessionToken", encode(reserveData));
 
-    //reserveSeats(selectedSeats,sessionToken,trip).then((response) => {
-    //  console.log(response);
-    navigate(
-      `/viaje-reserva?reserve=${encodeURIComponent(encode(reserveData))}`
-    );
-    //}).catch((error) => {
-    //  console.log(error);
-    //});
+    let seatList = [];
+    Object.values(selectedSeats).map((seat) => seatList.push(seat.seatNumber));
+
+    ReservaApiRest.reserveSeat(tripData.id, seatList, encode(reserveData))
+      .then((response) => {
+        console.log(response);
+        navigate(
+          `/viaje-reserva?reserve=${encodeURIComponent(encode(reserveData))}`
+        );
+      })
+      .catch((error) => {
+        navigate(
+          `/viaje-reserva?reserve=${encodeURIComponent(encode(reserveData))}`
+        );
+        console.error(error);
+      });
   };
 
   Object.values(selectedSeats).map(

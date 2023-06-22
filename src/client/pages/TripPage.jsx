@@ -37,6 +37,7 @@ const TripPage = () => {
       arrivalTime: trip.arrivalTime,
       price: trip.price,
       date: trip.date,
+      id: trip.id,
     });
 
     return null;
@@ -127,7 +128,11 @@ const TripPage = () => {
                   <TotalCard
                     selectedSeats={selectedSeats}
                     price={price}
-                    tripData={{ code: tripCode, price: tripData.price }}
+                    tripData={{
+                      code: tripCode,
+                      price: tripData.price,
+                      id: tripData.id,
+                    }}
                   />
                 </Paper>
               </Collapse>

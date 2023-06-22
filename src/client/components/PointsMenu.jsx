@@ -41,6 +41,12 @@ const PointsMenu = ({
     }
   };
 
+  const handleCancel = () => {
+    setPointsToUse(0);
+    setParentPoints(0);
+    handleClose();
+  };
+
   const handleSubmit = () => {
     setParentPoints(pointsToUse);
     handleClose();
@@ -166,7 +172,7 @@ const PointsMenu = ({
               <IconButton
                 variant="contained"
                 color="error"
-                onClick={handleClose}
+                onClick={handleCancel}
               >
                 <CancelRoundedIcon />
               </IconButton>

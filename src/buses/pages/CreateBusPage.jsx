@@ -70,6 +70,27 @@ const CreateBusPage = () => {
     setSaveIcon(<CircularProgress size={24} color="inherit" />);
     setSaveMessage("Guardando...");
 
+    //De-select any selected things
+    Object.values(seats.floors).forEach((floor) => {
+      Object.values(floor.seats).forEach((seat) => {
+        if (seat.status === "SELECTED") {
+          seat.status =
+            seat.type === "Asiento"
+              ? "FREE"
+              : seat.type === "Pasillo"
+              ? "HALL"
+              : seat.type === "Vacío"
+              ? "EMPTY"
+              : seat.type === "Baño"
+              ? "WC"
+              : seat.type === "Escaleras" && "STAIRS";
+        }
+      });
+    });
+
+    ///empty selected seats
+    setSelectedSeats({});
+
     const updatedBusData = {
       patentBus: busData.patente,
       floors: seats.floors,

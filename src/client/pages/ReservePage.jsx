@@ -113,7 +113,6 @@ const TicketPage = () => {
       boletoDTOS: boletoDTOS,
     };
 
-    console.log(ticketDto);
     handlePayment(ticketDto);
   };
 
@@ -166,20 +165,6 @@ const TicketPage = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              {token && (
-                <Grid container justifyContent="flex-end">
-                  <PuduDiscountButton
-                    total={price}
-                    userPoints={userPoints}
-                    setPoints={(value) =>
-                      setDiscounts((discounts) => ({
-                        ...discounts,
-                        points: value,
-                      }))
-                    }
-                  />
-                </Grid>
-              )}
               <Paper
                 style={{
                   backgroundColor: "#efefef",
@@ -217,6 +202,20 @@ const TicketPage = () => {
                       <Typography variant="h7" gutterBottom>
                         - ${discounts.tne}
                       </Typography>
+                    </Grid>
+                  )}
+                  {token && userPoints != 0 && (
+                    <Grid container>
+                      <PuduDiscountButton
+                        total={price}
+                        userPoints={userPoints}
+                        setPoints={(value) =>
+                          setDiscounts((discounts) => ({
+                            ...discounts,
+                            points: value,
+                          }))
+                        }
+                      />
                     </Grid>
                   )}
                   {discounts.points > 0 && (

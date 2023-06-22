@@ -18,8 +18,6 @@ class BusService {
 
   static async enviarAsientos(busData, token) {
     try {
-      console.log(busData);
-      //const response = await axios.post(`${apiEndpoint}/${busData.patenteBus}/asientos`, busData);
       const response = await axios.post(`${apiEndpoint}/asientos`, busData, {
         headers: {
           Authorization: `Bearer ${token}`,
