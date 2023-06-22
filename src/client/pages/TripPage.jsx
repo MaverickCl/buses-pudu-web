@@ -7,6 +7,7 @@ import {
   Typography,
   Grid,
   Collapse,
+  IconButton,
 } from "@mui/material";
 
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
@@ -105,9 +106,17 @@ const TripPage = () => {
                   elevation={3}
                   sx={{ p: 2, mt: 3, backgroundColor: "#f8f8f8" }}
                 >
-                  <Typography variant="h6" gutterBottom>
-                    Detalles del Asiento
-                  </Typography>
+                  <Grid container justifyContent="space-between">
+                    <Typography variant="h6" gutterBottom>
+                      Detalles del Asiento
+                    </Typography>
+                    <IconButton
+                      onClick={() => {
+                        setSelectedSeats({});
+                        setCurrentSeat({});
+                      }}
+                    />
+                  </Grid>
                   <MappedSeats currentSeat={currentSeat} price={price} />
 
                   <Collapse in={Object.keys(selectedSeats).length > 1}>

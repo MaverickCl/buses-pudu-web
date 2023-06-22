@@ -15,7 +15,7 @@ const PuduDiscountButton = ({ total, setPoints, userPoints }) => {
 
   return (
     <>
-      <Grid container fullWidth flexDirection="column">
+      <Grid container flexDirection="column">
         <Divider />
       </Grid>
       <Grid container alignItems="center" my={1}>

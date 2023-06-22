@@ -1,14 +1,33 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, Grid, Divider, Button } from "@mui/material";
+import { useState } from "react";
+import {
+  Typography,
+  Grid,
+  Divider,
+  Button,
+  CircularProgress,
+} from "@mui/material";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import CheckIcon from "@mui/icons-material/Check";
+
 import { encode } from "base-64";
+
 import ReservaApiRest from "../services/ReserveApiRest";
+import AlertDialogSlide from "./AlertDialog";
 
 const TotalCard = ({ selectedSeats, price, tripData }) => {
+  const [reserveIcon, setReserveIcon] = useState(<EventAvailableIcon />);
+  const [reserveMessage, setReserveMessage] = useState("Reservar Asientos");
+  const [showAlert, setShowAlert] = useState(false);
+
   const navigate = useNavigate();
   let total = 0;
 
   const handleSubmit = () => {
+    setReserveIcon(<CircularProgress size={24} />);
+    setReserveMessage("Reservando...");
+
     localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
 
     let reserveData = `${tripData.code},${tripData.price};`;
@@ -29,16 +48,20 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
     localStorage.setItem("sessionToken", encode(reserveData));
 
     let seatList = [];
-    Object.values(selectedSeats).map((seat) => seatList.push(seat.seatNumber));
+    Object.values(selectedSeats).map((seat) => seatList.push(seat.id));
 
     ReservaApiRest.reserveSeat(tripData.id, seatList, encode(reserveData))
       .then((response) => {
-        console.log(response);
+        setReserveIcon(<CheckIcon />);
+        setReserveMessage("Redireccionando...");
         navigate(
           `/viaje-reserva?reserve=${encodeURIComponent(encode(reserveData))}`
         );
       })
       .catch((error) => {
+        setReserveIcon(<EventAvailableIcon />);
+        setReserveMessage("Reservar Asientos");
+        setShowAlert(true);
         console.error(error);
       });
   };
@@ -62,10 +85,22 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
         Total de la compra: ${total}
       </Typography>
       <Grid item sx={{ display: "flex", justifyContent: "center" }}>
-        <Button variant="contained" onClick={handleSubmit}>
-          Reservar Boletos
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          startIcon={reserveIcon}
+        >
+          {reserveMessage}
         </Button>
       </Grid>
+      {showAlert && (
+        <AlertDialogSlide
+          title="Ups!"
+          text="Parece que su asiento ya fue reservado por otra persona. Por favor, seleccione otro asiento."
+          button="Ok"
+          onClose={() => setShowAlert(false)}
+        />
+      )}
     </>
   );
 };
