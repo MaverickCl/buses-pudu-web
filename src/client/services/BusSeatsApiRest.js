@@ -7,6 +7,8 @@ class BusSeatsApiRest {
     try {
       const response = await axios.get(`${BASE_URL}/api/viajes/${code}`);
 
+      console.log(response.data);
+
       //TRANSFORM DATA TO MATCH FORMAT
 
       let seats = response.data.bus.asientos;

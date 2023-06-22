@@ -11,7 +11,7 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
   const handleSubmit = () => {
     localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
 
-    let reserveData = `Tc=${tripData.code},Tp=${tripData.price};`;
+    let reserveData = `${tripData.code},${tripData.price};`;
 
     Object.values(selectedSeats).map(
       (seat, index) =>
@@ -39,9 +39,6 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
         );
       })
       .catch((error) => {
-        navigate(
-          `/viaje-reserva?reserve=${encodeURIComponent(encode(reserveData))}`
-        );
         console.error(error);
       });
   };

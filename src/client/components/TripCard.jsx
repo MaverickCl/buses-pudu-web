@@ -9,8 +9,6 @@ const TripCard = ({ trip }) => {
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
-  console.log(trip);
-
   const handleSubmit = (event) => {
     event.preventDefault();
 

@@ -8,18 +8,18 @@ class ReservaApiRest {
       idViaje: trip,
       id_asientos: seats,
       token: token,
-      correo: "thiare.morales@gmail.com",
+      //correo: "thiare.morales@gmail.com",
     };
 
     try {
       const response = await axios.post(
         `${BASE_URL}/viaje/${trip}/reservar`,
         reservaDTO,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+       // {
+          //headers: {
+          //  Authorization: `Bearer ${localStorage.getItem("token")}`,
+         // },
+        //}
       );
       return response.data;
     } catch (error) {

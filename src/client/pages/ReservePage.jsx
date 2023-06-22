@@ -45,8 +45,8 @@ const TicketPage = () => {
     let decryptedData = decode(decodeURIComponent(encryptedData));
 
     setTripData({
-      code: decryptedData.split(";")[0].split(",")[0].split("=")[1],
-      price: decryptedData.split(";")[0].split(",")[1].split("=")[1],
+      code: decryptedData.split(";")[0].split(",")[0],
+      price: decryptedData.split(";")[0].split(",")[1],
     });
 
     if (!selectedSeats) {
