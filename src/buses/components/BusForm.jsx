@@ -3,11 +3,6 @@ import {
   TextField,
   Typography,
   Grid,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Paper,
   Button,
   Collapse,
@@ -16,7 +11,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { es } from "date-fns/locale";
-import { format } from "date-fns";
 
 const BusForm = ({ onSubmit }) => {
   const [name, setName] = useState("");
@@ -24,9 +18,11 @@ const BusForm = ({ onSubmit }) => {
   const [plate, setPlate] = useState("");
   const [seatAmount, setSeatAmount] = useState(25);
   const [floors, setFloors] = useState(1);
-  const [year, setYear] = useState(1969);
+  const [year, setYear] = useState(null);
 
   const [formSent, setFormSent] = useState(true);
+
+  const currentYear = new Date().getFullYear();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -43,7 +39,17 @@ const BusForm = ({ onSubmit }) => {
     }
   };
 
+  const handleYearChange = (date) => {
+    if (date.getFullYear() <= currentYear) {
+      setYear(date.getFullYear());
+    } else {
+      setYear(new Date().getFullYear());
+    }
+  };
+
   const formatPlate = (value) => {
+    console.log(year);
+
     // Remove all characters except letters and numbers
     let plateChars = value.replace(/[^a-zA-Z0-9]/g, "");
 
@@ -169,13 +175,14 @@ const BusForm = ({ onSubmit }) => {
               >
                 <DatePicker
                   views={["year"]}
-                  defaultValue={format(new Date(2000), "yyyy")}
                   required
                   fullWidth
                   id="anioFabricacion"
+                  name="anioFabricacion"
                   label="Año de fabricación"
-                  value={year}
-                  onChange={(date) => setYear(date.getFullYear())}
+                  value={year ? new Date(year, 0, 1) : null}
+                  maxDate={new Date(currentYear, 11, 31)}
+                  onChange={(date) => handleYearChange(date)}
                 />
               </LocalizationProvider>
             </Grid>

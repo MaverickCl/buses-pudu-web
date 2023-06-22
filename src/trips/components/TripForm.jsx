@@ -29,6 +29,8 @@ import AlertDialogSlide from "../../client/components/AlertDialog";
 import TripApiRest from "../services/TripApiRest";
 
 const TripForm = ({ setParentTrip }) => {
+  const token = localStorage.getItem("token");
+
   const [trip, setTrip] = useState({
     origin: "",
     destination: "",
@@ -77,25 +79,23 @@ const TripForm = ({ setParentTrip }) => {
     } else {
       setParentTrip(trip);
 
-      TripApiRest.createTrip(trip, localStorage.getItem("token")).then(
-        (data) => {
-          setAlertData({
-            title: "Viaje creado correctamente",
-            message: "El viaje ha sido creado correctamente",
-            button: "Ok",
-          });
-          setShowAlert(true);
-        }
-      );
+      TripApiRest.createTrip(trip, token).then((data) => {
+        setAlertData({
+          title: "Viaje creado correctamente",
+          message: "El viaje ha sido creado correctamente",
+          button: "Ok",
+        });
+        setShowAlert(true);
+      });
     }
   };
 
   useEffect(() => {
     try {
-      DataApiRest.fetchBuses(localStorage.getItem("token")).then((data) => {
+      DataApiRest.fetchBuses(token).then((data) => {
         setBuses(data);
       });
-      DataApiRest.fetchDrivers(localStorage.getItem("token")).then((data) => {
+      DataApiRest.fetchDrivers(token).then((data) => {
         setDrivers(data);
       });
     } catch (error) {

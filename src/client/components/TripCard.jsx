@@ -1,17 +1,30 @@
 import React from "react";
 import { Card, CardContent, Grid, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { createContext } from "react";
 
 const TripCard = ({ trip }) => {
   const { origen, destino, horaSalida, horaLlegada, precio, fecha } = trip;
+
+  const navigate = useNavigate();
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    localStorage.setItem("trip", JSON.stringify(trip));
+    const tripData = {
+      origin: origen,
+      destination: destino,
+      departureTime: horaSalida,
+      arrivalTime: horaLlegada,
+      price: precio,
+      date: fecha,
+    };
 
-    window.location.href = "/viaje";
+    localStorage.setItem("trip", JSON.stringify(tripData));
+
+    navigate(`/viaje?code=${trip.codigo}`);
   };
 
   return (

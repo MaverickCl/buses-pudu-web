@@ -1,12 +1,40 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Typography, Grid, Divider, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { encode } from "base-64";
 
-const TotalCard = ({ selectedSeats, price }) => {
+const TotalCard = ({ selectedSeats, price, tripData }) => {
+  const navigate = useNavigate();
   let total = 0;
 
   const handleSubmit = () => {
     localStorage.setItem("selectedSeats", JSON.stringify(selectedSeats));
+
+    let reserveData = `Tc=${tripData.code},Tp=${tripData.price};`;
+
+    Object.values(selectedSeats).map(
+      (seat, index) =>
+        (reserveData +=
+          index +
+          "," +
+          seat.seatNumber +
+          "," +
+          seat.price +
+          "," +
+          seat.seatType +
+          ";")
+    );
+
+    localStorage.setItem("sessionToken", encode(reserveData));
+
+    //reserveSeats(selectedSeats,sessionToken,trip).then((response) => {
+    //  console.log(response);
+    navigate(
+      `/viaje-reserva?reserve=${encodeURIComponent(encode(reserveData))}`
+    );
+    //}).catch((error) => {
+    //  console.log(error);
+    //});
   };
 
   Object.values(selectedSeats).map(
@@ -28,11 +56,9 @@ const TotalCard = ({ selectedSeats, price }) => {
         Total de la compra: ${total}
       </Typography>
       <Grid item sx={{ display: "flex", justifyContent: "center" }}>
-        <Link to="/viaje-reserva">
-          <Button variant="contained" onClick={handleSubmit}>
-            Reservar Boletos
-          </Button>
-        </Link>
+        <Button variant="contained" onClick={handleSubmit}>
+          Reservar Boletos
+        </Button>
       </Grid>
     </>
   );

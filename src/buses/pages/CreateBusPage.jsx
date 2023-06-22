@@ -19,6 +19,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
 const CreateBusPage = () => {
+  const token = localStorage.getItem("token");
+
   const [busData, setBusData] = useState(null);
   const [seatData, setSeatData] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState({});
@@ -32,10 +34,7 @@ const CreateBusPage = () => {
 
   const handleFormSubmit = async (data) => {
     try {
-      const createdBus = await BusService.crearBus(
-        data,
-        localStorage.getItem("token")
-      );
+      const createdBus = await BusService.crearBus(data, token);
       console.log("Bus creado:", createdBus);
       setBusData(createdBus);
 
@@ -77,10 +76,7 @@ const CreateBusPage = () => {
     };
 
     try {
-      const updatedBus = await BusService.enviarAsientos(
-        updatedBusData,
-        localStorage.getItem("token")
-      );
+      const updatedBus = await BusService.enviarAsientos(updatedBusData, token);
 
       console.log("Bus y asientos actualizados:", updatedBus);
 

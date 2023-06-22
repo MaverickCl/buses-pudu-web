@@ -5,10 +5,10 @@ import CitySelector from "../../trips/components/CitySelector";
 import AlertDialogSlide from "./AlertDialog";
 
 const InputCard = ({ handleSearch }) => {
-  const [origin, setOrigin] = useState(localStorage.getItem("origin"));
-  const [destination, setDestination] = useState(
-    localStorage.getItem("destination")
-  );
+  const searchParams = new URLSearchParams(window.location.search);
+
+  const [origin, setOrigin] = useState(searchParams.get("from"));
+  const [destination, setDestination] = useState(searchParams.get("to"));
   const [showAlert, setShowAlert] = useState(false);
   const [alertData, setAlertData] = useState({});
 

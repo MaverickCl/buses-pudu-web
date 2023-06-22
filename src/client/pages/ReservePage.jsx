@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { decode } from "base-64";
 
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
@@ -22,11 +23,14 @@ import PaymentApiRest from "../services/PaymentApiRest";
 import PuduDiscountButton from "../components/PuduDiscountButton";
 
 const TicketPage = () => {
+  const token = localStorage.getItem("token");
+  const [tripData, setTripData] = useState({});
+
   const [selectedSeats, setSelectedSeats] = useState(
     JSON.parse(localStorage.getItem("selectedSeats"))
   );
   const [passengers, setPassengers] = useState({});
-  const [loading, setLoading] = useState(localStorage.getItem("token"));
+  const [loading, setLoading] = useState(token);
   const [price, setPrice] = useState(0);
   const [discounts, setDiscounts] = useState({ tne: 0, points: 0 });
   const [tneDiscount, setTneDiscount] = useState([1, 1, 1, 1, 1]);
@@ -35,9 +39,37 @@ const TicketPage = () => {
   const [userPoints, setUserPoints] = useState(0);
 
   useEffect(() => {
+    let urlParams = new URLSearchParams(window.location.search);
+    let encryptedData = urlParams.get("reserve");
+
+    let decryptedData = decode(decodeURIComponent(encryptedData));
+
+    setTripData({
+      code: decryptedData.split(";")[0].split(",")[0].split("=")[1],
+      price: decryptedData.split(";")[0].split(",")[1].split("=")[1],
+    });
+
+    if (!selectedSeats) {
+      let seats = {};
+
+      decryptedData.split(";").map((seat, index) => {
+        if (index !== 0 && seat !== "") {
+          let seatData = seat.split(",");
+          seats[seatData[0]] = {
+            seatNumber: seatData[1],
+            price: seatData[2],
+            seatType: seatData[3],
+          };
+        }
+      });
+      setSelectedSeats(seats);
+    }
+  }, []);
+
+  useEffect(() => {
     let total = 0;
     let discount = 0;
-    const tripPrice = JSON.parse(localStorage.getItem("trip")).precio;
+    const tripPrice = tripData.price;
     Object.values(selectedSeats).map((seat, index) => {
       total += Math.floor(tripPrice * (seat.price / 100 + 1));
       discount += (1 - tneDiscount[index]) * tripPrice * (seat.price / 100 + 1);
@@ -68,10 +100,9 @@ const TicketPage = () => {
         aplicaTne: tneDiscount[index] !== 1,
         servicio: Object.values(selectedSeats)[index].seatType,
         numeroAsiento: Object.values(selectedSeats)[index].seatNumber,
-        codigoViaje: JSON.parse(localStorage.getItem("trip")).codigo,
+        codigoViaje: tripData.code,
         montoBruto: Math.floor(
-          JSON.parse(localStorage.getItem("trip")).precio *
-            (Object.values(selectedSeats)[index].price / 100 + 1)
+          tripData.price * (Object.values(selectedSeats)[index].price / 100 + 1)
         ),
       });
     });
@@ -90,7 +121,7 @@ const TicketPage = () => {
     setPaymentMessage("Redireccionando a WebPay...");
     setPaymentIcon(<CircularProgress size={24} color="inherit" />);
 
-    await PaymentApiRest.postPayment(paymentData, localStorage.getItem("token"))
+    await PaymentApiRest.postPayment(paymentData, token)
       .then((response) => {
         const redirectUrl = `${response.url}?token_ws=${response.token}`;
 
@@ -135,7 +166,7 @@ const TicketPage = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              {localStorage.getItem("token") && (
+              {token && (
                 <Grid container justifyContent="flex-end">
                   <PuduDiscountButton
                     total={price}
@@ -250,7 +281,7 @@ const TicketPage = () => {
                 </Grid>
               </Paper>
 
-              {localStorage.getItem("token") && (
+              {token && (
                 <Grid item xs={12} mt={2}>
                   <LoggedPassengerSelection
                     passengers={passengers}

@@ -37,6 +37,8 @@ import FrecuentPassengersCard from "../components/FrecuentPassengersCard";
 import { set } from "date-fns";
 
 const Profile = () => {
+  const token = localStorage.getItem("token");
+
   const [isEditing, setIsEditing] = React.useState(false);
   const [profileData, setProfileData] = React.useState(null);
   const [openPasswordDialog, setOpenPasswordDialog] = React.useState(false);
@@ -63,8 +65,6 @@ const Profile = () => {
   };
 
   React.useEffect(() => {
-    const token = localStorage.getItem("token");
-
     if (!token) {
       navigate("/auth/login");
       return;
@@ -109,7 +109,7 @@ const Profile = () => {
     };
 
     // Save changes to backend
-    ProfileApiRest.updateProfile(localStorage.getItem("token"), tempProfile)
+    ProfileApiRest.updateProfile(token, tempProfile)
       .then((response) => {
         // Handle success
         setIsEditing(false);

@@ -87,7 +87,7 @@ const SeatMatrix = ({
     if (option === "add") {
       updatedSeats.floors.forEach((floor) => {
         for (let i = 0; i < 5; i++) {
-          floor.push({
+          floor.seats.push({
             seatNumber: "",
             status: i === 2 ? "HALL" : "EMPTY",
             type: i === 2 ? "Pasillo" : "Vacío",
@@ -100,7 +100,7 @@ const SeatMatrix = ({
     } else {
       updatedSeats.floors.forEach((floor) => {
         for (let i = 0; i < 5; i++) {
-          floor.pop();
+          floor.seats.pop();
         }
       });
     }
