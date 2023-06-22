@@ -26,16 +26,16 @@ const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
 
   useEffect(() => {
     if (busData === null) {
-      const fetchBusSeats = async () => {
-        try {
-          const seats = await BusSeatsApiRest.getBusSeats(trip);
-          setBusData(seats);
-        } catch (error) {}
-      };
-
       fetchBusSeats();
     }
   }, [props.busId]);
+
+  const fetchBusSeats = async () => {
+    try {
+      const seats = await BusSeatsApiRest.getBusSeats(trip);
+      setBusData(seats);
+    } catch (error) {}
+  };
 
   const handleFloorChange = () => {
     setCurrentFloor(currentFloor === 1 ? 2 : 1);

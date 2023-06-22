@@ -110,6 +110,7 @@ const TicketPage = () => {
     let ticketDto = {
       montoTotal: price - discounts.points - discounts.tne, //Price after discounts.
       descuentoPudu: discounts.points,
+      tokenReservaConfirmacion: localStorage.getItem("sessionToken"),
       boletoDTOS: boletoDTOS,
     };
 

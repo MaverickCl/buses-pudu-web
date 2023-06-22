@@ -8,7 +8,11 @@ import {
   Grid,
   Collapse,
   IconButton,
+  Tooltip,
+  Divider,
 } from "@mui/material";
+
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
@@ -107,16 +111,27 @@ const TripPage = () => {
                   sx={{ p: 2, mt: 3, backgroundColor: "#f8f8f8" }}
                 >
                   <Grid container justifyContent="space-between">
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="h6" gutterBottom >
                       Detalles del Asiento
                     </Typography>
+                    
+                    <Tooltip title="Cancelar selección" placement="top">
                     <IconButton
                       onClick={() => {
-                        setSelectedSeats({});
-                        setCurrentSeat({});
+                        //erase current seat from selected seats
+                        delete selectedSeats[`${currentSeat.seatNumber}`];
+                        //set current seat to the first seat in selected seats
+                        setCurrentSeat(Object.values(selectedSeats)[0]);
+                  
                       }}
-                    />
+                      sx={{transform: "translateY(35px)"}}
+                      color="error"
+                    >
+                      <CancelIcon />
+                      </IconButton>
+                      </Tooltip>
                   </Grid>
+                  <Divider  sx={{mt:-1, mb:1}}/>
                   <MappedSeats currentSeat={currentSeat} price={price} />
 
                   <Collapse in={Object.keys(selectedSeats).length > 1}>

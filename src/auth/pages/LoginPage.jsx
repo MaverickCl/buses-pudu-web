@@ -76,6 +76,7 @@ export default function LoginPage() {
     if (result) {
       const token = result.token;
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(correo));
       setIsLoggedIn(true);
       return true;
     }

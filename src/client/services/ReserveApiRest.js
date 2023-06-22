@@ -8,7 +8,7 @@ class ReservaApiRest {
       idViaje: trip,
       id_asientos: seats,
       token: token,
-      //correo: "thiare.morales@gmail.com",
+      correo: localStorage.getItem("user"),
     };
 
     try {
