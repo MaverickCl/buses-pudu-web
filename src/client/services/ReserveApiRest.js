@@ -14,11 +14,11 @@ class ReservaApiRest {
     try {
       const response = await axios.post(
         `${BASE_URL}/viaje/${trip}/reservar`,
-        reservaDTO,
-       // {
-          //headers: {
-          //  Authorization: `Bearer ${localStorage.getItem("token")}`,
-         // },
+        reservaDTO
+        // {
+        //headers: {
+        //  Authorization: `Bearer ${localStorage.getItem("token")}`,
+        // },
         //}
       );
       return response.data;

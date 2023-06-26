@@ -34,7 +34,6 @@ import Footer from "../components/Footer";
 import ProfileApiRest from "../services/ProfileApiRest";
 import EmailVerifyDialog from "../components/EmailVerifyDialog";
 import FrecuentPassengersCard from "../components/FrecuentPassengersCard";
-import { set } from "date-fns";
 
 const Profile = () => {
   const token = localStorage.getItem("token");
@@ -79,6 +78,18 @@ const Profile = () => {
         setEmail(response.correo);
         setPhoneNumber(response.contacto);
         setIsVerified(response.estadoCorreo);
+
+        ///Format data to be used in FrecuentPassengersCard component
+
+        setFrecuentPassengers(
+          response.pasajeroRecurrenteDTOS.map((pasajero) => ({
+            name: pasajero.nombre,
+            email: pasajero.correo,
+            rut: pasajero.rut,
+            phone: pasajero.contacto,
+            id: pasajero.id,
+          }))
+        );
       })
       .catch((error) => {
         console.error(error);

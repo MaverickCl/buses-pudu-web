@@ -55,10 +55,26 @@ const TicketPage = () => {
       decryptedData.split(";").map((seat, index) => {
         if (index !== 0 && seat !== "") {
           let seatData = seat.split(",");
+          let seatType;
+
+          switch (seatData[3]) {
+            case "e":
+              seatType = "Estándar";
+              break;
+            case "s":
+              seatType = "Salón Cama";
+              break;
+            case "c":
+              seatType = "Cama";
+              break;
+            default:
+              seatType = ""; // Handle the case when seatType doesn't match any expected values
+          }
+
           seats[seatData[0]] = {
             seatNumber: seatData[1],
             price: seatData[2],
-            seatType: seatData[3],
+            seatType: seatType,
           };
         }
       });
@@ -110,7 +126,9 @@ const TicketPage = () => {
     let ticketDto = {
       montoTotal: price - discounts.points - discounts.tne, //Price after discounts.
       descuentoPudu: discounts.points,
-      tokenReservaConfirmacion: localStorage.getItem("sessionToken"),
+      tokenReservaConfirmacion: localStorage
+        .getItem("sessionToken")
+        .substring(0, 60),
       boletoDTOS: boletoDTOS,
     };
 
@@ -124,6 +142,8 @@ const TicketPage = () => {
     await PaymentApiRest.postPayment(paymentData, token)
       .then((response) => {
         const redirectUrl = `${response.url}?token_ws=${response.token}`;
+
+        console.log(response);
 
         window.location.href = redirectUrl;
       })
@@ -288,6 +308,7 @@ const TicketPage = () => {
                     setPassengers={setPassengers}
                     setLoading={setLoading}
                     setUserPoints={setUserPoints}
+                    maxSelected={Object.values(selectedSeats).length}
                   />
                 </Grid>
               )}

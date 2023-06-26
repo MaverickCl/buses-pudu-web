@@ -32,25 +32,39 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
 
     let reserveData = `${tripData.code},${tripData.price};`;
 
-    Object.values(selectedSeats).map(
-      (seat, index) =>
-        (reserveData +=
-          index +
-          "," +
-          seat.seatNumber +
-          "," +
-          seat.price +
-          "," +
-          seat.seatType +
-          ";")
-    );
+    Object.values(selectedSeats).map((seat, index) => {
+      let seatTypeCode;
+      if (seat.seatType === "Estándar") {
+        seatTypeCode = "e";
+      } else if (seat.seatType === "Salón Cama") {
+        seatTypeCode = "s";
+      } else if (seat.seatType === "Cama") {
+        seatTypeCode = "c";
+      } else {
+        seatTypeCode = "e";
+      }
+
+      reserveData +=
+        index +
+        "," +
+        seat.seatNumber +
+        "," +
+        seat.price +
+        "," +
+        seatTypeCode +
+        ";";
+    });
 
     localStorage.setItem("sessionToken", encode(reserveData));
 
     let seatList = [];
     Object.values(selectedSeats).map((seat) => seatList.push(seat.id));
 
-    ReservaApiRest.reserveSeat(tripData.id, seatList, encode(reserveData))
+    ReservaApiRest.reserveSeat(
+      tripData.id,
+      seatList,
+      encode(reserveData).substring(0, 60)
+    )
       .then((response) => {
         setReserveIcon(<CheckIcon />);
         setReserveMessage("Redireccionando...");

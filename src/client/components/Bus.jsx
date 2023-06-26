@@ -78,10 +78,16 @@ const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
 
       let updatedFloors = [];
       if (floorIndex === 0) {
-        updatedFloors = [
-          { seats: (busData.floors[floorIndex].seats = updatedSeats) },
-          busData.floors[1],
-        ];
+        if (busData.floors.length > 1) {
+          updatedFloors = [
+            { seats: (busData.floors[floorIndex].seats = updatedSeats) },
+            busData.floors[1],
+          ];
+        } else {
+          updatedFloors = [
+            { seats: (busData.floors[floorIndex].seats = updatedSeats) },
+          ];
+        }
       } else {
         updatedFloors = [
           busData.floors[0],
