@@ -6,6 +6,7 @@ import {
   Box,
   IconButton,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import AlertDialog from "../components/AlertDialog";
 import BusSeatsApiRest from "../services/BusSeatsApiRest";
@@ -42,9 +43,22 @@ const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
   };
 
   if (!busData) {
-    // Show loading indicator or return null while fetching data
+    return (
+      <>
+        <Box
+          style={{
+            flex: 1,
+            height: "90vh",
 
-    return null;
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress color="secondary" size={90} />
+        </Box>
+      </>
+    );
   }
 
   const handleSeatSelect = (floorIndex, seatIndex) => {

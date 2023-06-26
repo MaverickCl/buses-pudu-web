@@ -89,14 +89,17 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
       {Object.values(selectedSeats).map((seat, seatIndex) => (
         <Grid key={seatIndex} item xs={6}>
           <Typography>
-            Asiento {seat.seatNumber}: ${price * (seat.price / 100 + 1)}
+            Asiento {seat.seatNumber}: $
+            {(price * (seat.price / 100 + 1))
+              .toLocaleString()
+              .replace(/,/g, ".")}
           </Typography>
         </Grid>
       ))}
 
       <Divider variant="middle" />
       <Typography variant="h6" gutterBottom>
-        Total de la compra: ${total}
+        Total de la compra: ${total.toLocaleString().replace(/,/g, ".")}
       </Typography>
       <Grid item sx={{ display: "flex", justifyContent: "center" }}>
         <Button

@@ -50,7 +50,7 @@ const TripCard = ({ trip }) => {
           <Grid item xs={4}>
             <Typography color="textSecondary">Desde:</Typography>
             <Typography variant="h4" component="h3">
-              ${precio}
+              ${precio.toLocaleString().replace(/,/g, ".")}
             </Typography>
             {!isPortrait && (
               <Button onClick={handleSubmit} variant="contained">

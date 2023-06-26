@@ -99,7 +99,7 @@ const TripPage = () => {
                   Hora de salida: {departureTime}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  Precio aprox: ${price}
+                  Precio aprox: ${price.toLocaleString().replace(/,/g, ".")}
                 </Typography>
               </Paper>
               <Collapse in={Object.keys(selectedSeats).length > 0}>

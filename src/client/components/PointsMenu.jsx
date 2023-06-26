@@ -114,7 +114,19 @@ const PointsMenu = ({
           <Grid item xs={9} mr={1.2} flexDirection="row">
             <Grid container justifyContent="flex-end" flexDirection="row">
               <img src="./Pudu Point.png" style={{ width: 30, height: 30 }} />
-              <Typography mt={0.4}>{points - pointsToUse}</Typography>
+              <Typography
+                mt={0.4}
+                onClick={() => setPointsToUse(points)}
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": {
+                    bgcolor: "#f0f0f0",
+                    borderRadius: 2,
+                  },
+                }}
+              >
+                {points - pointsToUse}
+              </Typography>
             </Grid>
           </Grid>
         </Grid>

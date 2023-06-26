@@ -207,7 +207,7 @@ const TicketPage = () => {
                         Precio:
                       </Typography>
                       <Typography variant="h6" gutterBottom>
-                        ${price}
+                        ${price.toLocaleString().replace(/,/g, ".")}
                       </Typography>
                     </Grid>
                   )}
@@ -221,7 +221,7 @@ const TicketPage = () => {
                         Descuento TNE:
                       </Typography>
                       <Typography variant="h7" gutterBottom>
-                        - ${discounts.tne}
+                        - ${discounts.tne.toLocaleString().replace(/,/g, ".")}
                       </Typography>
                     </Grid>
                   )}
@@ -249,7 +249,8 @@ const TicketPage = () => {
                         Descuento Puntos:
                       </Typography>
                       <Typography variant="h7" gutterBottom>
-                        - ${discounts.points}
+                        - $
+                        {discounts.points.toLocaleString().replace(/,/g, ".")}
                       </Typography>
                     </Grid>
                   )}
@@ -263,7 +264,10 @@ const TicketPage = () => {
                       Total:
                     </Typography>
                     <Typography variant="h6" gutterBottom>
-                      ${price - discounts.tne - discounts.points}
+                      $
+                      {(price - discounts.tne - discounts.points)
+                        .toLocaleString()
+                        .replace(/,/g, ".")}
                     </Typography>
                   </Grid>
                   <Typography variant="h6" gutterBottom>
