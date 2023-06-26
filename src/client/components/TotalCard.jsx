@@ -63,7 +63,7 @@ const TotalCard = ({ selectedSeats, price, tripData }) => {
     ReservaApiRest.reserveSeat(
       tripData.id,
       seatList,
-      encode(reserveData).substring(0, 60)
+      encode(reserveData).substring(0, 50)
     )
       .then((response) => {
         setReserveIcon(<CheckIcon />);

@@ -31,7 +31,7 @@ const FrecuentPassengersCard = ({
   const [alertMessage, setAlertMessage] = React.useState({
     title: "Finaliza primero",
     message: "Primero debes completar el formulario actual",
-    button: "Ok",
+    cancelButton: "Ok",
   });
   const [deleteIndex, setDeleteIndex] = React.useState();
   const [Editing, setEditing] = React.useState(false);
@@ -62,8 +62,7 @@ const FrecuentPassengersCard = ({
           ProfileApiRest.addFrecuent(token, frecuentDto)
             .then((res) => {
               frecuentPassengers[currentPassenger].id = res.id;
-              console.log(frecuentPassengers);
-              setCurrentPassenger(Object.values(frecuentPassengers).length + 1);
+              setCurrentPassenger(Object.values(frecuentPassengers).length);
             })
             .catch((err) => {
               console.log(err);
@@ -179,7 +178,7 @@ const FrecuentPassengersCard = ({
       setAlertMessage({
         title: "Finaliza primero",
         message: "Primero debes completar el formulario actual",
-        button: "Ok",
+        cancelButton: "Ok",
       });
       setShowAlert(true);
     }
@@ -200,7 +199,7 @@ const FrecuentPassengersCard = ({
                   title: "Agrega pasajeros frecuentes",
                   message:
                     "Sueles viajar acompañado? Agrega pasajeros frecuentes para no tener que ingresar sus datos cada vez que compres un pasaje.",
-                  button: "Ok",
+                  cancelButton: "Ok",
                 });
                 setShowAlert(true);
               }}

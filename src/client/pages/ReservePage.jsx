@@ -128,7 +128,7 @@ const TicketPage = () => {
       descuentoPudu: discounts.points,
       tokenReservaConfirmacion: localStorage
         .getItem("sessionToken")
-        .substring(0, 60),
+        .substring(0, 50),
       boletoDTOS: boletoDTOS,
     };
 
