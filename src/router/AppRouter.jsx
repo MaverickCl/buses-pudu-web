@@ -4,6 +4,7 @@ import { AuthRoutes } from "../auth/routes/AuthRoutes";
 import { ClientRoutes } from "../client/routes/ClientRoutes";
 import { BusRoutes } from "../buses/routes/BusRoutes";
 import { TripRoutes } from "../trips/routes/TripRoutes";
+import { DriverRoutes } from "../driver/routes/DriverRoutes";
 //import { NotFound } from './pages/404';
 
 export const AppRouter = () => {
@@ -20,6 +21,9 @@ export const AppRouter = () => {
 
       {/* Creacion de Viajes*/}
       <Route path="/viajes/*" element={<TripRoutes />} />
+
+      {/*Conductor */}
+      <Route path="/conductor/*" element={<DriverRoutes />} />
     </Routes>
   );
 };
