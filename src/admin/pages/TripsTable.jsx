@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UsersApiRest from '../services/UsersApiRest';
 
 import { Container, CssBaseline, Grid } from '@mui/material';
+import TripsApiRest from '../services/TripsApiRest';
 
 function RenderButton(props) {
   const { value } = props;
@@ -46,12 +47,13 @@ RenderButton.propTypes = {
 
 const columns = [
 
-  { field: 'rut', headerName: 'Destino', width: 110 },
-  { field: 'nombre', headerName: 'Origen', width: 130 },
-  { field: '', headerName: 'Hora de salida' , width: 130 },
-  { field: 'contacto',headerName: 'Hora de llegada', sortable: false, width: 130,},
-  { field: 'puntos', headerName: 'Estado', width: 130 },
-  { field: 'estadoCuenta', headerName: 'Estado', width: 130 },
+  { field: 'destino', headerName: 'Destino', width: 110 },
+  { field: 'origen', headerName: 'Origen', width: 130 },
+  { field: 'horaSalida', headerName: 'Hora de salida' , width: 130 },
+  { field: 'horaLlegada', headerName: 'Fecha' , width: 130 },
+  { field: 'precio', headerName: 'Precio' , width: 130 },
+  { field: 'codigo',headerName: 'Codigo', width: 130,},
+  /* { field: '', headerName: 'Estado', width: 130 }, */
   { field: 'id',headerName:'', renderCell: RenderButton }
 
 ];
@@ -68,9 +70,10 @@ export const TripsTable = () =>{
         navigate("/auth/login");
         return;
         }
-        UsersApiRest.getUsers(token)
+    TripsApiRest.getTrips(token)
         .then((response)=>{
-            setData(response.content);
+            
+            setData(response);
         })
         .catch((error) => {
             console.error(error);
