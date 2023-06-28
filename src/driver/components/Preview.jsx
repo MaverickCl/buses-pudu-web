@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 
 const Preview = ({ trip }) => {
-  const { origen, destino, horaSalida, horaLlegada, precio, fecha } = trip;
+  const { origen, destino, horaSalida,distanciaKM , fecha } = trip;
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
@@ -17,7 +17,7 @@ const Preview = ({ trip }) => {
 
     localStorage.setItem("trip", JSON.stringify(trip));
 
-    window.location.href = "/viaje";
+    window.location.href = "/";
   };
 
 
@@ -53,13 +53,15 @@ const Preview = ({ trip }) => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
+      <Typography color="textSecondary">Distancia a Recorrer: {distanciaKM} KM</Typography>
+            
         {isPortrait && (
           <Button
             /* onClick={handleSubmit} */
             sx={{ width: "100%", marginTop: 1 }}
             variant="contained"
           >
-            Ver mas detalles
+            Escanear Pasaje
           </Button>
         )}
       </Grid>
