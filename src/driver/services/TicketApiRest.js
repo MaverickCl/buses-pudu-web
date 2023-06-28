@@ -11,6 +11,7 @@ class TicketApiRest {
 
       return response.data;
     } catch (error) {
+      return error.response.data;
       console.log(error);
     }
   }

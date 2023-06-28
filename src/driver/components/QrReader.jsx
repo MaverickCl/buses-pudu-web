@@ -77,6 +77,7 @@ const QrReader = ({ onScan }) => {
                 <CircularProgress color="secondary" size={90} />
               </Box>
             )}
+
             <video
               id="video"
               width="100%"
@@ -86,7 +87,7 @@ const QrReader = ({ onScan }) => {
                 borderRadius: "10px",
                 display: !loading ? "block" : "none",
               }}
-            ></video>
+            />
           </Box>
           <Grid
             container

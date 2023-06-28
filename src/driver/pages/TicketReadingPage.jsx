@@ -12,16 +12,25 @@ const TicketReadingPage = () => {
   const trip = searchParams.get("trip");
   const token = localStorage.getItem("token");
   const [showAlert, setShowAlert] = useState(false);
-  const [ticket, setTicket] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(
+    "Hay algo mal con el pasaje"
+  );
+  const [ticket, setTicket] = useState({ name: "", seat: "" });
 
   const handleScan = (qrCodeText) => {
     console.log("Scanned QR code:", qrCodeText);
 
     TicketApiRest.checkTicket(trip, qrCodeText.split("=")[1], token)
       .then((response) => {
-        if (response.message === "true") {
-          setTicket(qrCodeText.split("=")[1]);
+        console.log("response", response);
+        if (response.estadoVerificacion) {
+          setTicket({
+            name: response.nombrePasajero,
+            seat: response.asientoPasajero,
+          });
         } else {
+          console.log("response.mensaje", response.message);
+          setAlertMessage(response.message);
           setShowAlert(true);
         }
       })
@@ -60,8 +69,8 @@ const TicketReadingPage = () => {
         </Grid>
       </Box>
       <TicketDisplay
-        openDialog={ticket !== null}
-        onClose={() => setTicket(null)}
+        openDialog={ticket.name !== ""}
+        onClose={() => setTicket({ name: "", seat: "" })}
         trip={trip}
         ticket={ticket}
       />
@@ -69,7 +78,7 @@ const TicketReadingPage = () => {
         <AlertDialogSlide
           onClose={() => setShowAlert(false)}
           title="Boleto Inválido"
-          text="El ticket escaneado no es válido o ya fue utilizado"
+          text={alertMessage}
           button="Ok"
         />
       )}

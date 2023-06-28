@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Slide from "@mui/material/Slide";
-import { Grid, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import {
+  Typography,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  DialogActions,
+  Slide,
+} from "@mui/material";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function TicketDisplay({ openDialog, onClose, trip, ticket }) {
+export default function TicketDisplay({ openDialog, onClose, ticket }) {
   const handleClose = () => {
     onClose();
   };
@@ -33,18 +35,20 @@ export default function TicketDisplay({ openDialog, onClose, trip, ticket }) {
         <>
           <DialogTitle>Pasaje Verificado</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              <Grid container flexDirection="column">
-                <Typography variant="h7" gutterBottom>
-                  El pasaje corresponde al:
-                </Typography>
-                <Typography variant="h7" gutterBottom>
-                  Pasajero:
-                </Typography>
-                <Typography variant="h7" gutterBottom>
-                  en el Asiento:
-                </Typography>
-              </Grid>
+            <DialogContentText
+              id="alert-dialog-slide-description"
+              display="flex"
+              flexDirection="column"
+            >
+              <Typography variant="h7" gutterBottom>
+                El pasaje corresponde al:
+              </Typography>
+              <Typography variant="h7" gutterBottom>
+                Pasajero:{ticket.name}
+              </Typography>
+              <Typography variant="h7" gutterBottom>
+                en el Asiento:{ticket.seat}
+              </Typography>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
