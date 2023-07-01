@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "target": "ES2020",
+        "jsx": "react",
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        
+        "allowSyntheticDefaultImports": true,
+        /// format on save with prettier
+
+         
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
+}

@@ -1,0 +1,15 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[remote "origin"]
+	url = git@gitlab.com:dci-vn/pds-2023-01/buses-pudu/buses-pudu-web.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "feature/signUp"]
+	remote = origin
+	merge = refs/heads/feature/signUp
+[gitflow "branch"]
+	master = main
