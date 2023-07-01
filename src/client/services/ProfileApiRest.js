@@ -28,6 +28,53 @@ class ProfileApiRest {
       throw new Error("Error al actualizar perfil de usuario");
     }
   }
+
+  static async addFrecuent(token, PasajeroRecurrenteDTO) {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/crearRecurrentes`,
+        PasajeroRecurrenteDTO,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error al agregar frecuente");
+    }
+  }
+
+  static async deleteFrecuent(token, id) {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    try {
+      const response = await axios.delete(`${BASE_URL}/${id}`, config);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error al agregar frecuente");
+    }
+  }
+
+  static async updateFrecuent(token, PasajeroRecurrenteDTO) {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/editarRecuerrente/${PasajeroRecurrenteDTO.id}`,
+        PasajeroRecurrenteDTO,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error al editar frecuente");
+    }
+  }
 }
 
 export default ProfileApiRest;

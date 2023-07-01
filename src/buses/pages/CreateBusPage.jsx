@@ -19,6 +19,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
 const CreateBusPage = () => {
+  const token = localStorage.getItem("token");
+
   const [busData, setBusData] = useState(null);
   const [seatData, setSeatData] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState({});
@@ -32,10 +34,7 @@ const CreateBusPage = () => {
 
   const handleFormSubmit = async (data) => {
     try {
-      const createdBus = await BusService.crearBus(
-        data,
-        localStorage.getItem("token")
-      );
+      const createdBus = await BusService.crearBus(data, token);
       console.log("Bus creado:", createdBus);
       setBusData(createdBus);
 
@@ -71,16 +70,34 @@ const CreateBusPage = () => {
     setSaveIcon(<CircularProgress size={24} color="inherit" />);
     setSaveMessage("Guardando...");
 
+    //De-select any selected things
+    Object.values(seats.floors).forEach((floor) => {
+      Object.values(floor.seats).forEach((seat) => {
+        if (seat.status === "SELECTED") {
+          seat.status =
+            seat.type === "Asiento"
+              ? "FREE"
+              : seat.type === "Pasillo"
+              ? "HALL"
+              : seat.type === "Vacío"
+              ? "EMPTY"
+              : seat.type === "Baño"
+              ? "WC"
+              : seat.type === "Escaleras" && "STAIRS";
+        }
+      });
+    });
+
+    ///empty selected seats
+    setSelectedSeats({});
+
     const updatedBusData = {
       patentBus: busData.patente,
       floors: seats.floors,
     };
 
     try {
-      const updatedBus = await BusService.enviarAsientos(
-        updatedBusData,
-        localStorage.getItem("token")
-      );
+      const updatedBus = await BusService.enviarAsientos(updatedBusData, token);
 
       console.log("Bus y asientos actualizados:", updatedBus);
 

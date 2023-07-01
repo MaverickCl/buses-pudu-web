@@ -33,7 +33,6 @@ export async function register(
       .then((response) => {
         console.log(response);
       });
-    console.log(response);
     return console.log("registrado");
     //return response.data;
   } catch (error) {

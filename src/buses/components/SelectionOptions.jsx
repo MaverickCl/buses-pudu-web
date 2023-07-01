@@ -21,6 +21,8 @@ const SelectionOptions = ({ selectedSeats, setSelectedSeats }) => {
       updatedSeats[seat].type = option;
       if (option === "Asiento") {
         updatedSeats[seat].seatType = "Estándar";
+      } else {
+        updatedSeats[seat].seatType = "";
       }
     });
     setSelectedSeats(updatedSeats);

@@ -15,6 +15,10 @@ const PhoneInput = (props) => {
 
   const [phoneNumber, setPhoneNumber] = useState(props.number.substring(3));
 
+  useEffect(() => {
+    setPhoneNumber(props.number.substring(3));
+  }, [props.number]);
+
   const extractCountryCode = (phoneNumber) => {
     const countryCode = countryCodes.findIndex((code) =>
       phoneNumber.startsWith(code.value)

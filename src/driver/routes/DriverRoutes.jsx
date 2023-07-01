@@ -1,16 +1,12 @@
-import React from 'react'
-import { Itinerario } from '../pages/Itinerario'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from "react-router-dom";
+import TicketReadingPage from "../pages/TicketReadingPage";
 
 export const DriverRoutes = () => {
   return (
     <Routes>
-      <Route path="*" element={<Itinerario />} />
-      
+      <Route path="/leer-qr" element={<TicketReadingPage />} />
 
-      {/* <Route path="" element={<Navigate to="/" />} /> */}
-
-      
+      <Route path="/*" element={<Navigate to="/auth/login" />} />
     </Routes>
-  )
-}
+  );
+};
