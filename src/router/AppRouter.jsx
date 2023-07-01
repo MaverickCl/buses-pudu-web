@@ -5,6 +5,7 @@ import { ClientRoutes } from "../client/routes/ClientRoutes";
 import { BusRoutes } from "../buses/routes/BusRoutes";
 import { TripRoutes } from "../trips/routes/TripRoutes";
 import { DriverRoutes } from "../driver/routes/DriverRoutes";
+import { AdminRoutes } from "../admin/routes/AdminRoutes";
 //import { NotFound } from './pages/404';
 
 export const AppRouter = () => {
@@ -24,6 +25,8 @@ export const AppRouter = () => {
 
       {/*Conductor */}
       <Route path="/conductor/*" element={<DriverRoutes />} />
+      {/* Admin */}
+      <Route path="/admin/*" element={<AdminRoutes />} />
     </Routes>
   );
 };
