@@ -52,7 +52,7 @@ const columns = [
   { field: 'horaSalida', headerName: 'Hora de salida' , width: 130 },
   { field: 'horaLlegada', headerName: 'Fecha' , width: 130 },
   { field: 'precio', headerName: 'Precio' , width: 130 },
-  { field: 'codigo',headerName: 'Codigo', width: 130,},
+  { field: 'codigo',headerName: 'Codigo de viaje', width: 130,},
   /* { field: '', headerName: 'Estado', width: 130 }, */
   { field: 'id',headerName:'', renderCell: RenderButton }
 
