@@ -14,7 +14,9 @@ const MappedSeats = ({ currentSeat, price }) => {
       <Typography variant="body1" gutterBottom>
         Precio: $
         {typeof currentSeat === "object" &&
-          price * (currentSeat.price / 100 + 1)}
+          (price * (currentSeat.price / 100 + 1))
+            .toLocaleString()
+            .replace(/,/g, ".")}
       </Typography>
     </div>
   );

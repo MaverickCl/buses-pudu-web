@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Grid,
@@ -16,18 +17,20 @@ import InputCard from "../components/InputCard";
 import FiltersCard from "../components/FiltersCard";
 
 const SearchResultPage = () => {
+  const searchParams = new URLSearchParams(window.location.search);
+
   const [trips, setTrips] = useState([]);
   const [filteredArray, setFilteredArray] = useState(trips);
   const [maxItems, setMaxItems] = useState(5);
-  const [origin, setOrigin] = useState(localStorage.getItem("origin"));
-  const [destination, setDestination] = useState(
-    localStorage.getItem("destination")
-  );
+  const [origin, setOrigin] = useState(searchParams.get("from"));
+  const [destination, setDestination] = useState(searchParams.get("to"));
   const [filterValues, setFilterValues] = useState({
     sortBy: "price",
     sortOrder: "asc",
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchTrips(origin, destination);
@@ -60,8 +63,8 @@ const SearchResultPage = () => {
   const handleSearch = (origin, destination) => {
     setOrigin(origin);
     setDestination(destination);
-    localStorage.setItem("origin", origin);
-    localStorage.setItem("destination", destination);
+
+    navigate(`/busqueda?from=${origin}&to=${destination}`);
 
     fetchTrips(origin, destination);
   };

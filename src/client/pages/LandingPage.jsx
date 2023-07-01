@@ -53,10 +53,7 @@ export default function LandingPage() {
       });
       setShowAlert(true);
     } else {
-      localStorage.setItem("destination", destination);
-      localStorage.setItem("origin", origin);
-
-      navigate("/busqueda");
+      navigate(`/busqueda?from=${origin}&to=${destination}`);
     }
   };
 
@@ -139,7 +136,7 @@ export default function LandingPage() {
                   fontWeight="bold"
                   align={isPortrait ? "center" : "left"}
                 >
-                  ¿A DÓNDE TE LLEVAMOS HOY?
+                  ¿DÓNDE TE LLEVAMOS HOY?
                 </Typography>
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={2}>

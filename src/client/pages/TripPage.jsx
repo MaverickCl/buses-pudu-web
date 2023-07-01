@@ -7,7 +7,10 @@ import {
   Typography,
   Grid,
   Collapse,
+  IconButton,
+  Divider,
 } from "@mui/material";
+
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Footer from "../components/Footer";
 import Bus from "../components/Bus";
@@ -16,24 +19,27 @@ import SeatSelection from "../components/SeatSelection";
 import TotalCard from "../components/TotalCard";
 
 const TripPage = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+
   const [selectedSeats, setSelectedSeats] = useState({});
   const [tripData, setTripData] = useState(null);
   const [currentSeat, setCurrentSeat] = useState({});
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
+  const tripCode = urlParams.get("code");
+
   if (!tripData) {
     const trip = JSON.parse(localStorage.getItem("trip"));
 
     setTripData({
-      code: trip.codigo,
+      origin: trip.origin,
+      destination: trip.destination,
+      departureTime: trip.departureTime,
+      arrivalTime: trip.arrivalTime,
+      price: trip.price,
+      date: trip.date,
       id: trip.id,
-      origin: trip.origen,
-      destination: trip.destino,
-      departureTime: trip.horaSalida,
-      arrivalTime: trip.horaLlegada,
-      price: trip.precio,
-      date: trip.fecha,
     });
 
     return null;
@@ -93,7 +99,7 @@ const TripPage = () => {
                   Hora de salida: {departureTime}
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                  Precio aprox: ${price}
+                  Precio aprox: ${price.toLocaleString().replace(/,/g, ".")}
                 </Typography>
               </Paper>
               <Collapse in={Object.keys(selectedSeats).length > 0}>
@@ -104,6 +110,8 @@ const TripPage = () => {
                   <Typography variant="h6" gutterBottom>
                     Detalles del Asiento
                   </Typography>
+
+                  <Divider sx={{ mt: -1, mb: 1 }} />
                   <MappedSeats currentSeat={currentSeat} price={price} />
 
                   <Collapse in={Object.keys(selectedSeats).length > 1}>
@@ -121,7 +129,15 @@ const TripPage = () => {
                   elevation={3}
                   sx={{ p: 2, mt: 3, backgroundColor: "#f8f8f8" }}
                 >
-                  <TotalCard selectedSeats={selectedSeats} price={price} />
+                  <TotalCard
+                    selectedSeats={selectedSeats}
+                    price={price}
+                    tripData={{
+                      code: tripCode,
+                      price: tripData.price,
+                      id: tripData.id,
+                    }}
+                  />
                 </Paper>
               </Collapse>
             </Grid>
@@ -131,7 +147,7 @@ const TripPage = () => {
                   Selecciona tu asiento
                 </Typography>
                 <Grid container>
-                  <Bus seatHandler={seatHandler} trip={tripData.code} />
+                  <Bus seatHandler={seatHandler} trip={tripCode} />
                 </Grid>
               </Paper>
             </Grid>

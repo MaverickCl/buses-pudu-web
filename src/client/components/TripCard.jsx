@@ -1,17 +1,30 @@
 import React from "react";
 import { Card, CardContent, Grid, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const TripCard = ({ trip }) => {
   const { origen, destino, horaSalida, horaLlegada, precio, fecha } = trip;
+
+  const navigate = useNavigate();
 
   const isPortrait = window.matchMedia("(orientation: portrait)").matches;
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    localStorage.setItem("trip", JSON.stringify(trip));
+    const tripData = {
+      origin: origen,
+      destination: destino,
+      departureTime: horaSalida,
+      arrivalTime: horaLlegada,
+      price: precio,
+      date: fecha,
+      id: trip.id,
+    };
 
-    window.location.href = "/viaje";
+    localStorage.setItem("trip", JSON.stringify(tripData));
+
+    navigate(`/viaje?code=${trip.codigo}`);
   };
 
   return (
@@ -37,7 +50,7 @@ const TripCard = ({ trip }) => {
           <Grid item xs={4}>
             <Typography color="textSecondary">Desde:</Typography>
             <Typography variant="h4" component="h3">
-              ${precio}
+              ${precio.toLocaleString().replace(/,/g, ".")}
             </Typography>
             {!isPortrait && (
               <Button onClick={handleSubmit} variant="contained">

@@ -135,7 +135,6 @@ function ResponsiveAppBar(props) {
                   marginRight: "0.5rem",
                   width: "3rem",
                   transition: "transform .2s",
-                  ":hover": { transform: "scale(1.1)" },
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.transform = "scale(1.1)";

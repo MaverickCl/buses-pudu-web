@@ -22,9 +22,8 @@ export const AppRouter = () => {
       {/* Creacion de Viajes*/}
       <Route path="/viajes/*" element={<TripRoutes />} />
 
-      {/* Rutas de conductor */}
-      <Route path="/driver/*" element={<DriverRoutes />} />
-
+      {/*Conductor */}
+      <Route path="/conductor/*" element={<DriverRoutes />} />
     </Routes>
   );
 };

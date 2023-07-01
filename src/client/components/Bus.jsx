@@ -6,6 +6,7 @@ import {
   Box,
   IconButton,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import AlertDialog from "../components/AlertDialog";
 import BusSeatsApiRest from "../services/BusSeatsApiRest";
@@ -26,25 +27,38 @@ const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
 
   useEffect(() => {
     if (busData === null) {
-      const fetchBusSeats = async () => {
-        try {
-          const seats = await BusSeatsApiRest.getBusSeats(trip);
-          setBusData(seats);
-        } catch (error) {}
-      };
-
       fetchBusSeats();
     }
   }, [props.busId]);
+
+  const fetchBusSeats = async () => {
+    try {
+      const seats = await BusSeatsApiRest.getBusSeats(trip);
+      setBusData(seats);
+    } catch (error) {}
+  };
 
   const handleFloorChange = () => {
     setCurrentFloor(currentFloor === 1 ? 2 : 1);
   };
 
   if (!busData) {
-    // Show loading indicator or return null while fetching data
+    return (
+      <>
+        <Box
+          style={{
+            flex: 1,
+            height: "90vh",
 
-    return null;
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress color="secondary" size={90} />
+        </Box>
+      </>
+    );
   }
 
   const handleSeatSelect = (floorIndex, seatIndex) => {
@@ -78,10 +92,16 @@ const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
 
       let updatedFloors = [];
       if (floorIndex === 0) {
-        updatedFloors = [
-          { seats: (busData.floors[floorIndex].seats = updatedSeats) },
-          busData.floors[1],
-        ];
+        if (busData.floors.length > 1) {
+          updatedFloors = [
+            { seats: (busData.floors[floorIndex].seats = updatedSeats) },
+            busData.floors[1],
+          ];
+        } else {
+          updatedFloors = [
+            { seats: (busData.floors[floorIndex].seats = updatedSeats) },
+          ];
+        }
       } else {
         updatedFloors = [
           busData.floors[0],
@@ -187,6 +207,8 @@ const BusComponent = ({ seatHandler, createdSeats, trip }, props) => {
                       ? "Asiento ocupado"
                       : createdSeats != undefined
                       ? seat.type + "\n" + seat.seatType
+                      : seat.type !== "Vacío" && seat.type !== "Asiento"
+                      ? seat.type
                       : seat.seatType
                   }
                 >
