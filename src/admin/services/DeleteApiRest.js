@@ -1,6 +1,7 @@
 import axios from 'axios';
+const base='http://localhost:8080/';
 
-const BASE_URL = 'http://localhost:8080/api/admin';
+const BASE_URL = base+'api/admin';
 
 class DeleteApiRest {
     static async deleteUser(token,id) {

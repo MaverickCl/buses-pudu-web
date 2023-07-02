@@ -1,6 +1,7 @@
 import axios from 'axios';
+const base='http://localhost:8080/';
 
-const BASE_URL = 'http://localhost:8080/api/viajes/todo';
+const BASE_URL = base+'api/viajes/todo';
 
 class TripsApiRest {
     static async getTrips(token) {

@@ -1,7 +1,8 @@
 import axios from 'axios';
+const base='http://localhost:8080/';
 
-const BASE_URL = 'http://localhost:8080/api/admin/editar';
-const BASE_URL_USER ='http://localhost:8080/api/admin/usuario';
+const BASE_URL = base+'api/admin/editar';
+const BASE_URL_USER =base+'api/admin/usuario';
 
 class EditApiRest {
   static async getProfile(token,id) {

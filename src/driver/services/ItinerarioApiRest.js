@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/api/movil/itinerario/conductor";
+const base='http://localhost:8080/';
+
+const BASE_URL = base+"api/movil/itinerario/conductor";
 
 class ItinerarioApiRest {
   static async getTrips(token) {

@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/api/adquisicion";
+const base='http://localhost:8080/';
+
+const BASE_URL = base+"api/adquisicion";
 
 class ReservaApiRest {
   static async reserveSeat(trip, seats, token) {

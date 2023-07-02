@@ -1,5 +1,8 @@
 import axios from "axios";
-export const Apiurl = "http://localhost:8080/";
+
+const base='http://localhost:8080/';
+
+export const Apiurl = base;
 
 export async function register(
   nombre,

@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const apiEndpoint = "http://localhost:8080/api/bus";
+const base='http://localhost:8080/';
+
+const apiEndpoint = base+"api/bus";
 
 class BusService {
   static async crearBus(busData, token) {

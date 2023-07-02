@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const apiEndpoint = "http://localhost:8080/api/viajes";
+const base='http://localhost:8080/';
+
+const apiEndpoint = base+"api/viajes";
 
 class TripApiRest {
   static async createTrip(trip, token) {

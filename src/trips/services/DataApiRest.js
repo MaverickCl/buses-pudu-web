@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api";
+const base='http://localhost:8080/';
+
+const API_URL = base+"api";
 
 export default class DataApiRest {
   static async fetchBuses(token) {

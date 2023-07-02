@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/api/pago"; // Replace with your API base URL
+const base='http://localhost:8080/';
+
+const BASE_URL = base+"api/pago"; // Replace with your API base URL
 
 class PaymentApiRest {
   static async postPayment(ticketDto, token) {

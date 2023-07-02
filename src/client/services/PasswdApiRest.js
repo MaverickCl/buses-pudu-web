@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080';
+const base='http://localhost:8080/';
+
+const BASE_URL = base;
 
 class PasswdApiRest {
 
     static async changePass(token, cambioContraseniaDTO) {
     try {
-      const response = await axios.put(`${BASE_URL}/api/cuenta/cambiar-contrasenia`, cambioContraseniaDTO, {
+      const response = await axios.put(`${BASE_URL}api/cuenta/cambiar-contrasenia`, cambioContraseniaDTO, {
         headers: {
           Authorization: `Bearer ${token}`
         }

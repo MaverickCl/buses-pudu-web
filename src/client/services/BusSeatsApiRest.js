@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080"; // Replace with your API base URL
+const base='http://localhost:8080/';
+
+const BASE_URL = base; // Replace with your API base URL
 
 class BusSeatsApiRest {
   static async getBusSeats(code) {
     try {
-      const response = await axios.get(`${BASE_URL}/api/viajes/${code}`);
+      const response = await axios.get(`${BASE_URL}api/viajes/${code}`);
 
       //TRANSFORM DATA TO MATCH FORMAT
 
