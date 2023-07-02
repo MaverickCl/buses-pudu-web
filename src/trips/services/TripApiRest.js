@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const base='http://localhost:8080/';
+const base = 'https://busespudu-backend-1aedcfd38ca3.herokuapp.com/';
 
 const apiEndpoint = base+"api/viajes";
 

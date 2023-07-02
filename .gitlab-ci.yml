@@ -1,0 +1,46 @@
+image: node:latest
+
+variables:
+  APP_NAME: busespudu-web
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - install
+  - build
+# - test
+  - deploy
+
+project-install:
+  stage: install
+  only:
+    - develop
+  script:
+    - npm install
+
+project-build:
+  stage: build
+  only:
+    - develop
+  script:
+    - npm run dev
+
+# #pruebas:
+#     stage: test
+#     only:
+#       - feature/ft_pipeline
+#     script:
+#       - npm test:unit
+
+project-deploy:
+  stage: deploy
+  only:
+    - develop
+  image: ruby:latest
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$APP_NAME --api_key=$HEROKU_API_KEY
