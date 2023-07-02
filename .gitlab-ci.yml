@@ -42,8 +42,9 @@ project-deploy:
   only:
     - develop
   image: ruby:latest
-  script:
+  before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
+  script:
     - gem install dpl
     - dpl --provider=heroku --app=$APP_NAME --api-key=$HEROKU_API_KEY
