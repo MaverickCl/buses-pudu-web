@@ -25,7 +25,7 @@ project-build:
   only:
     - develop
   script:
-    - npm run dev
+    - npm run build
 
 # #pruebas:
 #     stage: test
