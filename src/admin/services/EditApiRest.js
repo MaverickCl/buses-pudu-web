@@ -1,5 +1,6 @@
 import axios from 'axios';
-const base = 'https://busespudu-backend-1aedcfd38ca3.herokuapp.com/';
+//const base = 'https://busespudu-backend-1aedcfd38ca3.herokuapp.com/'; 
+const base = 'http://localhost:8080/'; 
 
 const BASE_URL = base+'api/admin/editar';
 const BASE_URL_USER =base+'api/admin/usuario';

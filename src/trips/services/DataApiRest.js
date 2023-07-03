@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const base = 'https://busespudu-backend-1aedcfd38ca3.herokuapp.com/';
+//const base = 'https://busespudu-backend-1aedcfd38ca3.herokuapp.com/'; 
+const base = 'http://localhost:8080/'; 
 
 const API_URL = base+"api";
 
