@@ -27,6 +27,7 @@ import { UsersTable } from './UsersTable';
 import Footer from '../../client/components/Footer';
 import ResponsiveAppBar from '../../client/components/ResponsiveAppBar';
 import { TripsTable } from './TripsTable';
+import ResponsiveAdminBar from '../components/ResponsiveAdminBar';
 
 
 function Copyright(props) {
@@ -84,7 +85,7 @@ export default function Dashboard() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <ResponsiveAppBar position="absolute" />
+        <ResponsiveAdminBar position="absolute" />
 
       //Drawer
         <Box

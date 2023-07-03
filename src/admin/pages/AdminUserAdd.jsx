@@ -24,6 +24,7 @@ import ResponsiveAppBar from "../../client/components/ResponsiveAppBar";
 import Footer from "../../client/components/Footer";
 
 import { addUser } from "../services/AddApiRest";
+import ResponsiveAdminBar from "../components/ResponsiveAdminBar";
 
 const options = ["administrador", "asistente_ventas", "conductor"];
 
@@ -101,7 +102,7 @@ export const AdminUserAdd = () => {
     };
   return (
     <CssBaseline>
-      <ResponsiveAppBar position="absolute" />
+      <ResponsiveAdminBar position="absolute" />
       <Container
         maxWidth="sm"
         sx={{ height: "100vh", display: "flex", alignItems: "center" }}
