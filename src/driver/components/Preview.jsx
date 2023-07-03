@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Preview = ({ trip }) => {
   const { origen, destino, horaSalida,distanciaKM , fecha } = trip;
@@ -46,9 +47,14 @@ const Preview = ({ trip }) => {
         <Grid item xs={4}>
           
           {!isPortrait && (
-            <Button /* onClick={handleSubmit} */ variant="contained">
-              Ver mas detalles
-            </Button>
+            <Link
+            to={`/conductor/leer-qr`}
+            >
+            <Button /* onClick={handleSubmit} */
+            
+            variant="contained">
+              Escanear Pasaje
+            </Button></Link>
           )}
         </Grid>
       </Grid>
