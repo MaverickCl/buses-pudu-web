@@ -26,7 +26,7 @@ function RenderButton(props) {
         variant="contained"
         size="small"
         style={{ marginLeft: 16 }}
-        to={`local/conductor/leer-qr?viaje=${value}`}
+        to={`/admin/delete/?codigo=${value}`}
         onClick={handleButtonClick}
       >
         Eliminar
@@ -51,9 +51,9 @@ const columns = [
   { field: 'origen', headerName: 'Origen', width: 130 },
   { field: 'horaSalida', headerName: 'Hora de salida' , width: 130 },
   { field: 'fecha', headerName: 'Fecha' , width: 130 },,
-  { field: 'codigo',headerName: 'Codigo', width: 130,},
+  { field: 'id',headerName: 'Id', width: 130,},
   /* { field: '', headerName: 'Estado', width: 130 }, */
-  { field: 'id',headerName:'', renderCell: RenderButton }
+  { field: 'codigo',headerName:'', renderCell: RenderButton }
 
 ];
 export const TripsTable = () =>{

@@ -27,7 +27,7 @@ import {
 } from "@mui/material";
 
 const pages = [
-  { title: "creacion de usuario", link: "/create" },
+  { title: "creacion de usuario", link: "/admin/create" },
   // { title: "Encuéntranos", link: "" },
   //{ title: "Pudú Points", link: "/pudu-points" },
 ];
