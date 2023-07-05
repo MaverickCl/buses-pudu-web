@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/api/pago"; // Replace with your API base URL
+const BASE_URL = import.meta.env.VITE_API_URL+"/api/pago"; // Replace with your API base URL
 
 class PaymentApiRest {
   static async postPayment(ticketDto, token) {

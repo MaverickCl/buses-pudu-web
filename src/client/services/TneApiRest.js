@@ -1,11 +1,11 @@
 import axios from "axios";
-export const Apiurl = "http://localhost:8080/";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 
 export async function validateTne(rut) {
   try {
     const response = await axios.get(
-      `${Apiurl}api/validartne/${rut}`,
+      `${BASE_URL}/api/validartne/${rut}`,
       {
         headers: {
           "Content-Type": "application/json",

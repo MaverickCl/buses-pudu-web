@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080/api/cuenta/cliente";
+const BASE_URL =  import.meta.env.VITE_API_URL+"/api/cuenta/cliente";
 
 class ProfileApiRest {
   static async getProfile(token) {

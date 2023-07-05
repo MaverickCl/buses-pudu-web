@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080"; // Replace with your API base URL
+const BASE_URL =  import.meta.env.VITE_API_URL; // Replace with your API base URL
 
 class BusSeatsApiRest {
   static async getBusSeats(code) {

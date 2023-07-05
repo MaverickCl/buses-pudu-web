@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiEndpoint = "http://localhost:8080/api/bus";
+const apiEndpoint =  import.meta.env.VITE_API_URL+"/api/bus";
 
 class BusService {
   static async crearBus(busData, token) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-export const Apiurl = "http://localhost:8080/";
+export const Apiurl =  import.meta.env.VITE_API_URL;
 
 export async function register(
   nombre,
