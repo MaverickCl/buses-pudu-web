@@ -6,6 +6,7 @@ export const DriverRoutes = () => {
   return (
     <Routes>
       <Route path="/leer-qr" element={<TicketReadingPage />} />
+      
 
       <Route path="/*" element={<Itinerario/>} />
     </Routes>

@@ -28,8 +28,8 @@ import {
 
 const pages = [
   { title: "creacion de usuario", link: "/admin/create" },
-  // { title: "Encuéntranos", link: "" },
-  //{ title: "Pudú Points", link: "/pudu-points" },
+  { title: "Creacion Viajes", link: "/viajes/crear-viaje" },
+  { title: "Creacion Buses", link: "/bus/crear-bus" },
 ];
 const settings = [
   { title: "Perfil", link: "/perfil" },

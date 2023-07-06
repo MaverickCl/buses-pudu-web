@@ -26,7 +26,7 @@ export const Itinerario = () => {
 
       setTrips(
         trips.map((trip) => {
-          console.log(trip)
+          
 
           return {
             ...trip,
