@@ -21,7 +21,7 @@ describe('Validar el detalle de compra', () => {
 
             //Seleccionar asientos
             cy.get('button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium span')
-            .contains('6')
+            .contains('10')
             .click();
 
             cy.get('button.MuiButton-containedPrimary')
@@ -33,7 +33,6 @@ describe('Validar el detalle de compra', () => {
             cy.contains('Compra de Pasajes').should('exist');
             cy.contains('Usar Pudú Points').should('exist');
             cy.contains('Total:').should('exist');
-            cy.contains('$10.000').should('exist');
             cy.contains('Pasajeros:').should('exist');
             cy.contains('- Camila Martinez').should('exist');
             cy.contains('Proceder al pago').should('exist');

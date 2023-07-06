@@ -8,7 +8,7 @@ describe('Test editar atributo de un perfil', () => {
         cy.get('[data-testid="AccountCircleIcon"]').click()
         cy.contains('Ingresar').click()
         // Ingresa las credenciales en los campos de usuario y contraseña
-        cy.get('input[name="correo"]').type('camilamartinez@gmail.com')
+        cy.get('input[name="correo"]').type('tatinhualpin@gmail.com')
         cy.get('input[id="confirm-password"]').type('password')
         cy.get('button[type="submit"]').click()
     
@@ -23,7 +23,7 @@ describe('Test editar atributo de un perfil', () => {
 
           cy.get('input#email')
           .clear()
-          .type('camilamartinez01@gmail.com');
+          .type('tatinhualpin@gmail.com');
 
           cy.get('button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedSuccess.MuiButton-sizeMedium.MuiButton-containedSizeMedium.css-hu0rfb-MuiButtonBase-root-MuiButton-root')
   .click();
@@ -36,7 +36,7 @@ describe('Test editar atributo de un perfil', () => {
             cy.get('[data-testid="AccountCircleIcon"]').click()
             cy.contains('Ingresar').click()
             // Ingresa las credenciales en los campos de usuario y contraseña
-            cy.get('input[name="correo"]').type('camilamartinez01@gmail.com')
+            cy.get('input[name="correo"]').type('tatinhualpin001@gmail.com')
             cy.get('input[id="confirm-password"]').type('password')
             cy.get('button[type="submit"]').click()
         

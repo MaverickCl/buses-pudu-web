@@ -13,11 +13,11 @@ describe('Adquirir boleto', () => {
             //Seleccionar asientos
 
             cy.get('button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium span')
-            .contains('1')
+            .contains('5')
             .click();
 
             cy.get('button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium span')
-            .contains('2')
+            .contains('6')
             .click();
 
             cy.get('button.MuiButton-containedPrimary')
@@ -55,11 +55,11 @@ describe('Adquirir boleto', () => {
             cy.contains('button', 'Seleccionar Asiento').click();
 
             cy.get('button:disabled span')
-            .contains('1');
+            .contains('5');
 
 
             cy.get('button:disabled span')
-            .contains('2');
+            .contains('6');
 
 
         })

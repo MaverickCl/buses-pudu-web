@@ -21,7 +21,7 @@ describe('Pudu points test', () => {
 
             //Seleccionar asientos
             cy.get('button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium span')
-            .contains('7')
+            .contains('17')
             .click();
 
             cy.get('button.MuiButton-containedPrimary')

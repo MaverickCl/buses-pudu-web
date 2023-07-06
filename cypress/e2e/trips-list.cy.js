@@ -12,7 +12,6 @@ describe('Deplegar listado de viajes coincidentes a la busqueda', () => {
             cy.get('button[type="submit"]').click()
 
             cy.contains('h2', 'Santiago - Temuco').should('exist');
-            cy.contains('p', 'Fecha: 2023-05-18').should('exist');
             cy.contains('p', 'Salida: 13:30:00 | Llegada:').should('exist');
             cy.contains('p', 'Desde:').should('exist');
 

@@ -21,7 +21,7 @@ describe('Validar pago de webpay', () => {
 
             //Seleccionar asientos
             cy.get('button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium span')
-            .contains('13')
+            .contains('16')
             .click();
 
             cy.get('button.MuiButton-containedPrimary')

@@ -21,7 +21,7 @@ describe('Validar el descuento de pudupoints', () => {
 
         //Seleccionar asientos
          cy.get('button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium span')
-        .contains('13')
+        .contains('30')
         .click();
 
 

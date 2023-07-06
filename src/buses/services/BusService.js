@@ -8,6 +8,7 @@ const apiEndpoint = base+"api/bus";
 class BusService {
   static async crearBus(busData, token) {
     try {
+      console.log(token);
       const response = await axios.post(`${apiEndpoint}/crear`, busData, {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -13,7 +13,7 @@ describe('Descuento TNE', () => {
             //Seleccionar asientos
 
             cy.get('button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium span')
-            .contains('6')
+            .contains('2')
             .click();
 
             cy.get('button.MuiButton-containedPrimary')
